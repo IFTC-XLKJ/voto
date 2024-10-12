@@ -56,13 +56,25 @@ addEventListener("load", () => {
                 ]
             }
         }*/
+        let isLoaded = false
+        const javascriptGenerator = Blockly.JavaScript;
+        setInterval(() => {
+            if (isLoaded) {
+            }
+        }, 1)
         const json = JSON.parse(localStorage.getItem("blocklyData"))
         Blockly.serialization.workspaces.load(json, workspace);
-        const javascriptGenerator = Blockly.JavaScript;
         workspace.addChangeListener(function (event) {
-            if (Blockly.serialization.workspaces.save(workspace).blocks) {
-                console.log("no emepty")
-                localStorage.setItem("blocklyData", JSON.stringify(Blockly.serialization.workspaces.save(workspace)))
+            console.log(event)
+            if (event.type == "finished_loading") {
+                console.log("加载")
+                isLoaded = true
+            }
+            if (event.type == "create" || event.type == "change" || event.type == "delete" || event.type == "move" || event.type == "comment_change" || event.type == "comment_create" || event.type == "comment_delete") {
+                if (Blockly.serialization.workspaces.save(workspace).blocks && isLoaded) {
+                    console.log("保存")
+                    localStorage.setItem("blocklyData", JSON.stringify(Blockly.serialization.workspaces.save(workspace)))
+                }
             }
             const code = javascriptGenerator.workspaceToCode(workspace);
             console.log(code)
