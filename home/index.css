@@ -2,6 +2,11 @@ body {
     margin: 0;
 }
 
+#app {
+    display: grid;
+    grid-template-columns: 100px 1fr;
+}
+
 #nav {
     width: 100px;
     height: 100vh;
