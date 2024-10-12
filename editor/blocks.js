@@ -29,7 +29,7 @@ addEventListener('load', function () {
                 ["点击", "click"],
                 ["按下", "down"],
                 ["松开", "up"]
-            ]), "role")
+            ]), "eventName")
         this.appendStatementInput('blocks')
             .appendField('');
         this.setOutput(false, "String");
