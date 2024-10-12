@@ -13,24 +13,33 @@
     border-radius: 5px;
 }
 
-.EventsBlocks .blocklyPath {
+.EventsBlocks>.blocklyPath {
     stroke: #608FEEFF;
 }
 
-.EventsBlocks .blocklyPath:hover {
+.EventsBlocks>.blocklyPath:hover {
     stroke: #608FEEFF;
 }
 
-.EventsBlocks .blocklyPath[fill] {
+.EventsBlocks>.blocklyPath[fill] {
     fill: #608FEEFF;
 }
 
-.EventsBlocks .blocklyPath[stroke] {
+.EventsBlocks>.blocklyPath[stroke] {
     stroke: #608FEEFF;
+}
+
+.EventsBlocks>.blocklyEditableText>.blocklyDropdownRect[stroke] {
+    stroke: #BFD2F8FF;
+    fill: #BFD2F8FF
 }
 
 .blocklySelected>.blocklyPath:nth-of-type(2) {
     display: none;
     stroke: none !important;
     stroke-width: 0 !important;
+}
+
+.blocklyMenuItemHighlight {
+    background-color: #47474710;
 }
