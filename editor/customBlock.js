@@ -1,9 +1,15 @@
 class Block {
-    constructor(id, name, content, type, parent) {
-        this.id = id;
-        this.name = name;
-        this.content = content;
-        this.type = type;
-        this.parent = parent;
+    constructor() { }
+    add(type, init, other) {
+        Blockly.Blocks[type] = {
+            init: init
+        }
+        console.log(Blockly.Blocks[type].init)
+        Object.keys(other).forEach(key => {
+            Blockly.Blocks[type][key] = other[key]
+        })
+    }
+    code(type, code) {
+        Blockly.JavaScript.forBlock[type] = code
     }
 }
