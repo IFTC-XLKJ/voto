@@ -9,6 +9,10 @@ window.toolbox = {
                     kind: "block",
                     type: "events_when_start",
                 },
+                {
+                    kind: "block",
+                    type: "events_role_event",
+                },
             ]
         },
         {
