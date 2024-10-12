@@ -1,0 +1,36 @@
+.blocklyToolboxDiv {
+    background-color: white;
+    box-shadow: 0 0 5px #47474788;
+    border-radius: 0 7px 7px 0;
+}
+
+.blocklyFlyoutBackground {
+    fill: white;
+    fill-opacity: .6;
+}
+
+.blocklyTreeRow {
+    border-radius: 5px;
+}
+
+.EventsBlocks .blocklyPath {
+    stroke: #608FEEFF;
+}
+
+.EventsBlocks .blocklyPath:hover {
+    stroke: #608FEEFF;
+}
+
+.EventsBlocks .blocklyPath[fill] {
+    fill: #608FEEFF;
+}
+
+.EventsBlocks .blocklyPath[stroke] {
+    stroke: #608FEEFF;
+}
+
+.blocklySelected>.blocklyPath:nth-of-type(2) {
+    display: none;
+    stroke: none !important;
+    stroke-width: 0 !important;
+}
