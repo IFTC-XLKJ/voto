@@ -1,4 +1,7 @@
 const blockLoad = new Event('blockLoad', { isTrust: true })
+window.roles = [
+    ["背景", "#background"]
+]
 addEventListener('load', function () {
     const block = new Block()
     const events = new Events()
@@ -6,7 +9,6 @@ addEventListener('load', function () {
         console.log(this)
         this.appendDummyInput()
             .appendField('当 开始运行 时')
-            .appendField();
         this.appendStatementInput('blocks')
             .appendField('');
         this.setOutput(false, "String");
@@ -20,8 +22,14 @@ addEventListener('load', function () {
     block.add("events_role_event", function () {
         console.log(this)
         this.appendDummyInput()
-            .appendField('当 开始运行 时')
-            .appendField();
+            .appendField('当')
+            .appendField(new Blockly.FieldDropdown(roles), "role")
+            .appendField('被')
+            .appendField(new Blockly.FieldDropdown([
+                ["点击", "click"],
+                ["按下", "down"],
+                ["抬起", "up"]
+            ]), "role")
         this.appendStatementInput('blocks')
             .appendField('');
         this.setOutput(false, "String");
