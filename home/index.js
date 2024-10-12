@@ -3,8 +3,10 @@ addEventListener("load", () => {
     New.addEventListener("click", () => {
         location.href = "/editor"
     })
-    const Home = document.getElementById(`[data-nav="home"]`)
-    Home.addEventListener("click", () => {
-        location.reload();
+    const Navs = document.querySelectorAll(".nav")
+    Navs.forEach(Nav => {
+        Nav.addEventListener("click", () => {
+            location.href = `/${Nav.dataset.nav}`
+        })
     })
 })
