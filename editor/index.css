@@ -1,0 +1,29 @@
+body {
+    margin: 0;
+}
+
+::-webkit-scrollbar {
+    width: 0px;
+}
+
+#app {
+    display: grid;
+    grid-template-rows: 60px 1fr;
+}
+
+#main {
+    width: 100vw;
+    height: calc(100vh - 60px);
+    display: grid;
+    grid-template-columns: 35vw 65vw;
+}
+
+#previewMain {
+    width: 100%;
+    height: calc(100vh - 60px);
+}
+
+#blockDiv {
+    width: 100%;
+    height: calc(100vh - 60px);
+}
