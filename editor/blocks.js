@@ -28,7 +28,7 @@ addEventListener('load', function () {
             .appendField(new Blockly.FieldDropdown([
                 ["点击", "click"],
                 ["按下", "down"],
-                ["抬起", "up"]
+                ["松开", "up"]
             ]), "role")
         this.appendStatementInput('blocks')
             .appendField('');
