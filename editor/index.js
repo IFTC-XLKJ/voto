@@ -34,21 +34,50 @@ addEventListener("load", () => {
         blocksBoxes.push(blockly0)
         blocksBoxes.forEach(blockly => {
             blockly.style.borderLeft = "8px solid #608FEEFF"
+            blockly.style.backgroundColor = "#FFFFFF00"
             blockly.addEventListener("click", () => {
-                if (blockly.dataset.current == "1") {
+                if (blockly.style.backgroundColor == "#608FEEFF") {
                     blockly.style.backgroundColor = "#FFFFFF00"
-                    blockly.dataset.current = "0"
                 } else {
                     blockly.style.backgroundColor = "#608FEEFF"
-                    blockly.dataset.current = "1"
                 }
             })
         })
+        /*const json = {
+            blocks: {
+                languageVersion: 0,
+                blocks: [
+                    {
+                        type: "events_when_start",
+                        id: "1UIPz@~Va%:ek#w]UT0=",
+                        x: 135,
+                        y: 151
+                    }
+                ]
+            }
+        }*/
+        const json = JSON.parse(localStorage.getItem("blocklyData"))
+        Blockly.serialization.workspaces.load(json, workspace);
         const javascriptGenerator = Blockly.JavaScript;
         workspace.addChangeListener(function (event) {
+            if (Blockly.serialization.workspaces.save(workspace).blocks) {
+                console.log("no emepty")
+                localStorage.setItem("blocklyData", JSON.stringify(Blockly.serialization.workspaces.save(workspace)))
+            }
             const code = javascriptGenerator.workspaceToCode(workspace);
             console.log(code)
         })
+        setInterval(() => {
+            const blocklyDropDownDiv = document.querySelector(".blocklyDropDownDiv")
+            if (blocklyDropDownDiv) {
+                blocklyDropDownDiv.style.backgroundColor = "white"
+                blocklyDropDownDiv.style.borderColor = "white"
+            }
+            const blocklyMenuItemContents = document.querySelectorAll(".blocklyMenuItemContent")
+            blocklyMenuItemContents.forEach(blocklyMenuItemContent => {
+                blocklyMenuItemContent.style.color = "#333"
+            })
+        }, 1)
     })
 
 })
