@@ -1,0 +1,26 @@
+body {
+    margin: 0;
+}
+
+#nav {
+    width: 100px;
+    height: 100vh;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+    border-radius: 0 15px 15px 0;
+    display: grid;
+    grid-template-rows: 40px 1fr;
+}
+
+.nav {
+    -webkit-user-select: none;
+    user-select: none;
+    width: 90%;
+    height: 90%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    box-shadow: 0 5px 5px rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+    margin: auto;
+}
