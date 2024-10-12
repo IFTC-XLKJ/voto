@@ -11,6 +11,12 @@ body {
     grid-template-rows: 60px 1fr;
 }
 
+#nav {
+    width: 100vw;
+    height: 60px;
+    background-color: #297EFFFF;
+}
+
 #main {
     width: 100vw;
     height: calc(100vh - 60px);
