@@ -1,13 +1,35 @@
 const pathToMedia = "/blockly/package/media/";
+const generatorWorkId = () => {
+    return Math.random().toString(36).slice(2)
+}
 window.workdata = {
     title: "新的Voto作品",
+    workId: generatorWorkId(),
     x: 0,
     y: 0,
     blockData: [],
     screenData: [],
     roleData: [],
 }
+function getURLParameters() {
+    const queryString = window.location.search.substring(1);
+    const params = {};
+
+    if (queryString) {
+        queryString.split('&').forEach(param => {
+            const [key, value] = param.split('=');
+            params[key] = decodeURIComponent(value);
+        });
+    }
+
+    return params;
+}
+
+const urlParams = getURLParameters();
 addEventListener("load", () => {
+    if (urlParams.workId) {
+        workdata.workId = urlParams.workId
+    }
     document.addEventListener("blockLoad", e => {
         console.log("blockLoad")
         window.workspace = Blockly.inject('blocklyDiv', {
@@ -163,9 +185,11 @@ addEventListener("load", () => {
             }
         }, 0)
     })
+    preview.style.width = `${previewBody.offsetWidth}px`
+    preview.style.height = `${(previewBody.offsetWidth / 16) * 9}px`
 })
 
 addEventListener("resize", () => {
-    preview.style.width = `${previewBody.offetWidth}px`
-    preview.style.height = (window.innerHeight - 60) + "px"
+    preview.style.width = `${previewBody.offsetWidth}px`
+    preview.style.height = `${(previewBody.offsetWidth / 16) * 9}px`
 })
