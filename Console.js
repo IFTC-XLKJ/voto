@@ -6,7 +6,7 @@ class Console {
             return obj instanceof HTMLElement;
         }
         if (!isElement(this.preview)) {
-            throw new Error("绗竴涓弬鏁扮被鍨嬪繀椤讳负鍏冪礌");
+            throw new Error("缁楊兛绔存稉顏勫棘閺佹壆琚崹瀣箑妞よ璐熼崗鍐");
         } else {
             var CslStyle = document.createElement("style");
             CslStyle.innerText = ``;
@@ -24,6 +24,7 @@ class Console {
         this.preview.appendChild(log)
         this.preview
     }
+    print(text) {}
     warn(text) { }
     error(text) { }
     on(type, callback) {
