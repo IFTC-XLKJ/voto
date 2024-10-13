@@ -1,12 +1,14 @@
 class Console {
     constructor(preview) {
-        this.preview = preview
+        this.preview = preview;
         this.events = {};
         function isElement(obj) {
             return obj instanceof HTMLElement;
         }
         if (!isElement(this.preview)) {
-            throw new Error("缁楊兛绔存稉顏勫棘閺佹壆琚崹瀣箑妞よ璐熼崗鍐");
+            throw new Error(
+                "缁楊兛绔存稉顏勫棘閺佹壆琚崹瀣箑妞よ璐熼崗鍐"
+            );
         } else {
             var CslStyle = document.createElement("style");
             CslStyle.innerText = ``;
@@ -15,18 +17,18 @@ class Console {
             var CslUL = document.createElement("ul");
             this.preview.appendChild(CslUL);
             this.console = CslUL;
-            this.#emit("onload", { Element: CslUL })
+            this.#emit("onload", { Element: CslUL });
         }
     }
-    log(text) { 
-        var log = document.createElement("li")
-        log.className= "console-log"
-        this.preview.appendChild(log)
-        this.preview
+    log(text) {
+        var log = document.createElement("li");
+        log.className = "console-log";
+        this.preview.appendChild(log);
+        this.preview;
     }
     print(text) {}
-    warn(text) { }
-    error(text) { }
+    warn(text) {}
+    error(text) {}
     on(type, callback) {
         if (!this.events[type]) {
             this.events[type] = [];
@@ -37,13 +39,13 @@ class Console {
         if (!this.events[type]) {
             return 0;
         }
-        const callbacks = this.events[type]
+        const callbacks = this.events[type];
         for (const callback of callbacks) {
             try {
                 callback.call(this, new EventObject(e));
             } catch (e) {
                 console.error(String(e));
             }
-        };
+        }
     }
 }
