@@ -1,6 +1,6 @@
 const blockLoad = new Event('blockLoad', { isTrust: true })
 window.roles = [
-    ["背景", "#background"]
+    ["背景", "__background__"]
 ]
 addEventListener('load', function () {
     const block = new Block()
@@ -36,8 +36,10 @@ addEventListener('load', function () {
         this.svgGroup_.classList.add('EventsBlocks');
     }, [null])
     block.code("events_role_event", function (block) {
+        var role = block.getFieldValue("role")
+        var eventName = block.getFieldValue("eventName")
         var blocks = Blockly.JavaScript.statementToCode(block, 'blocks')
-        var code = `events.on("when_start",funtion() {\n${blocks}\n})`
+        var code = `events.on("on_role_-${role}-_${eventName}",funtion() {\n${blocks}\n})`
         return code
     })
     console.log("blockLoad")
