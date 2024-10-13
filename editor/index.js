@@ -53,10 +53,6 @@ addEventListener("load", () => {
         })
         let isLoaded = false
         const javascriptGenerator = Blockly.JavaScript;
-        setInterval(() => {
-            if (isLoaded) {
-            }
-        }, 1)
         try {
             const json = JSON.parse(localStorage.getItem("blocklyData"))
             Blockly.serialization.workspaces.load(json, workspace);
@@ -74,6 +70,7 @@ addEventListener("load", () => {
         } catch (err) {
             console.log(err)
         }
+        //Blockly.Variables.createVariableButtonHandler(button.getTargetWorkspace(), null, 'panda');
         workspace.addChangeListener(function (event) {
             console.log(event)
             if (event.type == "finished_loading") {
@@ -104,6 +101,26 @@ addEventListener("load", () => {
             blocklyMenuItemContents.forEach(blocklyMenuItemContent => {
                 blocklyMenuItemContent.style.color = "#333"
             })
+            const blocklyFlyoutButtonShadow = document.querySelector(".blocklyFlyoutButtonShadow")
+            if (blocklyFlyoutButtonShadow) {
+                blocklyFlyoutButtonShadow.setAttribute("width", 200)
+                blocklyFlyoutButtonShadow.setAttribute("height", 30)
+            }
+            const blocklyFlyoutButtonBackground = document.querySelector(".blocklyFlyoutButtonBackground")
+            if (blocklyFlyoutButtonBackground) {
+                blocklyFlyoutButtonBackground.setAttribute("width", 200)
+                blocklyFlyoutButtonBackground.setAttribute("height", 30)
+            }
+            const blocklyText = document.querySelector(".blocklyFlyoutButton>.blocklyText")
+            if (blocklyText) {
+                blocklyText.setAttribute("y", 21)
+                blocklyText.setAttribute("x", 100)
+            }
+            const blocklyPath2 = document.querySelectorAll(".blocklySelected>.blocklyPath")[1]
+            if (blocklyPath2) {
+                blocklyPath2.setAttribute("d", "")
+                blocklyPath2.setAttribute("fill", "none")
+            }
         }, 1)
     })
 })
