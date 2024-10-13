@@ -34,3 +34,10 @@ body {
     width: 100%;
     height: calc(100vh - 60px);
 }
+
+#previewBody {
+    width: 100%;
+}
+
+#preview {
+}
