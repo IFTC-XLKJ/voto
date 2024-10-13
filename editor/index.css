@@ -27,6 +27,7 @@ body {
 #previewMain {
     width: 100%;
     height: calc(100vh - 60px);
+    box-shadow: inset 0px 0px 5px #47474788;
 }
 
 #blockDiv {
