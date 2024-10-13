@@ -1,4 +1,12 @@
 const pathToMedia = "/blockly/package/media/";
+window.workdata = {
+    title: "新的Voto作品",
+    x: 0,
+    y: 0,
+    blockData: [],
+    screenData: [],
+    roleData: [],
+}
 addEventListener("load", () => {
     document.addEventListener("blockLoad", e => {
         console.log("blockLoad")
@@ -64,6 +72,13 @@ addEventListener("load", () => {
         }, 1)
         const json = JSON.parse(localStorage.getItem("blocklyData"))
         Blockly.serialization.workspaces.load(json, workspace);
+        const blocklyBlockCanvas = document.querySelector(".blocklyBlockCanvas")
+        const CanvasX = JSON.parse(localStorage.getItem("blocklyCanvas")).x
+        const CanvasY = JSON.parse(localStorage.getItem("blocklyCanvas")).y
+        workspace.scrollX = CanvasX - 70;
+        workspace.scrollY = CanvasY;
+        console.log("x", CanvasX, "y", CanvasY)
+        blocklyBlockCanvas.transform.baseVal.getItem(0).setTranslate(CanvasX, CanvasY)
         workspace.addChangeListener(function (event) {
             console.log(event)
             if (event.type == "finished_loading") {
@@ -76,6 +91,11 @@ addEventListener("load", () => {
                     localStorage.setItem("blocklyData", JSON.stringify(Blockly.serialization.workspaces.save(workspace)))
                 }
             }
+            const blocklyBlockCanvas = document.querySelector(".blocklyBlockCanvas")
+            const CanvasX = blocklyBlockCanvas.transform.animVal[0].matrix.e;
+            const CanvasY = blocklyBlockCanvas.transform.animVal[0].matrix.f;
+            localStorage.setItem("blocklyCanvas", JSON.stringify({ x: CanvasX, y: CanvasY }))
+            console.log(CanvasX, CanvasY)
             const code = javascriptGenerator.workspaceToCode(workspace);
             console.log(code)
         })
@@ -91,5 +111,4 @@ addEventListener("load", () => {
             })
         }, 1)
     })
-
 })
