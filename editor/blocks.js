@@ -5,6 +5,7 @@ window.roles = [
 addEventListener('load', function () {
     const block = new Block()
     const events = new Events()
+    // Events
     block.add("events_when_start", function () {
         console.log(this)
         this.appendDummyInput()
@@ -42,6 +43,68 @@ addEventListener('load', function () {
         var code = `events.on("on_role_-${role}-_${eventName}",funtion() {\n${blocks}\n})`
         return code
     })
+    // Controls
+    var ControlsRepeatJson = {
+        type: 'controls_repeat',
+        message0: '%{BKY_CONTROLS_REPEAT_TITLE}',
+        args0: [
+            {
+                type: 'field_number',
+                name: 'TIMES',
+                value: 20,
+                min: 0,
+                precision: 1,
+            },
+        ],
+        message1: '%{BKY_CONTROLS_REPEAT_INPUT_DO} %1',
+        args1: [
+            {
+                type: 'input_statement',
+                name: 'DO',
+            },
+        ],
+        previousStatement: null,
+        nextStatement: null,
+        style: 'loop_blocks',
+        tooltip: '%{BKY_CONTROLS_REPEAT_TOOLTIP}',
+        helpUrl: '%{BKY_CONTROLS_REPEAT_HELPURL}',
+    }
+    Blockly.Blocks['controls_repeat'] = {
+        init: function () {
+            this.jsonInit(ControlsRepeatJson);
+            this.svgGroup_.classList.add('ControlsBlocks');
+        }
+    };
+    var ControlsIfJson = {
+        type: 'controls_if',
+        message0: '%{BKY_CONTROLS_IF_MSG_IF} %1',
+        args0: [
+            {
+                type: 'input_value',
+                name: 'IF0',
+                check: 'Boolean',
+            },
+        ],
+        message1: '%{BKY_CONTROLS_IF_MSG_THEN} %1',
+        args1: [
+            {
+                type: 'input_statement',
+                name: 'DO0',
+            },
+        ],
+        previousStatement: null,
+        nextStatement: null,
+        style: 'logic_blocks',
+        suppressPrefixSuffix: true,
+        mutator: 'controls_if_mutator',
+        extensions: ['controls_if_tooltip'],
+    }
+    Blockly.Blocks['controls_if'] = {
+        init: function () {
+            this.jsonInit(ControlsIfJson);
+            this.svgGroup_.classList.add('ControlsBlocks');
+        }
+    };
     console.log("blockLoad")
     document.dispatchEvent(blockLoad)
 })
