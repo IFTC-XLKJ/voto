@@ -39,5 +39,17 @@ body {
     width: 100%;
 }
 
-#preview {
+#preview {}
+
+#csl {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 20vw;
+    height: fit-content;
+    max-height: 500px;
+    overflow-y: auto;
+    background-color: white;
+    box-shadow: 0px 0px 5px #47474788;
+    border-radius: 15px;
 }

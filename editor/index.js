@@ -11,6 +11,7 @@ window.workdata = {
     screenData: [],
     roleData: [],
 }
+window.workId = ""
 function getURLParameters() {
     const queryString = window.location.search.substring(1);
     const params = {};
@@ -27,8 +28,18 @@ function getURLParameters() {
 
 const urlParams = getURLParameters();
 addEventListener("load", () => {
+    const preview = document.getElementById("preview");
     if (urlParams.workId) {
         workdata.workId = urlParams.workId
+        workId = urlParams.workId
+        console.log(workdata.workId)
+        preview.src = `/preview?workId=${workdata.workId}`
+    } else {
+        workdata.workId = `__${workdata.workId}__`
+        workId = workdata.workId
+        location.search = `?workId=${workdata.workId}`
+        console.log(workdata.workId)
+        preview.src = `/preview?workId=${workdata.workId}`
     }
     document.addEventListener("blockLoad", e => {
         console.log("blockLoad")
@@ -135,9 +146,8 @@ addEventListener("load", () => {
             const CanvasX = blocklyBlockCanvas.transform.animVal[0].matrix.e;
             const CanvasY = blocklyBlockCanvas.transform.animVal[0].matrix.f;
             localStorage.setItem("blocklyCanvas", JSON.stringify({ x: CanvasX, y: CanvasY }))
-            console.log(CanvasX, CanvasY)
             const code = javascriptGenerator.workspaceToCode(workspace);
-            console.log(code)
+            localStorage.setItem("code", code)
         })
         setInterval(() => {
             const blocklyDropDownDiv = document.querySelector(".blocklyDropDownDiv")
@@ -185,10 +195,38 @@ addEventListener("load", () => {
             }
         }, 0)
     })
+    postMessage({
+        type: "init",
+        workId: workdata.workId
+    })
+    onmessage = (e) => {
+        if (e.data.type) {
+            console.log(e.data)
+            if (e.data.type === "init") {
+                console.log(e.data.workId)
+                postMessage({
+                    type: "reply",
+                    success: true,
+                    id: workId
+                })
+            }
+            if (e.data.id == workId) {
+                if (e.data.type === "reply") {
+                    if (e.data.success) {
+                        console.log("success")
+                    } else {
+                        console.log("fail")
+                    }
+                }
+            }
+        }
+    }
     preview.style.width = `${previewBody.offsetWidth}px`
     preview.style.height = `${(previewBody.offsetWidth / 16) * 9}px`
 })
-
+addEventListener("load", () => {
+    const Csl = new Console(csl)
+})
 addEventListener("resize", () => {
     preview.style.width = `${previewBody.offsetWidth}px`
     preview.style.height = `${(previewBody.offsetWidth / 16) * 9}px`
