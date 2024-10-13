@@ -21,11 +21,12 @@ window.toolbox = {
             contents: [
                 {
                     kind: "block",
-                    type: "events_when_start",
+                    type: "controls_repeat",
+                    colour: "#68CDFFFF",
                 },
                 {
                     kind: "block",
-                    type: "events_role_event",
+                    type: "controls_if",
                 },
             ]
         },
