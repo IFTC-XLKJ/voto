@@ -3,7 +3,7 @@ const generatorWorkId = () => {
     return Math.random().toString(36).slice(2)
 }
 window.workdata = {
-    title: "新的Voto作品",
+    title: "鏂扮殑Voto浣滃搧",
     workId: generatorWorkId(),
     x: 0,
     y: 0,
@@ -123,12 +123,12 @@ addEventListener("load", () => {
                 console.log(`Variable "${event.varName}" ID: "${event.varId}"`);
             }
             if (event.type == "finished_loading") {
-                console.log("加载")
+                console.log("鍔犺浇")
                 isLoaded = true
             }
             if (event.type == "create" || event.type == "change" || event.type == "delete" || event.type == "move" || event.type == "comment_change" || event.type == "comment_create" || event.type == "comment_delete") {
                 if (Blockly.serialization.workspaces.save(workspace).blocks && isLoaded) {
-                    console.log("保存")
+                    console.log("淇濆瓨")
                     localStorage.setItem("blocklyData", JSON.stringify(Blockly.serialization.workspaces.save(workspace)))
                 }
                 const blocklyTreeLabels = document.querySelectorAll(".blocklyTreeLabel")
