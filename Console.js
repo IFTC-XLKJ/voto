@@ -6,7 +6,7 @@ class Console {
             return obj instanceof HTMLElement;
         }
         if (!isElement(this.preview)) {
-            throw new Error("第一个参数类型必须为元素");
+            throw new Error("绗竴涓弬鏁扮被鍨嬪繀椤讳负鍏冪礌");
         } else {
             var CslStyle = document.createElement("style");
             CslStyle.innerText = ``;
@@ -18,7 +18,12 @@ class Console {
             this.#emit("onload", { Element: CslUL })
         }
     }
-    log(text) { }
+    log(text) { 
+        var log = document.createElement("li")
+        log.className= "console-log"
+        this.preview.appendChild(log)
+        this.preview
+    }
     warn(text) { }
     error(text) { }
     on(type, callback) {
