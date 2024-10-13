@@ -20,6 +20,11 @@ window.toolbox = {
             name: "变量",
             contents: [
                 {
+                    kind: "button",
+                    text: "A button",
+                    callbackKey: "button"
+                },
+                {
                     kind: "block",
                     type: "variables_set",
                 },
