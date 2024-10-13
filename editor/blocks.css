@@ -13,6 +13,7 @@
     border-radius: 5px;
 }
 
+/* Events Blocks */
 .EventsBlocks>.blocklyPath {
     stroke: #608FEEFF;
 }
@@ -32,6 +33,36 @@
 .EventsBlocks>.blocklyEditableText>.blocklyDropdownRect[stroke] {
     stroke: #BFD2F8FF;
     fill: #BFD2F8FF
+}
+
+/* Controls Blocks */
+.ControlsBlocks>.blocklyPath {
+    stroke: #68CDFFFF;
+}
+
+.ControlsBlocks>.blocklyPath:hover {
+    stroke: #68CDFFFF;
+}
+
+.ControlsBlocks>.blocklyPath[fill] {
+    fill: #68CDFFFF;
+}
+
+.ControlsBlocks>.blocklyPath[stroke] {
+    stroke: #68CDFFFF;
+}
+
+.ControlsBlocks>.blocklyEditableText>.blocklyDropdownRect[stroke] {
+    stroke: #C3EBFFFF;
+    fill: #C3EBFFFF
+}
+
+.ControlsBlocks>.blocklyEditableText>.blocklyFieldRect {
+    stroke: #C3EBFFFF;
+}
+
+.ControlsBlocks>.blocklyOutlinePath {
+    fill: #C3EBFFFF
 }
 
 .blocklySelected>.blocklyPath:nth-of-type(2) {
