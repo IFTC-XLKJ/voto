@@ -51,19 +51,6 @@ addEventListener("load", () => {
                 }
             })
         })
-        /*const json = {
-            blocks: {
-                languageVersion: 0,
-                blocks: [
-                    {
-                        type: "events_when_start",
-                        id: "1UIPz@~Va%:ek#w]UT0=",
-                        x: 135,
-                        y: 151
-                    }
-                ]
-            }
-        }*/
         let isLoaded = false
         const javascriptGenerator = Blockly.JavaScript;
         setInterval(() => {
