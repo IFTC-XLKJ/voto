@@ -57,15 +57,23 @@ addEventListener("load", () => {
             if (isLoaded) {
             }
         }, 1)
-        const json = JSON.parse(localStorage.getItem("blocklyData"))
-        Blockly.serialization.workspaces.load(json, workspace);
-        const blocklyBlockCanvas = document.querySelector(".blocklyBlockCanvas")
-        const CanvasX = JSON.parse(localStorage.getItem("blocklyCanvas")).x
-        const CanvasY = JSON.parse(localStorage.getItem("blocklyCanvas")).y
-        workspace.scrollX = CanvasX - 70;
-        workspace.scrollY = CanvasY;
-        console.log("x", CanvasX, "y", CanvasY)
-        blocklyBlockCanvas.transform.baseVal.getItem(0).setTranslate(CanvasX, CanvasY)
+        try {
+            const json = JSON.parse(localStorage.getItem("blocklyData"))
+            Blockly.serialization.workspaces.load(json, workspace);
+        } catch (err) {
+            console.log(err)
+        }
+        try {
+            const blocklyBlockCanvas = document.querySelector(".blocklyBlockCanvas")
+            const CanvasX = JSON.parse(localStorage.getItem("blocklyCanvas")).x
+            const CanvasY = JSON.parse(localStorage.getItem("blocklyCanvas")).y
+            workspace.scrollX = CanvasX - 70;
+            workspace.scrollY = CanvasY;
+            console.log("x", CanvasX, "y", CanvasY)
+            blocklyBlockCanvas.transform.baseVal.getItem(0).setTranslate(CanvasX, CanvasY)
+        } catch (err) {
+            console.log(err)
+        }
         workspace.addChangeListener(function (event) {
             console.log(event)
             if (event.type == "finished_loading") {
