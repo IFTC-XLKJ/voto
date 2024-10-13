@@ -164,3 +164,8 @@ addEventListener("load", () => {
         }, 0)
     })
 })
+
+addEventListener("resize", () => {
+    preview.style.width = `${previewBody.offetWidth}px`
+    preview.style.height = (window.innerHeight - 60) + "px"
+})
