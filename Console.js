@@ -6,9 +6,7 @@ class Console {
             return obj instanceof HTMLElement;
         }
         if (!isElement(this.preview)) {
-            throw new Error(
-                "缂傚倷鐒﹂〃蹇涘礂濞戞氨鍗氶悗娑欘焽閳绘梹銇勮箛鎾愁仼婵☆偅锕㈤弻鈩冩媴閻熼偊妫嗛柣鐐村嚬閸嬪﹤鐣烽崷顓涘亾閿濆簼绨界紒鐘冲灥椤啴濡堕崼顐㈡暯闁荤姵鍔楅崰鏍х暦濡ゅ懎绀冩い蹇撴－濡??"
-            );
+            throw new Error("第一个参数必须为元素");
         } else {
             var CslStyle = document.createElement("style");
             CslStyle.innerText = ``;
@@ -18,7 +16,7 @@ class Console {
             CslDrag.className = "csl-drag";
             this.preview.appendChild(CslDrag);
             var CslUL = document.createElement("ul");
-            this.preview.className = "csl-ul"
+            this.preview.className = "csl-ul";
             this.preview.appendChild(CslUL);
             this.console = CslUL;
             this.#emit("onload", { Element: CslUL });
