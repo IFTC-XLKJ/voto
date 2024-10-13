@@ -17,12 +17,26 @@ window.toolbox = {
         },
         {
             kind: "category",
+            name: "控制",
+            contents: [
+                {
+                    kind: "block",
+                    type: "events_when_start",
+                },
+                {
+                    kind: "block",
+                    type: "events_role_event",
+                },
+            ]
+        },
+        {
+            kind: "category",
             name: "变量",
             contents: [
                 {
                     kind: "button",
-                    text: "A button",
-                    callbackKey: "button"
+                    text: "创建变量",
+                    callbackKey: "createVar"
                 },
                 {
                     kind: "block",
