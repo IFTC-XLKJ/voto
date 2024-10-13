@@ -109,56 +109,58 @@ addEventListener("load", () => {
                     blocklyTreeLabel.style.color = "#333"
                 })
             }
-        const blocklyBlockCanvas = document.querySelector(".blocklyBlockCanvas")
-        const CanvasX = blocklyBlockCanvas.transform.animVal[0].matrix.e;
-        const CanvasY = blocklyBlockCanvas.transform.animVal[0].matrix.f;
-        localStorage.setItem("blocklyCanvas", JSON.stringify({ x: CanvasX, y: CanvasY }))
-        console.log(CanvasX, CanvasY)
-        const code = javascriptGenerator.workspaceToCode(workspace);
-        console.log(code)
-    })
-    setInterval(() => {
-        const blocklyDropDownDiv = document.querySelector(".blocklyDropDownDiv")
-        if (blocklyDropDownDiv) {
-            blocklyDropDownDiv.style.backgroundColor = "white"
-            blocklyDropDownDiv.style.borderColor = "white"
-        }
-        const blocklyMenuItemContents = document.querySelectorAll(".blocklyMenuItemContent")
-        blocklyMenuItemContents.forEach(blocklyMenuItemContent => {
-            blocklyMenuItemContent.style.color = "#333"
+            const blocklyBlockCanvas = document.querySelector(".blocklyBlockCanvas")
+            const CanvasX = blocklyBlockCanvas.transform.animVal[0].matrix.e;
+            const CanvasY = blocklyBlockCanvas.transform.animVal[0].matrix.f;
+            localStorage.setItem("blocklyCanvas", JSON.stringify({ x: CanvasX, y: CanvasY }))
+            console.log(CanvasX, CanvasY)
+            const code = javascriptGenerator.workspaceToCode(workspace);
+            console.log(code)
         })
-        const blocklyFlyoutButtonShadow = document.querySelector(".blocklyFlyoutButtonShadow")
-        if (blocklyFlyoutButtonShadow) {
-            blocklyFlyoutButtonShadow.setAttribute("width", 200)
-            blocklyFlyoutButtonShadow.setAttribute("height", 30)
-        }
-        const blocklyFlyoutBackground = document.querySelector(".blocklyFlyoutBackground")
-        if (!blocklyFlyoutBackground) {
-            const blocklyTreeLabels = document.querySelectorAll(".blocklyTreeLabel")
-            blocklyTreeLabels.forEach(blocklyTreeLabel => {
-                blocklyTreeLabel.style.color = "#333"
+        setInterval(() => {
+            const blocklyDropDownDiv = document.querySelector(".blocklyDropDownDiv")
+            if (blocklyDropDownDiv) {
+                blocklyDropDownDiv.style.backgroundColor = "white"
+                blocklyDropDownDiv.style.borderColor = "white"
+            }
+            const blocklyMenuItemContents = document.querySelectorAll(".blocklyMenuItemContent")
+            blocklyMenuItemContents.forEach(blocklyMenuItemContent => {
+                blocklyMenuItemContent.style.color = "#333"
             })
-        }
-        const blocklyFlyoutButtonBackground = document.querySelector(".blocklyFlyoutButtonBackground")
-        if (blocklyFlyoutButtonBackground) {
-            blocklyFlyoutButtonBackground.setAttribute("width", 200)
-            blocklyFlyoutButtonBackground.setAttribute("height", 30)
-        }
-        const blocklyText = document.querySelector(".blocklyFlyoutButton>.blocklyText")
-        if (blocklyText) {
-            blocklyText.setAttribute("y", 21)
-            blocklyText.setAttribute("x", 100)
-        }
-        const blocklyPath2 = document.querySelectorAll(".blocklySelected>.blocklyPath")[1]
-        if (blocklyPath2) {
-            blocklyPath2.setAttribute("d", "")
-            blocklyPath2.setAttribute("fill", "none")
-        }
-        const blocklyPath4 = document.querySelectorAll(".blocklySelected>.blocklyPath")[3]
-        if (blocklyPath4) {
-            blocklyPath4.setAttribute("d", "")
-            blocklyPath4.setAttribute("fill", "none")
-        }
-    }, 1)
-})
+            const blocklyFlyoutButtonShadow = document.querySelector(".blocklyFlyoutButtonShadow")
+            if (blocklyFlyoutButtonShadow) {
+                blocklyFlyoutButtonShadow.setAttribute("width", 200)
+                blocklyFlyoutButtonShadow.setAttribute("height", 30)
+            }
+            const blocklyFlyoutBackground = document.querySelector(".blocklyFlyoutBackground")
+            if (!blocklyFlyoutBackground) {
+                const blocklyTreeLabels = document.querySelectorAll(".blocklyTreeLabel")
+                blocklyTreeLabels.forEach(blocklyTreeLabel => {
+                    blocklyTreeLabel.style.color = "#333"
+                })
+            }
+            const blocklyFlyoutButtonBackground = document.querySelector(".blocklyFlyoutButtonBackground")
+            if (blocklyFlyoutButtonBackground) {
+                blocklyFlyoutButtonBackground.setAttribute("width", 200)
+                blocklyFlyoutButtonBackground.setAttribute("height", 30)
+            }
+            const blocklyText = document.querySelector(".blocklyFlyoutButton>.blocklyText")
+            if (blocklyText) {
+                blocklyText.setAttribute("y", 21)
+                blocklyText.setAttribute("x", 100)
+            }
+        }, 1)
+        setInterval(() => {
+            const blocklyPath2 = document.querySelectorAll(".blocklySelected>.blocklyPath")[1]
+            if (blocklyPath2) {
+                blocklyPath2.setAttribute("d", "")
+                blocklyPath2.setAttribute("fill", "none")
+            }
+            const blocklyPath4 = document.querySelectorAll(".blocklySelected>.blocklyPath")[3]
+            if (blocklyPath4) {
+                blocklyPath4.setAttribute("d", "")
+                blocklyPath4.setAttribute("fill", "none")
+            }
+        }, 0)
+    })
 })
