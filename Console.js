@@ -7,13 +7,16 @@ class Console {
         }
         if (!isElement(this.preview)) {
             throw new Error(
-                "缂佹鍏涚粩瀛樼▔椤忓嫬妫橀柡浣瑰鐞氼偊宕圭€ｎ亞绠戝銈堫唺鐠愮喖宕楅崘顏嗩槺"
+                "缂備焦顨忛崗娑氱博鐎涙鈻旀い蹇撳濡﹢鏌℃担鐟邦棆閻炴凹鍋婂畷鍦偓锝庝簽缁犳垵顪冮妶鍫敽閻犳劗鍠栧畷妤呭礃椤忓棭妲?"
             );
         } else {
             var CslStyle = document.createElement("style");
             CslStyle.innerText = ``;
             CslStyle.dataset.name = "Console-Style";
             document.head.appendChild(CslStyle);
+            var CslDrag = document.createElement("div");
+            CslDrag.className = "csl-drag";
+            this.preview.appendChild(CslDrag);
             var CslUL = document.createElement("ul");
             this.preview.appendChild(CslUL);
             this.console = CslUL;
