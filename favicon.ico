@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg"
+    xmlns:xlink="http://www.w3.org/1999/xlink" width="50" height="50" viewBox="0 0 50 50" fill="none">
+    <g clip-path="url(#clip-path-0_1)">
+        <path fill="#FFFFFF" fill-opacity="0" d="M0 50L50 50L50 0L0 0L0 50Z">
+        </path>
+        <rect transform="matrix(0.6533664464950562, -0.7570416331291199, 0.774856686592102, 0.6321370601654053, 22.245901107788086, 2.9262094497680664)" x="0" y="0" width="3.8621868494392015" height="32.56176271974721" rx="1.5" fill="#CCCCCC">
+        </rect>
+        <rect transform="matrix(0.6533665060997009, 0.7570416927337646, -0.7748565077781677, 0.6321372389793396, 25.231224060058594, 0)" x="0" y="0" width="3.8592679065108686" height="32.56245312428716" rx="1.5" fill="#CCCCCC">
+        </rect>
+        <ellipse cx="17.0115647315979" cy="23.28244400024414" rx="5.2343268394470215" ry="5.089059829711914" stroke="rgba(204, 204, 204, 1)" stroke-width="1" fill="#FFFFFF" fill-opacity="0">
+        </ellipse>
+        <ellipse cx="32.714555740356445" cy="23.28244400024414" rx="5.23432731628418" ry="5.089059829711914" stroke="rgba(204, 204, 204, 1)" stroke-width="1" fill="#FFFFFF" fill-opacity="0">
+        </ellipse>
+        <rect x="22.245901107788086" y="28.371501922607422" width="5.23432731628418" height="12.722644805908203" rx="2" fill="#CCCCCC">
+        </rect>
+        <rect x="14.394402503967285" y="44.910945892333984" width="20.937308311462402" height="5.089057922363281" rx="2" fill="#CCCCCC">
+        </rect>
+        <ellipse cx="18.32015609741211" cy="23.28244400024414" rx="1.3085823059082031" ry="1.2722644805908203" fill="#CCCCCC">
+        </ellipse>
+        <ellipse cx="34.023136138916016" cy="23.28244400024414" rx="1.3085823059082031" ry="1.2722644805908203" fill="#CCCCCC">
+        </ellipse>
+    </g>
+    <defs>
+        <clipPath id="clip-path-0_1">
+            <path d="M0 50L50 50L50 0L0 0L0 50Z" fill="white"/>
+        </clipPath>
+    </defs>
+</svg>
