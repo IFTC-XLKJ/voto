@@ -7,7 +7,7 @@ class Console {
         }
         if (!isElement(this.preview)) {
             throw new Error(
-                "缂備焦顨忛崗娑氱博鐎涙鈻旀い蹇撳濡﹢鏌℃担鐟邦棆閻炴凹鍋婂畷鍦偓锝庝簽缁犳垵顪冮妶鍫敽閻犳劗鍠栧畷妤呭礃椤忓棭妲?"
+                "缂傚倷鐒﹂〃蹇涘礂濞戞氨鍗氶悗娑欘焽閳绘梹銇勮箛鎾愁仼婵☆偅锕㈤弻鈩冩媴閻熼偊妫嗛柣鐐村嚬閸嬪﹤鐣烽崷顓涘亾閿濆簼绨界紒鐘冲灥椤啴濡堕崼顐㈡暯闁荤姵鍔楅崰鏍х暦濡ゅ懎绀冩い蹇撴－濡??"
             );
         } else {
             var CslStyle = document.createElement("style");
@@ -18,6 +18,7 @@ class Console {
             CslDrag.className = "csl-drag";
             this.preview.appendChild(CslDrag);
             var CslUL = document.createElement("ul");
+            this.preview.className = "csl-ul"
             this.preview.appendChild(CslUL);
             this.console = CslUL;
             this.#emit("onload", { Element: CslUL });
