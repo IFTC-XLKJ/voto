@@ -7,7 +7,7 @@ class Console {
         }
         if (!isElement(this.preview)) {
             throw new Error(
-                "缁楊兛绔存稉顏勫棘閺佹壆琚崹瀣箑妞よ璐熼崗鍐"
+                "缂佹鍏涚粩瀛樼▔椤忓嫬妫橀柡浣瑰鐞氼偊宕圭€ｎ亞绠戝銈堫唺鐠愮喖宕楅崘顏嗩槺"
             );
         } else {
             var CslStyle = document.createElement("style");
@@ -24,7 +24,7 @@ class Console {
         var log = document.createElement("li");
         log.className = "console-log";
         this.preview.appendChild(log);
-        this.preview;
+        this.preview.scrollTop = this.preview.scrollHeight;
     }
     print(text) {}
     warn(text) {}
