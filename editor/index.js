@@ -28,6 +28,8 @@ function getURLParameters() {
 
 const urlParams = getURLParameters();
 addEventListener("load", () => {
+    const Csl = new Console(csl)
+    Csl.log("正在加载...")
     const preview = document.getElementById("preview");
     if (urlParams.workId) {
         workdata.workId = urlParams.workId
@@ -248,10 +250,7 @@ addEventListener("load", () => {
     }
     preview.style.width = `${previewBody.offsetWidth}px`
     preview.style.height = `${(previewBody.offsetWidth / 16) * 9}px`
-})
-addEventListener("load", () => {
-    const Csl = new Console(csl)
-    Csl.log("加载完成 <a href='https://github.com/Sky-Eye-Team/Sky-Eye-IDE")
+    Csl.log("加载完成")
 })
 addEventListener("resize", () => {
     preview.style.width = `${previewBody.offsetWidth}px`
