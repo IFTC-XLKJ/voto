@@ -65,6 +65,7 @@ class Console {
                 newX = initialOffset.x + e.clientX - dragStartPos.x;
                 newY = initialOffset.y + e.clientY - dragStartPos.y;
                 console.log(newX, newY)
+                newY = newY - 5;
                 preview.style.left = newX + 'px';
                 preview.style.top = newY + 'px';
             }
