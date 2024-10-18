@@ -140,7 +140,7 @@ addEventListener("load", () => {
                 isLoaded = true
             }
             if (event.type == "create" || event.type == "change" || event.type == "delete" || event.type == "move" || event.type == "comment_change" || event.type == "comment_create" || event.type == "comment_delete" || event.type == "viewport_change") {
-                if (Blockly.serialization.workspaces.save(workspace).blocks && isLoaded) {
+                if (Blockly.serialization.workspaces.save(workspace).blocks) {
                     console.log("改变")
                     localStorage.setItem("blocklyData", JSON.stringify(Blockly.serialization.workspaces.save(workspace)))
                 }
