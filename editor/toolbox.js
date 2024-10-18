@@ -40,6 +40,16 @@ window.toolbox = {
         },
         {
             kind: "category",
+            name: "动作",
+            contents: [
+                {
+                    kind: "block",
+                    type: "actions_move_forward",
+                },
+            ]
+        },
+        {
+            kind: "category",
             name: "变量",
             contents: [
                 {

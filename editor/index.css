@@ -41,6 +41,11 @@ body {
 
 #preview {
     user-select: none;
+    overflow: hidden;
+}
+
+::-webkit-scrollbar {
+    width: 0px;
 }
 
 #csl {

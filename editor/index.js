@@ -28,7 +28,7 @@ function getURLParameters() {
 
 const urlParams = getURLParameters();
 addEventListener("load", () => {
-    const Csl = new Console(csl)
+    const Csl = new Console(csl, true)
     Csl.log("正在加载...")
     const preview = document.getElementById("preview");
     if (urlParams.workId) {
@@ -78,6 +78,8 @@ addEventListener("load", () => {
         var blockly1 = document.getElementById("blockly-1")
         blocksBoxes.push({ blockly: blockly1, color: "#68CDFFFF" })
         var blockly2 = document.getElementById("blockly-2")
+        blocksBoxes.push({ blockly: blockly2, color: "#F46767FF" })
+        var blockly2 = document.getElementById("blockly-3")
         blocksBoxes.push({ blockly: blockly2, color: "#FFA500FF" })
         blocksBoxes.forEach(blockly => {
             blockly.blockly.style.borderLeft = "8px solid " + blockly.color
@@ -137,6 +139,7 @@ addEventListener("load", () => {
             if (event.type == "finished_loading") {
                 blocklyMainBackground.dispatchEvent(clickEvent);
                 console.log("加载完成")
+                Csl.log("控制台")
                 isLoaded = true
             }
             if (event.type == "create" || event.type == "change" || event.type == "delete" || event.type == "move" || event.type == "comment_change" || event.type == "comment_create" || event.type == "comment_delete" || event.type == "viewport_change") {
@@ -251,6 +254,7 @@ addEventListener("load", () => {
     preview.style.width = `${previewBody.offsetWidth}px`
     preview.style.height = `${(previewBody.offsetWidth / 16) * 9}px`
     Csl.log("加载完成")
+    Csl.log("欢迎使用 Voto编辑器")
 })
 addEventListener("resize", () => {
     preview.style.width = `${previewBody.offsetWidth}px`

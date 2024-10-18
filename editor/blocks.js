@@ -109,24 +109,37 @@ addEventListener('load', function () {
             this.svgGroup_.classList.add('ControlsBlocks');
         }
     };
-    block.add("controls_output", function () {
-        console.log(this)
-        this.appendDummyInput()
-            .appendField('在控制台')
-            .appendField(new Blockly.FieldDropdown([
-                ["打印", "print"],
-                ["警告", "warn"],
-                ["错误", "error"]
-            ]), "type")
-            .appendField(new Blockly.FieldTextInput("调试信息"), "text");
-        this.setPreviousStatement(true, null);
-        this.setNextStatement(true, null);
-        this.svgGroup_.classList.add('ControlsBlocks');
-    }, [null])
+    var ControlsOutputJson = {
+        type: 'controls_output',
+        message0: '在控制台 %1 %2',
+        args0: [
+            {
+                type: 'field_dropdown',
+                name: 'type',
+                options: [
+                    ["打印", "print"],
+                    ["警告", "warn"],
+                    ["错误", "error"],
+                ]
+            },
+            {
+                type: 'input_value',
+                name: 'text',
+            },
+        ],
+        previousStatement: null,
+        nextStatement: null,
+    }
+    Blockly.Blocks['controls_output'] = {
+        init: function () {
+            this.jsonInit(ControlsOutputJson);
+            this.svgGroup_.classList.add('ControlsBlocks');
+        }
+    };
     block.code("controls_output", function (block) {
         var type = block.getFieldValue("type")
         var text = block.getFieldValue("text")
-        var code = `Csl.${type}(${text})`
+        var code = `Csl.${type}(String(${text}))`
         return code
     })
     block.add("controls_clear-output", function () {
@@ -141,6 +154,37 @@ addEventListener('load', function () {
         var code = `Csl.clear()`
         return code
     })
+    // Actions
+    block.add("actions_move_forward", function () {
+        console.log(this)
+        this.appendDummyInput()
+            .appendField('角色')
+            .appendField(new Blockly.FieldDropdown(roles), "role")
+            .appendField('向前移动')
+            .appendField(new Blockly.FieldNumber(10, 0), "distance")
+            .appendField('步');
+        this.setPreviousStatement(true, null);
+        this.setNextStatement(true, null);
+        this.svgGroup_.classList.add('ActionsBlocks');
+    }, {
+        role: function (block) {
+            return roles
+        }
+    })
+    block.code("actions_move_forward", function (block) {
+        var role = block.getFieldValue("role")
+        var distance = block.getFieldValue("distance")
+        if (role == "__background__") {
+            const Csl = new Console(csl)
+            Csl.error("背景不是角色\n背景不能移动")
+        }
+        var code = `actions.move_forward(${distance})`
+        return code
+    })
+    // Looks
+    // Pen
+    // Sound
+    // Operators
     // Variables
     var VariablesGetJson = {
         type: 'variables_get',
