@@ -32,6 +32,10 @@ window.toolbox = {
                     kind: "block",
                     type: "controls_output",
                 },
+                {
+                    kind: "block",
+                    type: "controls_clear-output",
+                },
             ]
         },
         {
