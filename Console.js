@@ -104,7 +104,8 @@ class Console {
             e.preventDefault();
             navigator.clipboard.writeText(text)
                 .then(() => {
-                    
+                    const toast = new Toast();
+                    toast.success("复制成功", 2000);
                 })
                 .catch((err) => {
                     console.error('Failed to copy text: ', err);
