@@ -181,6 +181,16 @@ addEventListener("load", () => {
                 blocklyText.setAttribute("y", 21)
                 blocklyText.setAttribute("x", 100)
             }
+            const blocklyToolboxDiv = document.querySelector(".blocklyToolboxDiv")
+            blocklyToolboxDiv.addEventListener("click", e => {
+                if (e.target.className != "blocklyToolboxDiv blocklyNonSelectable") {
+                    return
+                }
+                const blocklyTreeLabels = document.querySelectorAll(".blocklyTreeLabel")
+                blocklyTreeLabels.forEach(blocklyTreeLabel => {
+                    blocklyTreeLabel.style.color = "#333"
+                })
+            })
         }, 1)
         setInterval(() => {
             const blocklyPath2 = document.querySelectorAll(".blocklySelected>.blocklyPath")[1]
