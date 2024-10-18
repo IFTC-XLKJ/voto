@@ -40,7 +40,7 @@ body {
 }
 
 #preview {
-    position: sticky;
+    user-select: none;
 }
 
 #csl {
