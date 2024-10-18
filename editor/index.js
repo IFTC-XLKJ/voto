@@ -109,11 +109,21 @@ addEventListener("load", () => {
             const CanvasY = JSON.parse(localStorage.getItem("blocklyCanvas")).y
             workspace.scrollX = CanvasX - 70;
             workspace.scrollY = CanvasY;
+            workspace.oldLeft = 0 - (CanvasX - 70)
+            workspace.oldTop = 0 - CanvasY;
             console.log("x", CanvasX, "y", CanvasY)
             blocklyBlockCanvas.transform.baseVal.getItem(0).setTranslate(CanvasX, CanvasY)
         } catch (err) {
             console.log(err)
         }
+        const blocklyMainBackground = document.querySelector(".blocklyMainBackground")
+        console.log(blocklyMainBackground)
+        const clickEvent = new MouseEvent('mousedown', {
+            bubbles: true,
+            cancelable: false,
+            view: window
+        });
+        blocklyMainBackground.dispatchEvent(clickEvent);
         workspace.registerButtonCallback("createVar", function (ws) {
             Blockly.Variables.createVariableButtonHandler(workspace, null, 'any')
         })
@@ -123,12 +133,13 @@ addEventListener("load", () => {
                 console.log(`Variable "${event.varName}" ID: "${event.varId}"`);
             }
             if (event.type == "finished_loading") {
-                console.log("鍔犺浇")
+                blocklyMainBackground.dispatchEvent(clickEvent);
+                console.log("加载完成")
                 isLoaded = true
             }
-            if (event.type == "create" || event.type == "change" || event.type == "delete" || event.type == "move" || event.type == "comment_change" || event.type == "comment_create" || event.type == "comment_delete") {
+            if (event.type == "create" || event.type == "change" || event.type == "delete" || event.type == "move" || event.type == "comment_change" || event.type == "comment_create" || event.type == "comment_delete" || event.type == "viewport_change") {
                 if (Blockly.serialization.workspaces.save(workspace).blocks && isLoaded) {
-                    console.log("淇濆瓨")
+                    console.log("改变")
                     localStorage.setItem("blocklyData", JSON.stringify(Blockly.serialization.workspaces.save(workspace)))
                 }
                 const blocklyTreeLabels = document.querySelectorAll(".blocklyTreeLabel")
@@ -176,10 +187,14 @@ addEventListener("load", () => {
                 blocklyFlyoutButtonBackground.setAttribute("width", 200)
                 blocklyFlyoutButtonBackground.setAttribute("height", 30)
             }
-            const blocklyText = document.querySelector(".blocklyFlyoutButton>.blocklyText")
-            if (blocklyText) {
+            const blocklyTexts = document.querySelectorAll(".blocklyFlyoutButton>.blocklyText")
+            blocklyTexts.forEach(blocklyText => {
                 blocklyText.setAttribute("y", 21)
                 blocklyText.setAttribute("x", 100)
+            })
+            const createVar = document.querySelector(".createVar");
+            if (createVar) {
+                createVar.style.color = "#333"
             }
             const blocklyToolboxDiv = document.querySelector(".blocklyToolboxDiv")
             blocklyToolboxDiv.addEventListener("click", e => {
@@ -236,6 +251,7 @@ addEventListener("load", () => {
 })
 addEventListener("load", () => {
     const Csl = new Console(csl)
+    Csl.log("加载完成 <a href='https://github.com/Sky-Eye-Team/Sky-Eye-IDE")
 })
 addEventListener("resize", () => {
     preview.style.width = `${previewBody.offsetWidth}px`
