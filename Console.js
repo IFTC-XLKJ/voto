@@ -18,7 +18,7 @@ class Console {
                 background-color: #ccc;
                 cursor: move;
             }
-            .csl-ul {
+            .csl {
                 width: 100%;
                 height: calc(100% - 10px);
                 padding: 5px;
@@ -28,16 +28,31 @@ class Console {
                 position: fixed;
                 top: 0;
                 left: 0;
-                z-index: 9999999999
+                z-index: 9999999999;
+            }
+            .csl-ul {
+                list-style: none;
+                padding: 0;
+                margin: 0;
+            }
+            .console-log {
+                padding: 5px;
+                color: #ccc;
+            }
+            .line:hover {
+                background-color: #76cdff60;
+                border-radius: 5px;
+                cursor: pointer;
             }
             `;
             CslStyle.dataset.name = "Console-Style";
             document.head.appendChild(CslStyle);
+            this.preview.className = "csl";
             var CslDrag = document.createElement("div");
             CslDrag.className = "csl-drag";
             this.preview.appendChild(CslDrag);
             var CslUL = document.createElement("ul");
-            this.preview.className = "csl-ul";
+            CslUL.className = "csl-ul";
             this.preview.appendChild(CslUL);
             this.console = CslUL;
             var isDragging = false;
@@ -81,9 +96,20 @@ class Console {
     }
     log(text) {
         var log = document.createElement("li");
-        log.className = "console-log";
-        this.preview.appendChild(log);
-        this.preview.scrollTop = this.preview.scrollHeight;
+        log.className = "console-log line";
+        log.innerHTML = `<p style="display: inline;user-select: none;margin: 0;">[日志] </p>${text.replaceAll("<", "&lt;").replaceAll(">", "&gt;")}`;
+        this.console.appendChild(log);
+        this.console.scrollTop = this.preview.scrollHeight;
+        log.oncontextmenu = function (e) {
+            e.preventDefault();
+            navigator.clipboard.writeText(text)
+                .then(() => {
+                    
+                })
+                .catch((err) => {
+                    console.error('Failed to copy text: ', err);
+                });
+        }
     }
     print(text) { }
     warn(text) { }
