@@ -129,6 +129,18 @@ addEventListener('load', function () {
         var code = `Csl.${type}(${text})`
         return code
     })
+    block.add("controls_clear-output", function () {
+        console.log(this)
+        this.appendDummyInput()
+            .appendField('清空控制台');
+        this.setPreviousStatement(true, null);
+        this.setNextStatement(true, null);
+        this.svgGroup_.classList.add('ControlsBlocks');
+    }, [null])
+    block.code("controls_clear-output", function (block) {
+        var code = `Csl.clear()`
+        return code
+    })
     // Variables
     var VariablesGetJson = {
         type: 'variables_get',
