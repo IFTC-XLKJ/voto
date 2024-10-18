@@ -65,6 +65,36 @@
     fill: #C3EBFFFF
 }
 
+/* Variables Blocks */
+.VariablesBlocks>.blocklyPath {
+    stroke: #FFA500FF;
+}
+
+.VariablesBlocks>.blocklyPath:hover {
+    stroke: #FFA500FF;
+}
+
+.VariablesBlocks>.blocklyPath[fill] {
+    fill: #FFA500FF;
+}
+
+.VariablesBlocks>.blocklyPath[stroke] {
+    stroke: #FFA500FF;
+}
+
+.VariablesBlocks>.blocklyEditableText>.blocklyDropdownRect[stroke] {
+    stroke: #FFE4BBFF;
+    fill: #FFE4BBFF
+}
+
+.VariablesBlocks>.blocklyEditableText>.blocklyFieldRect {
+    stroke: #FFE4BBFF;
+}
+
+.VariablesBlocks>.blocklyOutlinePath {
+    fill: #FFE4BBFF
+}
+
 .blocklySelected>.blocklyPath:nth-of-type(2) {
     display: none;
     stroke: none !important;
@@ -73,4 +103,8 @@
 
 .blocklyMenuItemHighlight {
     background-color: #47474710;
+}
+
+.createVar>.blocklyFlyoutButtonBackground {
+    fill: #FFA500FF;
 }
