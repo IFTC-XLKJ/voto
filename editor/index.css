@@ -39,7 +39,9 @@ body {
     width: 100%;
 }
 
-#preview {}
+#preview {
+    position: sticky;
+}
 
 #csl {
     position: fixed;
