@@ -28,6 +28,10 @@ window.toolbox = {
                     kind: "block",
                     type: "controls_if",
                 },
+                {
+                    kind: "block",
+                    type: "controls_output",
+                },
             ]
         },
         {
@@ -37,7 +41,8 @@ window.toolbox = {
                 {
                     kind: "button",
                     text: "创建变量",
-                    callbackKey: "createVar"
+                    callbackKey: "createVar",
+                    "web-class": "createVar"
                 },
                 {
                     kind: "block",
