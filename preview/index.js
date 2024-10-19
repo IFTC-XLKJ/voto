@@ -24,11 +24,15 @@ addEventListener("load", () => {
                     } else {
                         console.log("fail")
                     }
-                } else if (e.data.type === "run") {
+                }
+                if (e.data.type == "run") {
                     preview.dataset.operation = "run"
-                    postMessage({ type: "run", workId: workId })
-                } else if (e.data.type === "stop") {
+                    console.log(workId)
+                    postMessage({ type: "reply", workId: workId, success: true })
+                }
+                if (e.data.type == "stop") {
                     preview.dataset.operation = "edit"
+                    postMessage({ type: "reply", workId: workId, success: true })
                 }
             }
         }
