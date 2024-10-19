@@ -82,7 +82,6 @@ class Console {
                 var CX = 0;
                 var CY = 0;
                 CslDrag.addEventListener("touchstart", function (e) {
-                    console.log(isDragging)
                     e.preventDefault();
                     dragStartPos.x = e.clientX;
                     dragStartPos.y = e.clientY;
@@ -92,7 +91,6 @@ class Console {
                     document.addEventListener('touchend', onMouseUp);
                 })
                 CslDrag.addEventListener('mousedown', function (e) {
-                    console.log(isDragging)
                     e.preventDefault();
                     dragStartPos.x = e.clientX;
                     dragStartPos.y = e.clientY;
@@ -102,20 +100,17 @@ class Console {
                     document.addEventListener('mouseup', onMouseUp);
                 });
                 function onMouseMove(e) {
-                    console.log(isDragging);
                     isDragging = true;
                     CX = e.clientX - dragStartPos.x;
                     CY = e.clientY - dragStartPos.y;
                     newX = initialOffset.x + e.clientX - dragStartPos.x;
                     newY = initialOffset.y + e.clientY - dragStartPos.y;
-                    console.log(newX, newY)
                     newY = newY - 5;
                     preview.style.left = newX + 'px';
                     preview.style.top = newY + 'px';
                 }
 
                 function onMouseUp() {
-                    console.log(isDragging)
                     document.removeEventListener('mousemove', onMouseMove);
                     document.removeEventListener('mouseup', onMouseUp);
                     document.removeEventListener('touchmove', onMouseMove);

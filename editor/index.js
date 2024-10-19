@@ -4,13 +4,33 @@ const generatorWorkId = () => {
     return Math.random().toString(36).slice(2)
 }
 window.workdata = {
-    title: "鏂扮殑Voto浣滃搧",
+    title: "新的Voto作品",
     workId: generatorWorkId(),
     x: 0,
     y: 0,
     blockData: [],
-    screenData: [],
-    roleData: [],
+    screenData: [
+        {
+            id: "0",
+            background: "#FFFFFF"
+        }
+    ],
+    roleData: [
+        {
+            name: "role",
+            at: "0",
+            Keyframes: [
+                {
+                    name: "default",
+                    url: "/assets/role.svg"
+                }
+            ],
+            x: 100,
+            y: 100,
+            width: 100,
+            height: 100
+        }
+    ],
 }
 window.workId = ""
 function getURLParameters() {
@@ -31,6 +51,20 @@ const urlParams = getURLParameters();
 addEventListener("load", () => {
     const Csl = new Console(csl, true)
     Csl.log("正在加载...")
+    addEventListener("message", e => {
+        if (e.data.type == "log") {
+            Csl.log(e.data.data)
+        }
+        if (e.data.type == "print") {
+            Csl.print(e.data.data)
+        }
+        if (e.data.type == "warn") {
+            Csl.warn(e.data.data)
+        }
+        if (e.data.type == "error") {
+            Csl.error(e.data.data)
+        }
+    })
     const runBtn = document.querySelector(".run")
     const stopBtn = document.querySelector(".stop")
     runBtn.style.display = "block"
@@ -139,10 +173,7 @@ addEventListener("load", () => {
             Blockly.Variables.createVariableButtonHandler(workspace, null, 'any')
         })
         workspace.addChangeListener(function (event) {
-            console.log(event)
-            if (event.type == "var_create") {
-                console.log(`Variable "${event.varName}" ID: "${event.varId}"`);
-            }
+            if (event.type == "var_create") { }
             if (event.type == "finished_loading") {
                 blocklyMainBackground.dispatchEvent(clickEvent);
                 console.log("加载完成")
@@ -234,38 +265,30 @@ addEventListener("load", () => {
     })
     postMessage({
         type: "init",
-        workId: workdata.workId
+        workId: workdata.workId,
+        origin: "editor"
     })
     onmessage = (e) => {
-        if (e.data.type) {
-            console.log(e.data)
-            if (e.data.type === "init") {
-                console.log(e.data.workId)
-                postMessage({
-                    type: "reply",
-                    success: true,
-                    id: workId
-                })
-            }
-            if (e.data.id == workId) {
+        if (e.data.origin == "preview" || typeof e.data != "string") {
+            console.log("editor", e.data)
+            if (e.data.type) {
+                console.log(e.data)
+                console.log(e)
+                if (e.data.type === "init") {
+                    console.log(e.data.workId)
+                    postMessage({
+                        type: "reply",
+                        success: true,
+                        id: workId,
+                        origin: "editor"
+                    })
+                }
                 if (e.data.type === "reply") {
                     if (e.data.success) {
-                        console.log("success")
+                        console.log("reply", "success")
                     } else {
-                        console.log("fail")
+                        console.log("reply", "fail")
                     }
-                }
-                if (e.data.type == "log") {
-                    Csl.log(e.data.data)
-                }
-                if (e.data.type == "print") {
-                    Csl.print(e.data.data)
-                }
-                if (e.data.type == "warn") {
-                    Csl.warn(e.data.data)
-                }
-                if (e.data.type == "error") {
-                    Csl.error(e.data.data)
                 }
             }
         }
@@ -276,24 +299,44 @@ addEventListener("load", () => {
         if (run) {
             postMessage({
                 type: "stop",
-                workId: workdata.workId
+                workId: workdata.workId,
+                origin: "editor"
             })
             const runBtn = document.querySelector(".run")
             const stopBtn = document.querySelector(".stop")
             runBtn.style.display = "block"
             stopBtn.style.display = "none"
+            runMask.style.display = "none"
             run = false
+            Csl.log("<em>已停止</em>", true)
         } else {
             postMessage({
                 type: "run",
-                workId: workdata.workId
+                workId: workdata.workId,
+                origin: "editor",
+                data: {
+                    code: Blockly.JavaScript.workspaceToCode(workspace)
+                }
             })
             const runBtn = document.querySelector(".run")
             const stopBtn = document.querySelector(".stop")
             runBtn.style.display = "none"
             stopBtn.style.display = "block"
+            runMask.style.display = "block"
             run = true
+            Csl.log("<em>已运行</em>", true)
         }
+    })
+    postMessage({
+        type: "addRole",
+        url: "/assets/role.svg",
+        id: "0",
+        name: "role",
+        w: 100,
+        h: 100,
+        x: 100,
+        y: 100,
+        origin: "editor"
     })
     Csl.log("加载完成")
     Csl.log("欢迎使用 Voto编辑器")

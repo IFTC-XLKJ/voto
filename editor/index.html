@@ -21,36 +21,49 @@
     <script src="/blockly/package/blocks_compressed.js"></script>
     <script src="/blockly/package/javascript_compressed.js"></script>
     <script src="/blockly/package/msg/zh-hans.js"></script>
+    <script>
+        onload = function () {
+            logo.addEventListener("click", function () {
+                location.href = "../home"
+            })
+        }
+    </script>
     <div id="app">
-        <div id="nav"></div>
-        <div id="main">
-            <div id="previewMain">
-                <div id="previewBody">
-                    <iframe id="preview"></iframe>
-                    <div id="previewFooter">
-                        <button id="previewBtn">
-                            <svg t="1729317257862" class="icon run" viewBox="0 0 1024 1024" version="1.1"
-                                xmlns="http://www.w3.org/2000/svg" p-id="4270" width="30" height="30">
-                                <path
-                                    d="M170.666667 128l2.133333 768c0 34.133333 36.266667 53.333333 64 34.133333l597.333333-384c25.6-17.066667 25.6-53.333333 0-70.4L234.666667 91.733333C206.933333 74.666667 170.666667 93.866667 170.666667 128z"
-                                    fill="#267AFF" p-id="4271"></path>
-                            </svg>
-                            <svg t="1729317409839" class="icon stop" viewBox="0 0 1024 1024" version="1.1"
-                                xmlns="http://www.w3.org/2000/svg" p-id="9735" width="30" height="30">
-                                <path
-                                    d="M608 744H392A72 72 0 0 1 320 672V456C320 416.256 352.256 384 392 384H608c39.744 0 72 32.256 72 72V672c0 39.744-32.256 72-72 72z"
-                                    fill="#E50017" p-id="9736"></path>
-                                <path
-                                    d="M250.048 138.048A141.696 141.696 0 0 0 108.48 279.68v524.032a141.696 141.696 0 0 0 141.568 141.568h524.032a141.696 141.696 0 0 0 141.568-141.568V279.68a141.696 141.696 0 0 0-141.568-141.568H250.048z m524.032 885.44H250.048a220.16 220.16 0 0 1-219.84-219.84V279.68A220.16 220.16 0 0 1 250.048 59.776h524.032a220.16 220.16 0 0 1 219.84 219.84v524.032a220.16 220.16 0 0 1-219.84 219.84z"
-                                    fill="#E50017" p-id="9737"></path>
-                            </svg>
-                        </button>
-                    </div>
+        <div id="nav">
+            <div id="logo">
+                <img src="/Voto.svg" alt="Voto">
+            </div>
+        </div>
+    </div>
+    <div id="main">
+        <div id="previewMain">
+            <div id="previewBody">
+                <iframe id="preview"></iframe>
+                <div id="previewFooter">
+                    <button id="previewBtn">
+                        <svg t="1729317257862" class="icon run" viewBox="0 0 1024 1024" version="1.1"
+                            xmlns="http://www.w3.org/2000/svg" p-id="4270" width="30" height="30">
+                            <path
+                                d="M170.666667 128l2.133333 768c0 34.133333 36.266667 53.333333 64 34.133333l597.333333-384c25.6-17.066667 25.6-53.333333 0-70.4L234.666667 91.733333C206.933333 74.666667 170.666667 93.866667 170.666667 128z"
+                                fill="#267AFF" p-id="4271"></path>
+                        </svg>
+                        <svg t="1729317409839" class="icon stop" viewBox="0 0 1024 1024" version="1.1"
+                            xmlns="http://www.w3.org/2000/svg" p-id="9735" width="30" height="30">
+                            <path
+                                d="M608 744H392A72 72 0 0 1 320 672V456C320 416.256 352.256 384 392 384H608c39.744 0 72 32.256 72 72V672c0 39.744-32.256 72-72 72z"
+                                fill="#E50017" p-id="9736"></path>
+                            <path
+                                d="M250.048 138.048A141.696 141.696 0 0 0 108.48 279.68v524.032a141.696 141.696 0 0 0 141.568 141.568h524.032a141.696 141.696 0 0 0 141.568-141.568V279.68a141.696 141.696 0 0 0-141.568-141.568H250.048z m524.032 885.44H250.048a220.16 220.16 0 0 1-219.84-219.84V279.68A220.16 220.16 0 0 1 250.048 59.776h524.032a220.16 220.16 0 0 1 219.84 219.84v524.032a220.16 220.16 0 0 1-219.84 219.84z"
+                                fill="#E50017" p-id="9737"></path>
+                        </svg>
+                    </button>
                 </div>
             </div>
-            <div id="blocklyDiv"></div>
         </div>
-        <div id="csl"></div>
+        <div id="blocklyDiv"></div>
+        <div id="runMask" style="display: none;"></div>
+    </div>
+    <div id="csl"></div>
     </div>
 </body>
 
