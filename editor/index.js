@@ -404,14 +404,21 @@ addEventListener("load", () => {
         projectSearch.placeholder = "搜索作品"
         projectSearch.className = "projectSearch"
         var projectViewClose = document.createElement("div")
-        projectViewClose.className = "icon"
-        projectViewClose.innerHTML = `<svg t="1729361341224" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="4247" width="200" height="200"><path d="M597.795527 511.488347 813.564755 295.718095c23.833825-23.833825 23.833825-62.47489 0.001023-86.307691-23.832801-23.832801-62.47489-23.833825-86.307691 0L511.487835 425.180656 295.717583 209.410404c-23.833825-23.833825-62.475913-23.833825-86.307691 0-23.832801 23.832801-23.833825 62.47489 0 86.308715l215.769228 215.769228L209.410915 727.258599c-23.833825 23.833825-23.833825 62.47489 0 86.307691 23.832801 23.833825 62.473867 23.833825 86.307691 0l215.768205-215.768205 215.769228 215.769228c23.834848 23.833825 62.475913 23.832801 86.308715 0 23.833825-23.833825 23.833825-62.47489 0-86.307691L597.795527 511.488347z" fill="#272636" p-id="4248"></path></svg>`
+        projectViewClose.className = "projectViewClose"
+        projectViewClose.innerHTML = `<svg t="1729361341224" class="icon" viewBox="0 0 1024 1024" version="1.1"
+    xmlns="http://www.w3.org/2000/svg" p-id="4247" width="30" height="30">
+    <path
+        d="M597.795527 511.488347 813.564755 295.718095c23.833825-23.833825 23.833825-62.47489 0.001023-86.307691-23.832801-23.832801-62.47489-23.833825-86.307691 0L511.487835 425.180656 295.717583 209.410404c-23.833825-23.833825-62.475913-23.833825-86.307691 0-23.832801 23.832801-23.833825 62.47489 0 86.308715l215.769228 215.769228L209.410915 727.258599c-23.833825 23.833825-23.833825 62.47489 0 86.307691 23.832801 23.833825 62.473867 23.833825 86.307691 0l215.768205-215.768205 215.769228 215.769228c23.834848 23.833825 62.475913 23.832801 86.308715 0 23.833825-23.833825 23.833825-62.47489 0-86.307691L597.795527 511.488347z"
+        fill="#272636" p-id="4248">
+    </path>
+</svg>`
         projectViewClose.onclick = () => {
             dialogMask.style.display = "none"
             projectView.remove()
         }
         projectView.appendChild(projectSearch)
         projectView.appendChild(projectViewClose)
+        Csl.log("正在获取作品列表")
         const json = await Porject.getTableData({
             limit: 100,
             page: projectPage,
@@ -430,6 +437,21 @@ addEventListener("load", () => {
                     return data.name.includes(search)
                 })
                 console.log(result)
+            }
+        })
+        var projectViewBox = document.createElement("div")
+        projectViewBox.className = "projectViewBox"
+        projectView.appendChild(projectViewBox)
+        data.forEach(projectData => {
+            const projectItem = document.createElement("div")
+            projectItem.className = "projectItem"
+            var projectName = document.createElement("h3")
+            projectName.className = "projectName"
+            projectName.innerText = projectData.name
+            projectViewBox.appendChild(projectItem)
+            projectItem.appendChild(projectName)
+            projectItem.onclick = () => {
+                location.href = "/editor?workId=" + data.workId
             }
         })
         Csl.print("获取作品列表成功\n总数" + json.count + "个\n已获取" + data.length + "个")
