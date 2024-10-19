@@ -51,6 +51,10 @@ class Console {
                 padding: 5px;
                 color: #d70909;
             }
+            .console-warn {
+                padding: 5px;
+                color: #fac310;
+            }
             .line:hover {
                 background-color: #76cdff60;
                 border-radius: 5px;
@@ -77,6 +81,16 @@ class Console {
                 var newY = 0;
                 var CX = 0;
                 var CY = 0;
+                CslDrag.addEventListener("touchstart", function (e) {
+                    console.log(isDragging)
+                    e.preventDefault();
+                    dragStartPos.x = e.clientX;
+                    dragStartPos.y = e.clientY;
+                    initialOffset.x = preview.offsetLeft;
+                    initialOffset.y = preview.offsetTop;
+                    document.addEventListener('touchmove', onMouseMove);
+                    document.addEventListener('touchend', onMouseUp);
+                })
                 CslDrag.addEventListener('mousedown', function (e) {
                     console.log(isDragging)
                     e.preventDefault();
@@ -104,6 +118,8 @@ class Console {
                     console.log(isDragging)
                     document.removeEventListener('mousemove', onMouseMove);
                     document.removeEventListener('mouseup', onMouseUp);
+                    document.removeEventListener('touchmove', onMouseMove);
+                    document.removeEventListener('touchend', onMouseUp);
                     isDragging = false;
                 }
             }
@@ -150,7 +166,26 @@ class Console {
                 });
         }
     }
-    warn(text) { }
+    warn(text) {
+        var warn = document.createElement("li");
+        warn.className = "console-warn line";
+        warn.innerHTML = `<p style="display: inline;user-select: none;margin: 0;">[警告] </p>${text.replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll("\n", "<br>")}`;
+        this.console.appendChild(warn);
+        warn.scrollIntoView({
+            behavior: 'smooth'
+        })
+        warn.oncontextmenu = function (e) {
+            e.preventDefault();
+            navigator.clipboard.writeText(text)
+                .then(() => {
+                    const toast = new Toast();
+                    toast.success("复制成功", 2000);
+                })
+                .catch((err) => {
+                    console.error('Failed to copy text: ', err);
+                });
+        }
+    }
     error(text) {
         var error = document.createElement("li");
         error.className = "console-error line";
