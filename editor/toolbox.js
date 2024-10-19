@@ -83,4 +83,6 @@ window.toolbox = {
 
 const defaultRoles = [
     ["角色-1", "https://static.codemao.cn/IFTC-Studio/B13WJr-gye.jpg"],
+    ["角色-2", "https://static.codemao.cn/IFTC-Studio/HkfYJHZeJx.jpg"],
+    ["角色-3", "https://static.codemao.cn/IFTC-Studio/SkO31rZxyl.jpg"],
 ]
