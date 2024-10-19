@@ -3,6 +3,9 @@ window.run = false
 const generatorWorkId = () => {
     return Math.random().toString(36).slice(2)
 }
+const isNew = workId => {
+    return /$^__.*__^/.test(workId)
+}
 window.workdata = {
     title: "新的Voto作品",
     workId: generatorWorkId(),
@@ -54,11 +57,10 @@ const sendMessage = data => {
     preview.contentWindow.message = data
 }
 window.Csl = {};
-addEventListener("load", () => {
+addEventListener("load", async () => {
     Csl = new Console(csl, true)
     Csl.log("正在加载...")
-    addEventListener("message", e => {
-    })
+    const Porject = new pgdbs(dbs_8efbb73cc76b58f1e97c0faac2289f9b5cbcfc8eda08d3801958ddb27943f14e)
     const runBtn = document.querySelector(".run")
     const stopBtn = document.querySelector(".stop")
     runBtn.style.display = "block"
@@ -68,7 +70,15 @@ addEventListener("load", () => {
         workdata.workId = urlParams.workId
         workId = urlParams.workId
         console.log(workdata.workId)
-        preview.src = `/preview?workId=${workdata.workId}`
+        if (isNew(workdata.workId)) {
+            const json = await Porject.getTableData({
+                limit: 1,
+                page: 1,
+                filter: `ID="${localStorage.getItem("UID")}" AND workId="${workdata.workId}"`
+            })
+            const data = json.fields[0].workdata
+            Blockly.serialization.workspaces.load(data, workspace);
+        }
     } else {
         workdata.workId = `__${workdata.workId}__`
         workId = workdata.workId
@@ -178,6 +188,7 @@ addEventListener("load", () => {
                 if (Blockly.serialization.workspaces.save(workspace).blocks) {
                     console.log("改变")
                     localStorage.setItem("blocklyData", JSON.stringify(Blockly.serialization.workspaces.save(workspace)))
+                    workdata.blockData = Blockly.serialization.workspaces.save(workspace)
                 }
                 const blocklyTreeLabels = document.querySelectorAll(".blocklyTreeLabel")
                 blocklyTreeLabels.forEach(blocklyTreeLabel => {
@@ -369,6 +380,8 @@ addEventListener("load", () => {
     runMask.addEventListener("click", () => {
         previewBtn.click()
     })
+    preview.style.width = `${previewBody.offsetWidth}px`
+    preview.style.height = `${(previewBody.offsetWidth / 16) * 9}px`
     Csl.log("加载完成")
     Csl.log("欢迎使用 Voto编辑器")
 })
@@ -419,42 +432,48 @@ addEventListener("load", () => {
         projectView.appendChild(projectSearch)
         projectView.appendChild(projectViewClose)
         Csl.log("正在获取作品列表")
-        const json = await Porject.getTableData({
-            limit: 100,
-            page: projectPage,
-            filter: `ID='${localStorage.getItem("UID")}'`
-        })
-        console.log(json)
-        if (json.code != 200) {
-            Csl.error("获取作品列表失败\n原因：" + json.msg)
+        if (localStorage.getItem("UID")) {
+            const json = await Porject.getTableData({
+                limit: 100,
+                page: projectPage,
+                filter: `ID='${localStorage.getItem("UID")}'`
+            })
+            console.log(json)
+            if (json.code != 200) {
+                Csl.error("获取作品列表失败\n原因：" + json.msg)
+                return
+            }
+            const data = json.fields
+            projectSearch.addEventListener("keypress", e => {
+                if (e.key == "Enter") {
+                    const search = projectSearch.value
+                    const result = json.data.filter(data => {
+                        return data.name.includes(search)
+                    })
+                    console.log(result)
+                }
+            })
+            var projectViewBox = document.createElement("div")
+            projectViewBox.className = "projectViewBox"
+            projectView.appendChild(projectViewBox)
+            data.forEach(projectData => {
+                const projectItem = document.createElement("div")
+                projectItem.className = "projectItem"
+                var projectName = document.createElement("h3")
+                projectName.className = "projectName"
+                projectName.innerText = projectData.name
+                projectViewBox.appendChild(projectItem)
+                projectItem.appendChild(projectName)
+                projectItem.addEventListener("click", e => {
+                    console.log(`/editor/?workId=${projectData.WID}`)
+                    location.href = `/editor/?workId=${projectData.WID}`
+                })
+            })
+            Csl.print("获取作品列表成功\n总数" + json.count + "个\n已获取" + data.length + "个")
+        } else {
+            Csl.warn("未登录，无法获取作品列表")
             return
         }
-        const data = json.fields
-        projectSearch.addEventListener("keypress", e => {
-            if (e.key == "Enter") {
-                const search = projectSearch.value
-                const result = json.data.filter(data => {
-                    return data.name.includes(search)
-                })
-                console.log(result)
-            }
-        })
-        var projectViewBox = document.createElement("div")
-        projectViewBox.className = "projectViewBox"
-        projectView.appendChild(projectViewBox)
-        data.forEach(projectData => {
-            const projectItem = document.createElement("div")
-            projectItem.className = "projectItem"
-            var projectName = document.createElement("h3")
-            projectName.className = "projectName"
-            projectName.innerText = projectData.name
-            projectViewBox.appendChild(projectItem)
-            projectItem.appendChild(projectName)
-            projectItem.onclick = () => {
-                location.href = "/editor?workId=" + data.workId
-            }
-        })
-        Csl.print("获取作品列表成功\n总数" + json.count + "个\n已获取" + data.length + "个")
     })
     addEventListener("click", e => {
         console.log(e.target)
