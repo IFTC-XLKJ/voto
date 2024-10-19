@@ -25,8 +25,8 @@ window.workdata = {
                     url: "/assets/role.svg"
                 }
             ],
-            x: 100,
-            y: 100,
+            x: 0,
+            y: 0,
             width: 100,
             height: 100
         }
@@ -53,8 +53,9 @@ window.message = {
 const sendMessage = data => {
     preview.contentWindow.message = data
 }
+window.Csl = {};
 addEventListener("load", () => {
-    const Csl = new Console(csl, true)
+    Csl = new Console(csl, true)
     Csl.log("正在加载...")
     addEventListener("message", e => {
     })
@@ -352,6 +353,9 @@ addEventListener("load", () => {
         }
         if (e.type == "error") {
             Csl.error(e.data)
+        }
+        if (e.type == "clear") {
+            Csl.clear()
         }
     }
     let last = message;

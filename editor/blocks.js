@@ -17,7 +17,7 @@ addEventListener('load', function () {
     }, [null])
     block.code("events_when_start", function (block) {
         var blocks = Blockly.JavaScript.statementToCode(block, 'blocks')
-        var code = `events.on("when_start",funtion() {\n${blocks}\n})`
+        var code = `events.on("when_start",function() {\n${blocks}\n})`
         return code
     })
     block.add("events_role_event", function () {
@@ -139,7 +139,7 @@ addEventListener('load', function () {
     block.code("controls_output", function (block) {
         var type = block.getFieldValue("type")
         var text = block.getFieldValue("text")
-        var code = `sendMessage({ type: "${type}", data: "${text}", origin: "preview", })`
+        var code = `parentWindow.Csl.${type}(${String(text)});\n`
         return code
     })
     block.add("controls_clear-output", function () {
@@ -151,7 +151,7 @@ addEventListener('load', function () {
         this.svgGroup_.classList.add('ControlsBlocks');
     }, [null])
     block.code("controls_clear-output", function (block) {
-        var code = `Csl.clear()`
+        var code = `parentWindow.Csl.clear();\n`
         return code
     })
     // Actions
@@ -219,14 +219,12 @@ addEventListener('load', function () {
         args0: [
             {
                 type: 'field_variable',
-                name: 'VAR',
+                name: 'var',
                 variable: '%{BKY_VARIABLES_DEFAULT_NAME}',
             },
         ],
         output: null,
         style: 'variable_blocks',
-        helpUrl: '%{BKY_VARIABLES_GET_HELPURL}',
-        tooltip: '%{BKY_VARIABLES_GET_TOOLTIP}',
         extensions: ['contextMenu_variableSetterGetter'],
     }
     Blockly.Blocks['variables_get'] = {
@@ -235,6 +233,11 @@ addEventListener('load', function () {
             this.svgGroup_.classList.add('VariablesBlocks');
         }
     };
+    block.code("variables_get", function (block) {
+        var varName = block.getFieldValue('var');
+        console.log(varName)
+        return varName;
+    })
     var VariablesSetJson = {
         type: 'variables_set',
         message0: '%{BKY_VARIABLES_SET}',

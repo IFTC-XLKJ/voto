@@ -124,7 +124,7 @@ class Console {
     log(text, system) {
         var log = document.createElement("li");
         log.className = "console-log line";
-        log.innerHTML = `<p style="display: inline;user-select: none;margin: 0;">[日志] </p>${system ? text : text.replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll("\n", "<br>")}`;
+        log.innerHTML = `<p style="display: inline;user-select: none;margin: 0;">[日志] </p>${system ? String(text) : String(text).replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll("\n", "<br>")}`;
         this.console.appendChild(log);
         log.scrollIntoView({
             behavior: 'smooth'
@@ -144,7 +144,7 @@ class Console {
     print(text) {
         var print = document.createElement("li");
         print.className = "console-print line";
-        print.innerHTML = `<p style="display: inline;user-select: none;margin: 0;">[打印] </p>${text.replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll("\n", "<br>")}`;
+        print.innerHTML = `<p style="display: inline;user-select: none;margin: 0;">[打印] </p>${String(text).replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll("\n", "<br>")}`;
         this.console.appendChild(print);
         print.scrollIntoView({
             behavior: 'smooth'
@@ -164,7 +164,7 @@ class Console {
     warn(text) {
         var warn = document.createElement("li");
         warn.className = "console-warn line";
-        warn.innerHTML = `<p style="display: inline;user-select: none;margin: 0;">[警告] </p>${text.replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll("\n", "<br>")}`;
+        warn.innerHTML = `<p style="display: inline;user-select: none;margin: 0;">[警告] </p>${String(text).replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll("\n", "<br>")}`;
         this.console.appendChild(warn);
         warn.scrollIntoView({
             behavior: 'smooth'
@@ -187,7 +187,7 @@ class Console {
         if (line) {
             error.title = line;
         }
-        error.innerHTML = `<p style="display: inline;user-select: none;margin: 0;">[错误] </p>${text.replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll("\n", "<br>")}`;
+        error.innerHTML = `<p style="display: inline;user-select: none;margin: 0;">[错误] </p>${String(text).replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll("\n", "<br>")}`;
         this.console.appendChild(error);
         error.scrollIntoView({
             behavior: 'smooth'

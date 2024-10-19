@@ -9,6 +9,7 @@ window.parentWindow = parent || top
 const sendMessage = (data) => {
     parentWindow.message = data
 }
+window.workdata = {}
 addEventListener("load", () => {
     preview.style.width = `${innerWidth}px`
     preview.style.height = `${(innerWidth / 16) * 9}px`
@@ -39,14 +40,18 @@ addEventListener("load", () => {
                 success: true,
                 origin: "preview",
             })
-            sendMessage({
-                type: "log",
-                data: "已收到运行指令",
-                origin: "preview",
-            })
+            workdata = parentWindow.workdata;
+            parentWindow.Csl.log("已收到运行指令")
+            const roles = workdata.roleData;
+            ctx.clearRect(0, 0, preview.width, preview.height);
+            roles.forEach(async role => {
+                await addRole(role.Keyframes[0].url, role.x, role.y, role.w, role.h)
+                console.log(role)
+            });
             let code = e.data.code
             code = "const events = new Events();\n" + code
-            code += "\n\n" + `events.emit("when_start")`
+            code += "\n\n" + `events.emit("when_start");`
+            code = "const parentWindow = parent || top;\n" + code
             eval(code)
             console.log(code)
         }
@@ -58,11 +63,8 @@ addEventListener("load", () => {
                 success: true,
                 origin: "preview",
             })
-            sendMessage({
-                type: "log",
-                data: "已收到停止指令",
-                origin: "preview",
-            })
+            parentWindow.Csl.log("已收到停止指令")
+            ctx.clearRect(0, 0, preview.width, preview.height);
         }
         if (e.type == "addRole") {
             addRole(e.url, e.x, e.y, e.w, e.h)
@@ -82,6 +84,11 @@ addEventListener("load", () => {
         var img = new Image();
         img.onload = function () {
             ctx.drawImage(img, x, y, w, h);
+            console.log(img)
+            parentWindow.document.body.appendChild(img)
+            return Promise((resolve, reject) => {
+                resolve(img)
+            });
         };
         img.src = url;
     }
