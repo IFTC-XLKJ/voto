@@ -1,6 +1,6 @@
 const blockLoad = new Event('blockLoad', { isTrust: true })
 window.roles = [
-    ["背景", "__background__"]
+    ["背景", "__background__"],
 ]
 addEventListener('load', function () {
     const block = new Block()
