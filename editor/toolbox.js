@@ -85,4 +85,12 @@ const defaultRoles = [
     ["角色-1", "https://static.codemao.cn/IFTC-Studio/B13WJr-gye.jpg"],
     ["角色-2", "https://static.codemao.cn/IFTC-Studio/HkfYJHZeJx.jpg"],
     ["角色-3", "https://static.codemao.cn/IFTC-Studio/SkO31rZxyl.jpg"],
+    ["角色-4", "https://static.codemao.cn/IFTC-Studio/HJeNlH-gJl.jpg"],
+    ["角色-5", "https://static.codemao.cn/IFTC-Studio/B1tBgHZgyx.jpg"],
+    ["角色-6", "https://static.codemao.cn/IFTC-Studio/SyiUgBbeJl.jpg"],
+    ["角色-7", "https://static.codemao.cn/IFTC-Studio/SJ9YxBbeye.jpg"],
+    ["角色-8", ""],
+    ["角色-9", ""],
+    ["角色-10", ""],
+    ["角色-11", ""],
 ]
