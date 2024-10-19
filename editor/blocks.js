@@ -174,11 +174,14 @@ addEventListener('load', function () {
     block.code("actions_move_forward", function (block) {
         var role = block.getFieldValue("role")
         var distance = block.getFieldValue("distance")
+        var code = "";
         if (role == "__background__") {
             const Csl = new Console(csl)
             Csl.error("背景不是角色\n背景不能移动")
+            code = `// actions.move_forward(${role}, ${distance})`
+        } else {
+            code = `actions.move_forward(${role}, ${distance})`
         }
-        var code = `actions.move_forward(${distance})`
         return code
     })
     // Looks
