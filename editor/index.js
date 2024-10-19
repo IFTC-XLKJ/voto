@@ -85,6 +85,8 @@ addEventListener("load", () => {
         var blockly2 = document.getElementById("blockly-2")
         blocksBoxes.push({ blockly: blockly2, color: "#F46767FF" })
         var blockly2 = document.getElementById("blockly-3")
+        blocksBoxes.push({ blockly: blockly2, color: "#E76CEAFF" })
+        var blockly2 = document.getElementById("blockly-4")
         blocksBoxes.push({ blockly: blockly2, color: "#FFA500FF" })
         blocksBoxes.forEach(blockly => {
             blockly.blockly.style.borderLeft = "8px solid " + blockly.color
@@ -252,6 +254,18 @@ addEventListener("load", () => {
                     } else {
                         console.log("fail")
                     }
+                }
+                if (e.data.type == "log") {
+                    Csl.log(e.data.data)
+                }
+                if (e.data.type == "print") {
+                    Csl.print(e.data.data)
+                }
+                if (e.data.type == "warn") {
+                    Csl.warn(e.data.data)
+                }
+                if (e.data.type == "error") {
+                    Csl.error(e.data.data)
                 }
             }
         }
