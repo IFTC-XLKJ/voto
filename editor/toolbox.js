@@ -80,3 +80,7 @@ window.toolbox = {
         },
     ]
 }
+
+const defaultRoles = [
+    ["角色-1", "https://static.codemao.cn/IFTC-Studio/B13WJr-gye.jpg"],
+]
