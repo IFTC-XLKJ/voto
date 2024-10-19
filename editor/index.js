@@ -46,7 +46,6 @@ function getURLParameters() {
 
     return params;
 }
-
 const urlParams = getURLParameters();
 addEventListener("load", () => {
     const Csl = new Console(csl, true)
@@ -301,11 +300,6 @@ addEventListener("load", () => {
     preview.style.height = `${(previewBody.offsetWidth / 16) * 9}px`
     previewBtn.addEventListener("click", () => {
         if (run) {
-            postMessage({
-                type: "stop",
-                workId: workdata.workId,
-                origin: "editor"
-            })
             const runBtn = document.querySelector(".run")
             const stopBtn = document.querySelector(".stop")
             runBtn.style.display = "block"
@@ -313,15 +307,12 @@ addEventListener("load", () => {
             runMask.style.display = "none"
             run = false
             Csl.log("<em>已停止</em>", true)
-        } else {
-            postMessage({
-                type: "run",
+            window.postMessage({
+                type: "stop",
                 workId: workdata.workId,
-                origin: "editor",
-                data: {
-                    code: Blockly.JavaScript.workspaceToCode(workspace)
-                }
+                origin: "editor"
             })
+        } else {
             const runBtn = document.querySelector(".run")
             const stopBtn = document.querySelector(".stop")
             runBtn.style.display = "none"
@@ -329,6 +320,14 @@ addEventListener("load", () => {
             runMask.style.display = "block"
             run = true
             Csl.log("<em>已运行</em>", true)
+            window.postMessage({
+                type: "run",
+                workId: workdata.workId,
+                origin: "editor",
+                data: {
+                    code: Blockly.JavaScript.workspaceToCode(workspace)
+                }
+            })
         }
     })
     postMessage({
@@ -344,6 +343,9 @@ addEventListener("load", () => {
     })
     Csl.log("加载完成")
     Csl.log("欢迎使用 Voto编辑器")
+    onmessageerror = (e) => {
+        console.error(e)
+    }
 })
 addEventListener("resize", () => {
     preview.style.width = `${previewBody.offsetWidth}px`
