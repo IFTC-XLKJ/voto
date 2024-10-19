@@ -186,6 +186,29 @@ addEventListener('load', function () {
         return code
     })
     // Looks
+    var LooksSetBackgroundImgJson = {
+        type: 'looks_set_background_img',
+        message0: '设置背景为 %1',
+        args0: [
+            {
+                type: 'input_value',
+                name: 'img',
+            }
+        ],
+        previousStatement: null,
+        nextStatement: null,
+    }
+    Blockly.Blocks["looks_set_background_img"] = {
+        init: function () {
+            this.jsonInit(LooksSetBackgroundImgJson);
+            this.svgGroup_.classList.add('LooksBlocks');
+        }
+    };
+    block.code("looks_set_background_img", function (block) {
+        var img = block.getFieldValue("img")
+        var code = `looks.set_background("${img}")`
+        return code
+    })
     // Pen
     // Sound
     // Operators
