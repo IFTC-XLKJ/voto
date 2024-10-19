@@ -4,11 +4,11 @@ const generatorWorkId = () => {
     return Math.random().toString(36).slice(2)
 }
 const isNew = workId => {
-    return /$^__.*__^/.test(workId)
+    return workId.includes("__")
 }
 window.workdata = {
     title: "新的Voto作品",
-    workId: `__${generatorWorkId()}__`,
+    workId: generatorWorkId(),
     x: 0,
     y: 0,
     blockData: [],
@@ -112,13 +112,6 @@ addEventListener("load", () => {
                 const data = json.fields[0].workdata
                 workdata = json.fields[0].workdata
                 preview.src = `/preview/?workId=${workdata.workId}`
-            } else {
-                Csl.log("正在创建新作品...")
-                workdata.workId = generatorWorkId()
-                workId = workdata.workId
-                location.search = `?workId=${workdata.workId}`
-                console.log(workdata.workId)
-                preview.src = `/preview/?workId=${workdata.workId}`
             }
         } else {
             workdata.workId = `__${workdata.workId}__`
@@ -198,7 +191,6 @@ addEventListener("load", () => {
             }
             if (event.type == "create" || event.type == "change" || event.type == "delete" || event.type == "move" || event.type == "comment_change" || event.type == "comment_create" || event.type == "comment_delete" || event.type == "viewport_change") {
                 if (Blockly.serialization.workspaces.save(workspace).blocks) {
-                    console.log("改变")
                     localStorage.setItem("blocklyData", JSON.stringify(Blockly.serialization.workspaces.save(workspace)))
                     workdata.blockData = Blockly.serialization.workspaces.save(workspace)
                 }
