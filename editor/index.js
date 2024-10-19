@@ -271,7 +271,7 @@ addEventListener("load", () => {
         workId: workdata.workId,
         origin: "editor"
     })
-    onmessage = (e) => {
+    addEventListener("message", e => {
         if (e.data.origin == "preview" || typeof e.data != "string") {
             console.log("editor", e.data)
             if (e.data.type) {
@@ -295,7 +295,7 @@ addEventListener("load", () => {
                 }
             }
         }
-    }
+    })
     preview.style.width = `${previewBody.offsetWidth}px`
     preview.style.height = `${(previewBody.offsetWidth / 16) * 9}px`
     previewBtn.addEventListener("click", () => {
@@ -343,9 +343,6 @@ addEventListener("load", () => {
     })
     Csl.log("加载完成")
     Csl.log("欢迎使用 Voto编辑器")
-    onmessageerror = (e) => {
-        console.error(e)
-    }
 })
 addEventListener("resize", () => {
     preview.style.width = `${previewBody.offsetWidth}px`
