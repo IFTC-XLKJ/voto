@@ -16,7 +16,20 @@ body {
     height: 60px;
     background-color: #297EFFFF;
     display: grid;
-    grid-template-columns: 50px 50px 1fr;
+    grid-template-columns: 50px auto 1fr;
+}
+
+#file {
+    width: 50px;
+    height: 50px;
+    margin-left: 10px;
+    margin-top: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    user-select: none;
+    cursor: pointer;
+    color: white;
 }
 
 #main {
