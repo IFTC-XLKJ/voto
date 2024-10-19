@@ -86,7 +86,7 @@ addEventListener("load", () => {
             ctx.drawImage(img, x, y, w, h);
             console.log(img)
             parentWindow.document.body.appendChild(img)
-            return Promise((resolve, reject) => {
+            return new Promise((resolve, reject) => {
                 resolve(img)
             });
         };

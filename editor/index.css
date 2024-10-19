@@ -16,7 +16,7 @@ body {
     height: 60px;
     background-color: #297EFFFF;
     display: grid;
-    grid-template-columns: 50px 1fr;
+    grid-template-columns: 50px 50px 1fr;
 }
 
 #main {
