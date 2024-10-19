@@ -135,8 +135,8 @@ addEventListener("load", () => {
                     blockly.blockly.style.backgroundColor = "#FFFFFF00"
                     blocklyTreeLabel.style.color = "#333"
                 } else {
-                    blockly.blockly.style.backgroundColor = blockly.color
-                    blocklyTreeLabel.style.color = "white"
+                    blockly.blockly.style.backgroundColor = "#FFFFFF00"
+                    blocklyTreeLabel.style.color = "#333"
                 }
             })
         })
@@ -261,6 +261,10 @@ addEventListener("load", () => {
                 blocklyPath4.setAttribute("d", "")
                 blocklyPath4.setAttribute("fill", "none")
             }
+            const blocklyToolboxCategorys = document.querySelectorAll(".blocklyToolboxCategory")
+            blocklyToolboxCategorys.forEach(blocklyToolboxCategory => {
+                blocklyToolboxCategory.style.backgroundColor = "white"
+            })
         }, 0)
     })
     postMessage({
