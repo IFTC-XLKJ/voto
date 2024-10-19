@@ -44,6 +44,14 @@ body {
     overflow: hidden;
 }
 
+#previewBtn {
+    border: none;
+    padding: 5px;
+    border-radius: 5px;
+    cursor: pointer;
+    outline: none;
+}
+
 ::-webkit-scrollbar {
     width: 0px;
 }

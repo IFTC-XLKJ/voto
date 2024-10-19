@@ -24,6 +24,11 @@ addEventListener("load", () => {
                     } else {
                         console.log("fail")
                     }
+                } else if (e.data.type === "run") {
+                    preview.dataset.operation = "run"
+                    postMessage({ type: "run", workId: workId })
+                } else if (e.data.type === "stop") {
+                    preview.dataset.operation = "edit"
                 }
             }
         }

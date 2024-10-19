@@ -177,7 +177,8 @@ addEventListener('load', function () {
         var code = "";
         if (role == "__background__") {
             const Csl = new Console(csl)
-            Csl.error("背景不是角色\n背景不能移动")
+            Csl.error("背景不是角色\n背景不能移动", "积木:角色[背景]向前移动(" + distance + ")步")
+            console.error("背景不是角色\n背景不能移动")
             code = `// actions.move_forward(${role}, ${distance})`
         } else {
             code = `actions.move_forward(${role}, ${distance})`

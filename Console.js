@@ -126,10 +126,10 @@ class Console {
             this.#emit("onload", { Element: CslUL });
         }
     }
-    log(text) {
+    log(text, system) {
         var log = document.createElement("li");
         log.className = "console-log line";
-        log.innerHTML = `<p style="display: inline;user-select: none;margin: 0;">[日志] </p>${text.replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll("\n", "<br>")}`;
+        log.innerHTML = `<p style="display: inline;user-select: none;margin: 0;">[日志] </p>${system ? text : text.replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll("\n", "<br>")}`;
         this.console.appendChild(log);
         log.scrollIntoView({
             behavior: 'smooth'
@@ -186,9 +186,12 @@ class Console {
                 });
         }
     }
-    error(text) {
+    error(text, line) {
         var error = document.createElement("li");
         error.className = "console-error line";
+        if (line) {
+            error.title = line;
+        }
         error.innerHTML = `<p style="display: inline;user-select: none;margin: 0;">[错误] </p>${text.replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll("\n", "<br>")}`;
         this.console.appendChild(error);
         error.scrollIntoView({
@@ -208,6 +211,7 @@ class Console {
     }
     clear() {
         this.console.innerHTML = "";
+        this.log("<em>控制台已清空</em>", true)
     }
     on(type, callback) {
         if (!this.events[type]) {

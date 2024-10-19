@@ -1,4 +1,5 @@
 const pathToMedia = "/blockly/package/media/";
+window.run = false
 const generatorWorkId = () => {
     return Math.random().toString(36).slice(2)
 }
@@ -30,6 +31,10 @@ const urlParams = getURLParameters();
 addEventListener("load", () => {
     const Csl = new Console(csl, true)
     Csl.log("正在加载...")
+    const runBtn = document.querySelector(".run")
+    const stopBtn = document.querySelector(".stop")
+    runBtn.style.display = "block"
+    stopBtn.style.display = "none"
     const preview = document.getElementById("preview");
     if (urlParams.workId) {
         workdata.workId = urlParams.workId
@@ -253,6 +258,29 @@ addEventListener("load", () => {
     }
     preview.style.width = `${previewBody.offsetWidth}px`
     preview.style.height = `${(previewBody.offsetWidth / 16) * 9}px`
+    previewBtn.addEventListener("click", () => {
+        if (run) {
+            postMessage({
+                type: "stop",
+                workId: workdata.workId
+            })
+            const runBtn = document.querySelector(".run")
+            const stopBtn = document.querySelector(".stop")
+            runBtn.style.display = "block"
+            stopBtn.style.display = "none"
+            run = false
+        } else {
+            postMessage({
+                type: "run",
+                workId: workdata.workId
+            })
+            const runBtn = document.querySelector(".run")
+            const stopBtn = document.querySelector(".stop")
+            runBtn.style.display = "none"
+            stopBtn.style.display = "block"
+            run = true
+        }
+    })
     Csl.log("加载完成")
     Csl.log("欢迎使用 Voto编辑器")
 })
