@@ -1,0 +1,45 @@
+#dialogMask {
+    width: 100vw;
+    height: 100vh;
+    background-color: #47474788;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1000000000;
+}
+
+.projectView {
+    width: 850px;
+    height: 75vh;
+    background-color: white;
+    position: fixed;
+    top: 50vh;
+    left: 50vw;
+    transform: translate(-50%, -50%);
+    z-index: 1000000001;
+    border-radius: 2.5%;
+}
+
+.projectSearch {
+    width: 60%;
+    height: 30px;
+    outline: none;
+    display: flex;
+    margin-left: 50%;
+    transform: translateX(-50%);
+    margin-top: 10px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    border: 1px solid #47474788;
+    padding: 5px;
+}
+
+.projectSearch:hover {
+    border: 1px solid #333;
+    box-shadow: 0px 0px 3px #47474788;
+}
+
+.projectSearch:focus {
+    border: 1px solid #333;
+    box-shadow: 0px 0px 3px #47474788;
+}
