@@ -50,6 +50,16 @@ window.toolbox = {
         },
         {
             kind: "category",
+            name: "外观",
+            contents: [
+                {
+                    kind: "block",
+                    type: "looks_set_costume",
+                },
+            ]
+        },
+        {
+            kind: "category",
             name: "变量",
             contents: [
                 {
