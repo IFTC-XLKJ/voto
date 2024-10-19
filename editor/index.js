@@ -372,6 +372,43 @@ addEventListener("load", () => {
     Csl.log("加载完成")
     Csl.log("欢迎使用 Voto编辑器")
 })
+
+addEventListener("load", () => {
+    const Porject = new pgdbs(dbs_8efbb73cc76b58f1e97c0faac2289f9b5cbcfc8eda08d3801958ddb27943f14e)
+    let isFile = false
+    file.addEventListener("click", () => {
+        if (!isFile) {
+            isFile = true
+            fileList.dataset.file = "true"
+        } else {
+            isFile = false
+            fileList.dataset.file = "false"
+        }
+        console.log("file click", isFile)
+    })
+    addNew.addEventListener("click", () => {
+        location.href = "/editor"
+    })
+    openProject.addEventListener("click", async () => {
+        var projectView = document.createElement("div")
+        projectView.className = "projectView"
+        document.body.appendChild(projectView)
+        const json = await Porject.getTableData({
+            limit: 100,
+            page: 1,
+            filter: `ID='${localStorage.getItem("UID")}'`
+        })
+        console.log(json)
+    })
+    addEventListener("click", e => {
+        console.log(e.target)
+        if (e.target.id != "file" && isFile) {
+            isFile = false
+            fileList.dataset.file = "false"
+        }
+    })
+})
+
 addEventListener("resize", () => {
     preview.style.width = `${previewBody.offsetWidth}px`
     preview.style.height = `${(previewBody.offsetWidth / 16) * 9}px`
