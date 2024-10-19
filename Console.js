@@ -28,8 +28,8 @@ class Console {
                 margin: 5px;
                 background-color: #eee;
                 position: fixed;
-                top: 0;
-                left: 0;
+                top: 65px;
+                right: 5px;
                 z-index: 9999999999;
             }
             .csl-ul {

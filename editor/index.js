@@ -254,7 +254,7 @@ addEventListener("load", async () => {
                     blocklyTreeLabel.style.color = "#333"
                 })
             })
-        }, 1)
+        }, 10)
         setInterval(() => {
             const blocklyPath2 = document.querySelectorAll(".blocklySelected>.blocklyPath")[1]
             if (blocklyPath2) {
@@ -270,7 +270,7 @@ addEventListener("load", async () => {
             blocklyToolboxCategorys.forEach(blocklyToolboxCategory => {
                 blocklyToolboxCategory.style.backgroundColor = "white"
             })
-        }, 0)
+        }, 1)
     })
     console.log("editor loaded")
     preview.addEventListener("load", () => {
