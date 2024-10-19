@@ -8,7 +8,7 @@ const isNew = workId => {
 }
 window.workdata = {
     title: "新的Voto作品",
-    workId: generatorWorkId(),
+    workId: `__${generatorWorkId()}__`,
     x: 0,
     y: 0,
     blockData: [],
@@ -60,6 +60,9 @@ window.Csl = {};
 addEventListener("load", async () => {
     Csl = new Console(csl, true)
     Csl.log("正在加载...")
+    onerror = (msg, url, lineNo, columnNo, error) => {
+        Csl.error("错误：" + msg + "在" + url + "的" + lineNo + "行" + columnNo + "列" + error)
+    }
     const Porject = new pgdbs(dbs_8efbb73cc76b58f1e97c0faac2289f9b5cbcfc8eda08d3801958ddb27943f14e)
     const runBtn = document.querySelector(".run")
     const stopBtn = document.querySelector(".stop")
@@ -68,23 +71,32 @@ addEventListener("load", async () => {
     const preview = document.getElementById("preview");
     if (urlParams.workId) {
         workdata.workId = urlParams.workId
+        console.log(workdata.workId)
         workId = urlParams.workId
         console.log(workdata.workId)
-        if (isNew(workdata.workId)) {
+        if (!isNew(workId)) {
             const json = await Porject.getTableData({
                 limit: 1,
                 page: 1,
-                filter: `ID="${localStorage.getItem("UID")}" AND workId="${workdata.workId}"`
+                filter: `ID="${localStorage.getItem("UID")}" AND WID="${workdata.workId}"`
             })
             const data = json.fields[0].workdata
-            Blockly.serialization.workspaces.load(data, workspace);
+            workdata = json.fields[0].workdata
+            preview.src = `/preview/?workId=${workdata.workId}`
+        } else {
+            Csl.log("正在创建新作品...")
+            workdata.workId = generatorWorkId()
+            workId = workdata.workId
+            location.search = `?workId=${workdata.workId}`
+            console.log(workdata.workId)
+            preview.src = `/preview/?workId=${workdata.workId}`
         }
     } else {
         workdata.workId = `__${workdata.workId}__`
         workId = workdata.workId
         location.search = `?workId=${workdata.workId}`
         console.log(workdata.workId)
-        preview.src = `/preview?workId=${workdata.workId}`
+        preview.src = `/preview/?workId=${workdata.workId}`
     }
     document.addEventListener("blockLoad", e => {
         console.log("blockLoad")
@@ -147,6 +159,10 @@ addEventListener("load", async () => {
         let isLoaded = false
         const javascriptGenerator = Blockly.JavaScript;
         try {
+            if (workdata.blockData) {
+                Blockly.serialization.workspaces.load(workdata.blockData, workspace);
+                return 0;
+            }
             const json = JSON.parse(localStorage.getItem("blocklyData"))
             Blockly.serialization.workspaces.load(json, workspace);
         } catch (err) {
