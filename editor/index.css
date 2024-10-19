@@ -86,4 +86,28 @@ body {
     height: calc(100vh - 60px);
     position: fixed;
     left: 35vw;
+    background-color: #47474788;
+    z-index: 1000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    -webkit-box-orient: vertical;
+    flex-direction: column;
+    cursor: pointer;
+}
+
+.gears {
+    width: 120px;
+    height: 120px;
+    display: inline-block;
+    background-image: url(/running.svg);
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+}
+
+.text {
+    color: white;
+    margin-top: 15px;
+    text-align: center;
 }

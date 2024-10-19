@@ -47,22 +47,16 @@ function getURLParameters() {
     return params;
 }
 const urlParams = getURLParameters();
+window.message = {
+    time: Date.now(),
+}
+const sendMessage = data => {
+    preview.contentWindow.message = data
+}
 addEventListener("load", () => {
     const Csl = new Console(csl, true)
     Csl.log("正在加载...")
     addEventListener("message", e => {
-        if (e.data.type == "log") {
-            Csl.log(e.data.data)
-        }
-        if (e.data.type == "print") {
-            Csl.print(e.data.data)
-        }
-        if (e.data.type == "warn") {
-            Csl.warn(e.data.data)
-        }
-        if (e.data.type == "error") {
-            Csl.error(e.data.data)
-        }
     })
     const runBtn = document.querySelector(".run")
     const stopBtn = document.querySelector(".stop")
@@ -266,80 +260,110 @@ addEventListener("load", () => {
             })
         }, 0)
     })
-    postMessage({
-        type: "init",
-        workId: workdata.workId,
-        origin: "editor"
-    })
-    addEventListener("message", e => {
-        if (e.data.origin == "preview" || typeof e.data != "string") {
-            console.log("editor", e.data)
-            if (e.data.type) {
-                console.log(e.data)
-                console.log(e)
-                if (e.data.type === "init") {
-                    console.log(e.data.workId)
-                    postMessage({
-                        type: "reply",
-                        success: true,
-                        id: workId,
-                        origin: "editor"
-                    })
-                }
-                if (e.data.type === "reply") {
-                    if (e.data.success) {
-                        console.log("reply", "success")
-                    } else {
-                        console.log("reply", "fail")
-                    }
+    console.log("editor loaded")
+    preview.addEventListener("load", () => {
+        console.log("preview loaded")
+        sendMessage({
+            type: "init",
+            workId: workdata.workId,
+            origin: "editor"
+        })
+        addEventListener("message", e => {
+            if (e.data.origin == "preview" || typeof e.data != "string") {
+                console.log("editor", e.data)
+                if (e.data.type) {
+                    console.log(e.data)
+                    console.log(e)
                 }
             }
-        }
+        })
+        preview.style.width = `${previewBody.offsetWidth}px`
+        preview.style.height = `${(previewBody.offsetWidth / 16) * 9}px`
+        previewBtn.addEventListener("click", () => {
+            if (run) {
+                const runBtn = document.querySelector(".run")
+                const stopBtn = document.querySelector(".stop")
+                runBtn.style.display = "block"
+                stopBtn.style.display = "none"
+                runMask.style.display = "none"
+                run = false
+                Csl.log("<em>已停止</em>", true)
+                sendMessage({
+                    type: "stop",
+                    workId: workdata.workId,
+                    origin: "editor"
+                })
+            } else {
+                const runBtn = document.querySelector(".run")
+                const stopBtn = document.querySelector(".stop")
+                runBtn.style.display = "none"
+                stopBtn.style.display = "block"
+                runMask.style.display = "flex"
+                run = true
+                Csl.log("<em>已运行</em>", true)
+                sendMessage({
+                    type: "run",
+                    workId: workdata.workId,
+                    origin: "editor",
+                    data: {
+                        code: Blockly.JavaScript.workspaceToCode(workspace)
+                    }
+                })
+            }
+        })
+        sendMessage({
+            type: "addRole",
+            url: "/assets/role.svg",
+            id: "0",
+            name: "role",
+            w: 100,
+            h: 100,
+            x: 100,
+            y: 100,
+            origin: "editor"
+        })
     })
-    preview.style.width = `${previewBody.offsetWidth}px`
-    preview.style.height = `${(previewBody.offsetWidth / 16) * 9}px`
-    previewBtn.addEventListener("click", () => {
-        if (run) {
-            const runBtn = document.querySelector(".run")
-            const stopBtn = document.querySelector(".stop")
-            runBtn.style.display = "block"
-            stopBtn.style.display = "none"
-            runMask.style.display = "none"
-            run = false
-            Csl.log("<em>已停止</em>", true)
-            window.postMessage({
-                type: "stop",
-                workId: workdata.workId,
+    function Processing(e) {
+        console.log("editor", e)
+        if (e.type === "init") {
+            console.log(e.workId)
+            sendMessage({
+                type: "reply",
+                success: true,
+                id: workId,
                 origin: "editor"
             })
-        } else {
-            const runBtn = document.querySelector(".run")
-            const stopBtn = document.querySelector(".stop")
-            runBtn.style.display = "none"
-            stopBtn.style.display = "block"
-            runMask.style.display = "block"
-            run = true
-            Csl.log("<em>已运行</em>", true)
-            window.postMessage({
-                type: "run",
-                workId: workdata.workId,
-                origin: "editor",
-                data: {
-                    code: Blockly.JavaScript.workspaceToCode(workspace)
-                }
-            })
+        }
+        if (e.type === "reply") {
+            if (e.success) {
+                console.log("reply", "success")
+            } else {
+                console.log("reply", "fail")
+            }
+        }
+        if (e.type == "log") {
+            Csl.log(e.data)
+        }
+        if (e.type == "print") {
+            Csl.print(e.data)
+        }
+        if (e.type == "warn") {
+            Csl.warn(e.data)
+        }
+        if (e.type == "error") {
+            Csl.error(e.data)
+        }
+    }
+    let last = message;
+    setInterval(() => {
+        if (last != message) {
+            last = message
+            Processing(message)
+            console.log("editor meassge changed")
         }
     })
-    postMessage({
-        type: "addRole",
-        url: "/assets/role.svg",
-        id: "0",
-        name: "role",
-        w: 100,
-        h: 100,
-        x: 100,
-        y: 100,
-        origin: "editor"
+    runMask.addEventListener("click", () => {
+        previewBtn.click()
     })
     Csl.log("加载完成")
     Csl.log("欢迎使用 Voto编辑器")
