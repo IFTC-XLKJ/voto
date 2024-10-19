@@ -139,7 +139,7 @@ addEventListener('load', function () {
     block.code("controls_output", function (block) {
         var type = block.getFieldValue("type")
         var text = block.getFieldValue("text")
-        var code = `Csl.${type}(String(${text}))`
+        var code = `sendMessage({ type: "${type}", data: "${text}", origin: "preview", })`
         return code
     })
     block.add("controls_clear-output", function () {

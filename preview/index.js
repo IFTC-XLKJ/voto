@@ -44,6 +44,11 @@ addEventListener("load", () => {
                 data: "已收到运行指令",
                 origin: "preview",
             })
+            let code = e.data.code
+            code = "const events = new Events();\n" + code
+            code += "\n\n" + `events.emit("when_start")`
+            eval(code)
+            console.log(code)
         }
         if (e.type == "stop") {
             preview.dataset.operation = "edit"
