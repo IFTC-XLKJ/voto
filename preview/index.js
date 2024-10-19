@@ -7,7 +7,7 @@ addEventListener("load", () => {
     preview.style.width = `${innerWidth}px`
     preview.style.height = `${(innerWidth / 16) * 9}px`
     const ctx = preview.getContext("2d");
-    onmessage = (e) => {
+    addEventListener("message", e => {
         if (e.data.origin == "editor" || typeof e.data != "string") {
             console.log("preview", e.data)
             if (e.data.type) {
@@ -71,7 +71,7 @@ addEventListener("load", () => {
                 }
             }
         }
-    }
+    })
     function addRole(url, x, y, w, h) {
         var img = new Image();
         img.onload = function () {
