@@ -54,7 +54,7 @@ window.toolbox = {
             contents: [
                 {
                     kind: "block",
-                    type: "looks_set_costume",
+                    type: "looks_set_background_img",
                 },
             ]
         },
