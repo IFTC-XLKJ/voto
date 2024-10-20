@@ -54,10 +54,48 @@
 }
 
 .projectViewBox {
+    width: 850px;
+    height: calc(75vh - 30px);
+    overflow: clip;
+    overflow-y: scroll;
     display: grid;
     grid-template-columns: 200px 200px 200px 200px;
+    grid-gap: 10px;
+    padding: 10px;
+}
+
+.projectItem {
+    width: 200px;
+    height: 165px;
+    box-shadow: 0px 0px 5px #47474788;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: transform 0.7s;
+    user-select: none;
+}
+
+.projectItem:hover {
+    transform: scale(1.03);
 }
 
 .projectName {
     margin: 0;
+    font-size: 1.17em;
+    font-weight: bold;
+    padding: 2px;
+}
+
+.projectCover {
+    border-radius: 10px;
+    box-shadow: inset 0px 0px 3px #47474788;
+    width: 200px;
+    height: 112.5px;
+}
+
+.projectTime {
+    margin: 0;
+    font-size: 0.7em;
+    color: #47474780;
+    font-weight: 600;
+    padding: 2px;
 }
