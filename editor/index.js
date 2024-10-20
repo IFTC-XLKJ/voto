@@ -6,9 +6,10 @@ const generatorWorkId = () => {
 const isNew = workId => {
     return workId.includes("__")
 }
+localStorage.setItem("tempWorkId", generatorWorkId())
 window.workdata = {
     title: "新的Voto作品",
-    workId: generatorWorkId(),
+    workId: localStorage.getItem("tempWorkId"),
     x: 0,
     y: 0,
     blockData: [],
@@ -71,13 +72,38 @@ const sendMessage = data => {
     preview.contentWindow.message = data
 }
 window.Csl = {};
+window.vvzh = {}
+async function login() {
+    Csl.log("登录中...")
+    try {
+        const user = await vvzh.getTableData({
+            limit: 1,
+            page: 1,
+            filter: `ID="${localStorage.getItem("UID")}" AND 密码="${CryptoJS.MD5(localStorage.getItem("PWD"))}"`
+        })
+        if (user.fields.length == 0) {
+            Csl.error("无法登录，可能原因：未登录、密码被修改、账号已注销或账号不存在")
+            return false
+        } else {
+            Csl.log("登录成功")
+            localStorage.setItem("token", user.fields[0].token)
+            localStorage.setItem("UNM", user.fields[0].用户名)
+            localStorage.setItem("UID", user.fields[0].ID)
+            return true
+        }
+    } catch (e) {
+        Csl.error("用户数据获取失败")
+        console.error(e)
+        return false
+    }
+}
 addEventListener("load", () => {
     Csl = new Console(csl, true)
     Csl.log("正在加载...")
     onerror = (msg, url, lineNo, columnNo, error) => {
         Csl.error("错误：" + msg + "在" + url + "的" + lineNo + "行" + columnNo + "列\n" + error)
     }
-    const vvzh = new pgdbs(dbs_a6b2a4d6c02022e831626d31ab805a468a151b90d5161660485a73cc6e1ea902)
+    vvzh = new pgdbs(dbs_a6b2a4d6c02022e831626d31ab805a468a151b90d5161660485a73cc6e1ea902)
     const Porject = new pgdbs(dbs_8efbb73cc76b58f1e97c0faac2289f9b5cbcfc8eda08d3801958ddb27943f14e)
     const runBtn = document.querySelector(".run")
     const stopBtn = document.querySelector(".stop")
@@ -114,54 +140,39 @@ addEventListener("load", () => {
             }
         });
         if (urlParams.workId) {
-            workdata.workId = urlParams.workId
-            console.log(workdata.workId)
-            workId = urlParams.workId
-            console.log(workdata.workId)
-            if (!isNew(workId)) {
+            console.log(isNew(urlParams.workId))
+            if (!isNew(urlParams.workId)) {
                 if (localStorage.getItem("UID").trim() == "") {
                     Csl.error("请先登录")
                 } else {
-                    Csl.log("登录中...")
-                    try {
-                        const user = await vvzh.getTableData({
+                    const isTrust = await login();
+                    if (isTrust) {
+                        Csl.log("作品已加载中...")
+                        const json = await Porject.getTableData({
                             limit: 1,
                             page: 1,
-                            filter: `ID="${localStorage.getItem("UID")}" AND 密码="${CryptoJS.MD5(localStorage.getItem("PWD"))}"`
+                            filter: `ID="${localStorage.getItem("UID")}" AND WID="${workdata.workId}"`
                         })
-                        if (user.fields.length == 0) {
-                            Csl.error("无法登录，可能原因：未登录、密码被修改、账号已注销或账号不存在")
+                        if (json.fields.length == 0) {
+                            Csl.error("作品不存在")
                         } else {
-                            Csl.log("登录成功")
-                            Csl.log("作品已加载中...")
+                            Csl.log("作品数据获取成功")
                             try {
-                                const json = await Porject.getTableData({
-                                    limit: 1,
-                                    page: 1,
-                                    filter: `ID="${localStorage.getItem("UID")}" AND WID="${workdata.workId}"`
-                                })
-                                if (json.fields.length == 0) {
-                                    Csl.error("作品不存在")
-                                } else {
-                                    Csl.log("作品数据获取成功")
-                                    try {
-                                        const data = JSON.parse(json.fields[0].workdata)
-                                        workdata = JSON.parse(json.fields[0].workdata)
-                                        Blockly.serialization.workspaces.load(workdata.blockData, workspace);
-                                        preview.src = `/preview/?workId=${workdata.workId}`
-                                        Csl.log("作品已加载完成")
-                                    } catch (e) {
-                                        Csl.error("作品数据损坏")
-                                    }
-                                }
+                                const data = JSON.parse(json.fields[0].workdata)
+                                workId = json.fields[0].workId
+                                workdata.workId = workId
+                                workdata = JSON.parse(json.fields[0].workdata)
+                                Blockly.serialization.workspaces.load(workdata.blockData, workspace);
+                                preview.src = `/preview/?workId=${workdata.workId}`
+                                Csl.log("作品已加载完成")
                             } catch (e) {
-                                Csl.error("作品数据获取失败")
+                                Csl.error("作品数据损坏")
                             }
                         }
-                    } catch (e) {
-                        Csl.error("用户数据获取失败")
                     }
                 }
+            } else {
+                location.href = `/editor`
             }
         } else {
             workdata.workId = `__${workdata.workId}__`
@@ -201,27 +212,6 @@ addEventListener("load", () => {
         })
         let isLoaded = false
         const javascriptGenerator = Blockly.JavaScript;
-        /*
-        try {
-            const json = JSON.parse(localStorage.getItem("blocklyData"))
-            Blockly.serialization.workspaces.load(json, workspace);
-        } catch (err) {
-            console.log(err)
-        }
-        try {
-            const blocklyBlockCanvas = document.querySelector(".blocklyBlockCanvas")
-            const CanvasX = JSON.parse(localStorage.getItem("blocklyCanvas")).x
-            const CanvasY = JSON.parse(localStorage.getItem("blocklyCanvas")).y
-            workspace.scrollX = CanvasX - 70;
-            workspace.scrollY = CanvasY;
-            workspace.oldLeft = 0 - (CanvasX - 70)
-            workspace.oldTop = 0 - CanvasY;
-            console.log("x", CanvasX, "y", CanvasY)
-            blocklyBlockCanvas.transform.baseVal.getItem(0).setTranslate(CanvasX, CanvasY)
-        } catch (err) {
-            console.log(err)
-        }
-        */
         const blocklyMainBackground = document.querySelector(".blocklyMainBackground")
         console.log(blocklyMainBackground)
         const clickEvent = new MouseEvent('mousedown', {
@@ -338,29 +328,9 @@ addEventListener("load", () => {
         })
         preview.style.width = `${previewBody.offsetWidth}px`
         preview.style.height = `${(previewBody.offsetWidth / 16) * 9}px`
-        sendMessage({
-            type: "addRole",
-            url: "/assets/role.svg",
-            id: "0",
-            name: "role",
-            w: 100,
-            h: 100,
-            x: 100,
-            y: 100,
-            origin: "editor"
-        })
     })
     function Processing(e) {
         console.log("editor", e)
-        if (e.type === "init") {
-            console.log(e.workId)
-            sendMessage({
-                type: "reply",
-                success: true,
-                id: workId,
-                origin: "editor"
-            })
-        }
         if (e.type === "reply") {
             if (e.success) {
                 console.log("reply", "success")
@@ -423,91 +393,94 @@ addEventListener("load", () => {
     openProject.addEventListener("click", async () => {
         isFile = false
         fileList.dataset.file = "false"
-        dialogMask.style.display = "flex"
-        var projectView = document.createElement("div")
-        projectView.className = "projectView"
-        document.body.appendChild(projectView)
-        var projectSearch = document.createElement("input")
-        projectSearch.type = "search"
-        projectSearch.placeholder = "搜索作品"
-        projectSearch.className = "projectSearch"
-        var projectViewClose = document.createElement("div")
-        projectViewClose.className = "projectViewClose"
-        projectViewClose.innerHTML = `<svg t="1729361341224" class="icon" viewBox="0 0 1024 1024" version="1.1"
+        const isTrust = await login();
+        if (isTrust) {
+            dialogMask.style.display = "flex"
+            var projectView = document.createElement("div")
+            projectView.className = "projectView"
+            document.body.appendChild(projectView)
+            var projectSearch = document.createElement("input")
+            projectSearch.type = "search"
+            projectSearch.placeholder = "搜索作品"
+            projectSearch.className = "projectSearch"
+            var projectViewClose = document.createElement("div")
+            projectViewClose.className = "projectViewClose"
+            projectViewClose.innerHTML = `<svg t="1729361341224" class="icon" viewBox="0 0 1024 1024" version="1.1"
     xmlns="http://www.w3.org/2000/svg" p-id="4247" width="30" height="30">
     <path
         d="M597.795527 511.488347 813.564755 295.718095c23.833825-23.833825 23.833825-62.47489 0.001023-86.307691-23.832801-23.832801-62.47489-23.833825-86.307691 0L511.487835 425.180656 295.717583 209.410404c-23.833825-23.833825-62.475913-23.833825-86.307691 0-23.832801 23.832801-23.833825 62.47489 0 86.308715l215.769228 215.769228L209.410915 727.258599c-23.833825 23.833825-23.833825 62.47489 0 86.307691 23.832801 23.833825 62.473867 23.833825 86.307691 0l215.768205-215.768205 215.769228 215.769228c23.834848 23.833825 62.475913 23.832801 86.308715 0 23.833825-23.833825 23.833825-62.47489 0-86.307691L597.795527 511.488347z"
         fill="#272636" p-id="4248">
     </path>
 </svg>`
-        projectViewClose.onclick = () => {
-            dialogMask.style.display = "none"
-            projectView.remove()
-        }
-        projectView.appendChild(projectSearch)
-        projectView.appendChild(projectViewClose)
-        Csl.log("正在获取作品列表")
-        if (localStorage.getItem("UID")) {
-            try {
-                const json = await Porject.getTableData({
-                    limit: 100,
-                    page: projectPage,
-                    filter: `ID='${localStorage.getItem("UID")}'`
-                })
-                console.log(json)
-                if (json.code != 200) {
-                    Csl.error("获取作品列表失败\n原因：" + json.msg)
-                    return
-                }
-                const data = json.fields
-                projectSearch.addEventListener("keypress", e => {
-                    if (e.key == "Enter") {
-                        const search = projectSearch.value
-                        const result = json.data.filter(data => {
-                            return data.name.includes(search)
-                        })
-                        console.log(result)
-                    }
-                })
-                data.sort((a, b) => {
-                    return b.updatedAt - a.updatedAt
-                })
-                var projectViewBox = document.createElement("div")
-                projectViewBox.className = "projectViewBox"
-                projectView.appendChild(projectViewBox)
-                data.forEach(projectData => {
-                    const projectItem = document.createElement("div")
-                    projectItem.className = "projectItem"
-                    var projectCover = document.createElement("img")
-                    projectCover.className = "projectCover"
-                    projectCover.src = projectData.cover
-                    projectCover.title = projectData.name ? projectData.name : "未命名作品"
-                    var projectName = document.createElement("div")
-                    projectName.className = "projectName"
-                    projectName.innerText = projectData.name ? projectData.name : "未命名作品";
-                    projectName.title = projectData.name ? projectData.name : "未命名作品"
-                    var projectTime = document.createElement("div")
-                    const formattedDate = formatTimestamp(Number(String(projectData.updatedAt) + "000"));
-                    requestAnimationFrame(() => {
-                        projectTime.innerText = formattedDate;
-                    });
-                    projectTime.className = "projectTime"
-                    projectViewBox.appendChild(projectItem)
-                    projectItem.appendChild(projectCover)
-                    projectItem.appendChild(projectName)
-                    projectItem.appendChild(projectTime)
-                    projectItem.addEventListener("click", e => {
-                        console.log(`/editor/?workId=${projectData.WID}`)
-                        location.href = `/editor/?workId=${projectData.WID}`
-                    })
-                })
-                Csl.print("获取作品列表成功\n总数" + json.count + "个\n已获取" + data.length + "个")
-            } catch (e) {
-                Csl.error("获取作品列表失败\n原因：" + e)
+            projectViewClose.onclick = () => {
+                dialogMask.style.display = "none"
+                projectView.remove()
             }
-        } else {
-            Csl.warn("未登录，无法获取作品列表")
-            return
+            projectView.appendChild(projectSearch)
+            projectView.appendChild(projectViewClose)
+            Csl.log("正在获取作品列表")
+            if (localStorage.getItem("UID")) {
+                try {
+                    const json = await Porject.getTableData({
+                        limit: 100,
+                        page: projectPage,
+                        filter: `ID='${localStorage.getItem("UID")}'`
+                    })
+                    console.log(json)
+                    if (json.code != 200) {
+                        Csl.error("获取作品列表失败\n原因：" + json.msg)
+                        return
+                    }
+                    const data = json.fields
+                    projectSearch.addEventListener("keypress", e => {
+                        if (e.key == "Enter") {
+                            const search = projectSearch.value
+                            const result = json.data.filter(data => {
+                                return data.name.includes(search)
+                            })
+                            console.log(result)
+                        }
+                    })
+                    data.sort((a, b) => {
+                        return b.updatedAt - a.updatedAt
+                    })
+                    var projectViewBox = document.createElement("div")
+                    projectViewBox.className = "projectViewBox"
+                    projectView.appendChild(projectViewBox)
+                    data.forEach(projectData => {
+                        const projectItem = document.createElement("div")
+                        projectItem.className = "projectItem"
+                        var projectCover = document.createElement("img")
+                        projectCover.className = "projectCover"
+                        projectCover.src = projectData.cover
+                        projectCover.title = projectData.name ? projectData.name : "未命名作品"
+                        var projectName = document.createElement("div")
+                        projectName.className = "projectName"
+                        projectName.innerText = projectData.name ? projectData.name : "未命名作品";
+                        projectName.title = projectData.name ? projectData.name : "未命名作品"
+                        var projectTime = document.createElement("div")
+                        const formattedDate = formatTimestamp(Number(String(projectData.updatedAt) + "000"));
+                        requestAnimationFrame(() => {
+                            projectTime.innerText = formattedDate;
+                        });
+                        projectTime.className = "projectTime"
+                        projectViewBox.appendChild(projectItem)
+                        projectItem.appendChild(projectCover)
+                        projectItem.appendChild(projectName)
+                        projectItem.appendChild(projectTime)
+                        projectItem.addEventListener("click", e => {
+                            console.log(`/editor/?workId=${projectData.WID}`)
+                            location.href = `/editor/?workId=${projectData.WID}`
+                        })
+                    })
+                    Csl.print("获取作品列表成功\n总数" + json.count + "个\n已获取" + data.length + "个")
+                } catch (e) {
+                    Csl.error("获取作品列表失败\n原因：" + e)
+                }
+            } else {
+                Csl.warn("未登录，无法获取作品列表")
+                return
+            }
         }
     })
     document.addEventListener("click", e => {
