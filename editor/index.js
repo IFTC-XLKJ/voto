@@ -77,6 +77,7 @@ addEventListener("load", () => {
     onerror = (msg, url, lineNo, columnNo, error) => {
         Csl.error("错误：" + msg + "在" + url + "的" + lineNo + "行" + columnNo + "列\n" + error)
     }
+    const vvzh = new pgdbs(dbs_a6b2a4d6c02022e831626d31ab805a468a151b90d5161660485a73cc6e1ea902)
     const Porject = new pgdbs(dbs_8efbb73cc76b58f1e97c0faac2289f9b5cbcfc8eda08d3801958ddb27943f14e)
     const runBtn = document.querySelector(".run")
     const stopBtn = document.querySelector(".stop")
@@ -118,29 +119,46 @@ addEventListener("load", () => {
             workId = urlParams.workId
             console.log(workdata.workId)
             if (!isNew(workId)) {
-                Csl.log("作品已加载中...")
-                try {
-                    const json = await Porject.getTableData({
-                        limit: 1,
-                        page: 1,
-                        filter: `ID="${localStorage.getItem("UID")}" AND WID="${workdata.workId}"`
-                    })
-                    if (json.fields.length == 0) {
-                        Csl.error("作品不存在")
-                    } else {
-                        Csl.log("作品数据获取成功")
-                        try {
-                            const data = JSON.parse(json.fields[0].workdata)
-                            workdata = JSON.parse(json.fields[0].workdata)
-                            Blockly.serialization.workspaces.load(workdata.blockData, workspace);
-                            preview.src = `/preview/?workId=${workdata.workId}`
-                            Csl.log("作品已加载完成")
-                        } catch (e) {
-                            Csl.error("作品数据损坏")
+                if (localStorage.getItem("UID").trim() == "") {
+                    Csl.error("请先登录")
+                } else {
+                    try {
+                        const user = await vvzh.getTableData({
+                            limit: 1,
+                            page: 1,
+                            filter: `ID="${localStorage.getItem("UID")}" AND 密码="${localStorage.getItem("PWD")}"`
+                        })
+                        if (user.fields.length == 0) {
+                            Csl.error("无法登录，可能原因：未登录、密码被修改、账号已注销或账号不存在")
+                        } else {
+                            Csl.log("作品已加载中...")
+                            try {
+                                const json = await Porject.getTableData({
+                                    limit: 1,
+                                    page: 1,
+                                    filter: `ID="${localStorage.getItem("UID")}" AND WID="${workdata.workId}"`
+                                })
+                                if (json.fields.length == 0) {
+                                    Csl.error("作品不存在")
+                                } else {
+                                    Csl.log("作品数据获取成功")
+                                    try {
+                                        const data = JSON.parse(json.fields[0].workdata)
+                                        workdata = JSON.parse(json.fields[0].workdata)
+                                        Blockly.serialization.workspaces.load(workdata.blockData, workspace);
+                                        preview.src = `/preview/?workId=${workdata.workId}`
+                                        Csl.log("作品已加载完成")
+                                    } catch (e) {
+                                        Csl.error("作品数据损坏")
+                                    }
+                                }
+                            } catch (e) {
+                                Csl.error("作品数据获取失败")
+                            }
                         }
+                    } catch (e) {
+                        Csl.error("用户数据获取失败")
                     }
-                } catch (e) {
-                    Csl.error("作品数据获取失败")
                 }
             }
         } else {
