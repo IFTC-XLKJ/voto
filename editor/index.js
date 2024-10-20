@@ -125,24 +125,22 @@ addEventListener("load", () => {
                         page: 1,
                         filter: `ID="${localStorage.getItem("UID")}" AND WID="${workdata.workId}"`
                     })
-                    Csl.log("作品数据获取成功")
                     if (json.fields.length == 0) {
                         Csl.error("作品不存在")
-                        return
-                    }
-                    try {
-                        const data = JSON.parse(json.fields[0].workdata)
-                        workdata = JSON.parse(json.fields[0].workdata)
-                        Blockly.serialization.workspaces.load(workdata.blockData, workspace);
-                        preview.src = `/preview/?workId=${workdata.workId}`
-                        Csl.log("作品已加载完成")
-                    } catch (e) {
-                        Csl.error("作品数据损坏")
-                        return
+                    } else {
+                        Csl.log("作品数据获取成功")
+                        try {
+                            const data = JSON.parse(json.fields[0].workdata)
+                            workdata = JSON.parse(json.fields[0].workdata)
+                            Blockly.serialization.workspaces.load(workdata.blockData, workspace);
+                            preview.src = `/preview/?workId=${workdata.workId}`
+                            Csl.log("作品已加载完成")
+                        } catch (e) {
+                            Csl.error("作品数据损坏")
+                        }
                     }
                 } catch (e) {
                     Csl.error("作品数据获取失败")
-                    return
                 }
             }
         } else {
@@ -317,15 +315,6 @@ addEventListener("load", () => {
             type: "init",
             workId: workdata.workId,
             origin: "editor"
-        })
-        addEventListener("message", e => {
-            if (e.data.origin == "preview" || typeof e.data != "string") {
-                console.log("editor", e.data)
-                if (e.data.type) {
-                    console.log(e.data)
-                    console.log(e)
-                }
-            }
         })
         preview.style.width = `${previewBody.offsetWidth}px`
         preview.style.height = `${(previewBody.offsetWidth / 16) * 9}px`
