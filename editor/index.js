@@ -122,15 +122,17 @@ addEventListener("load", () => {
                 if (localStorage.getItem("UID").trim() == "") {
                     Csl.error("请先登录")
                 } else {
+                    Csl.log("登录中...")
                     try {
                         const user = await vvzh.getTableData({
                             limit: 1,
                             page: 1,
-                            filter: `ID="${localStorage.getItem("UID")}" AND 密码="${localStorage.getItem("PWD")}"`
+                            filter: `ID="${localStorage.getItem("UID")}" AND 密码="${CryptoJS.MD5(localStorage.getItem("PWD"))}"`
                         })
                         if (user.fields.length == 0) {
                             Csl.error("无法登录，可能原因：未登录、密码被修改、账号已注销或账号不存在")
                         } else {
+                            Csl.log("登录成功")
                             Csl.log("作品已加载中...")
                             try {
                                 const json = await Porject.getTableData({
@@ -336,38 +338,6 @@ addEventListener("load", () => {
         })
         preview.style.width = `${previewBody.offsetWidth}px`
         preview.style.height = `${(previewBody.offsetWidth / 16) * 9}px`
-        previewBtn.addEventListener("click", () => {
-            if (run) {
-                const runBtn = document.querySelector(".run")
-                const stopBtn = document.querySelector(".stop")
-                runBtn.style.display = "block"
-                stopBtn.style.display = "none"
-                runMask.style.display = "none"
-                run = false
-                Csl.log("<em>已停止</em>", true)
-                sendMessage({
-                    type: "stop",
-                    workId: workdata.workId,
-                    origin: "editor"
-                })
-            } else {
-                const runBtn = document.querySelector(".run")
-                const stopBtn = document.querySelector(".stop")
-                runBtn.style.display = "none"
-                stopBtn.style.display = "block"
-                runMask.style.display = "flex"
-                run = true
-                Csl.log("<em>已运行</em>", true)
-                sendMessage({
-                    type: "run",
-                    workId: workdata.workId,
-                    origin: "editor",
-                    data: {
-                        code: Blockly.JavaScript.workspaceToCode(workspace)
-                    }
-                })
-            }
-        })
         sendMessage({
             type: "addRole",
             url: "/assets/role.svg",
@@ -540,11 +510,42 @@ addEventListener("load", () => {
             return
         }
     })
-    addEventListener("click", e => {
-        console.log(e.target)
+    document.addEventListener("click", e => {
         if (e.target.id != "file" && isFile) {
             isFile = false
             fileList.dataset.file = "false"
+        } else if (e.target.id == "previewBtn" || e.target.dataset.icon == "run") {
+            console.log("run")
+            if (run) {
+                const runBtn = document.querySelector(".run")
+                const stopBtn = document.querySelector(".stop")
+                runBtn.style.display = "block"
+                stopBtn.style.display = "none"
+                runMask.style.display = "none"
+                run = false
+                Csl.log("<em>已停止</em>", true)
+                sendMessage({
+                    type: "stop",
+                    workId: workdata.workId,
+                    origin: "editor"
+                })
+            } else {
+                const runBtn = document.querySelector(".run")
+                const stopBtn = document.querySelector(".stop")
+                runBtn.style.display = "none"
+                stopBtn.style.display = "block"
+                runMask.style.display = "flex"
+                run = true
+                Csl.log("<em>已运行</em>", true)
+                sendMessage({
+                    type: "run",
+                    workId: workdata.workId,
+                    origin: "editor",
+                    data: {
+                        code: Blockly.JavaScript.workspaceToCode(workspace)
+                    }
+                })
+            }
         }
     })
 })
