@@ -172,7 +172,7 @@ addEventListener("load", () => {
                     }
                 }
             } else {
-                location.href = `/editor`
+                //location.href = `/editor`
             }
         } else {
             workdata.workId = `__${workdata.workId}__`
