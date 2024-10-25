@@ -12,7 +12,7 @@ const dispatchEvents = e => {
     parentWindow.events.emit("preview", e)
 }
 addEventListener("load", () => {
-    events = new Events()
+    events = new Events();
     preview.style.width = `${innerWidth}px`
     preview.style.height = `${(innerWidth / 16) * 9}px`
     events.on("editor", e => {
@@ -42,8 +42,17 @@ addEventListener("load", () => {
             parentWindow.Csl.log("已收到运行指令")
             let code = e.data.code
             code = "const events = new Events();\n" + code
-            code += "\n\n" + `events.emit("when_start");`
             code = "const parentWindow = parent || top;\n" + code
+            code += `\npreview.addEventListener("click", event => {
+    if (preview.dataset.type == "run") {
+        const e = {
+            x: event.offsetX,
+            y: event.offsetY,
+        }
+        events.emit("on_role_-__background__-_click", e)
+    }
+})`
+            code += "\n\n" + `events.emit("when_start");`
             eval(code)
             console.log(code)
         } else if (e.type == "stop") {
