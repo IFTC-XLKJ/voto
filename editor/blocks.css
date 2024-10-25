@@ -155,6 +155,36 @@
     fill: #F7D6FFFF
 }
 
+/* Operations Blocks */
+.OperatorsBlocks>.blocklyPath {
+    stroke: #FEAE8AFF;
+}
+
+.OperatorsBlocks>.blocklyPath:hover {
+    stroke: #FEAE8AFF;
+}
+
+.OperatorsBlocks>.blocklyPath[fill] {
+    fill: #FEAE8AFF;
+}
+
+.OperatorsBlocks>.blocklyPath[stroke] {
+    stroke: #FEAE8AFF;
+}
+
+.OperatorsBlocks>.blocklyEditableText>.blocklyDropdownRect[stroke] {
+    stroke: #FFDFD0FF;
+    fill: #FFDFD0FF
+}
+
+.OperatorsBlocks>.blocklyEditableText>.blocklyFieldRect {
+    stroke: #FFDFD0FF;
+}
+
+.OperatorsBlocks>.blocklyOutlinePath {
+    fill: #FFDFD0FF
+}
+
 .blocklySelected>.blocklyPath:nth-of-type(2) {
     display: none;
     stroke: none !important;
