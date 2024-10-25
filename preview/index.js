@@ -41,9 +41,9 @@ addEventListener("load", () => {
             workdata = parentWindow.workdata;
             parentWindow.Csl.log("已收到运行指令")
             let code = e.data.code
-            code = "const events = new Events();\n" + code
-            code = "const parentWindow = parent || top;\n" + code
-            code += `\npreview.addEventListener("click", event => {
+            code = `const parentWindow = parent || top;
+const events = new Events();
+function backgroundClick(event) {
     if (preview.dataset.type == "run") {
         const e = {
             x: event.offsetX,
@@ -51,8 +51,41 @@ addEventListener("load", () => {
         }
         events.emit("on_role_-__background__-_click", e)
     }
-})`
-            code += "\n\n" + `events.emit("when_start");`
+}
+function backgroundDown(event) {
+    if (preview.dataset.type == "run") {
+        const e = {
+            x: event.offsetX,
+            y: event.offsetY,
+        }
+        events.emit("on_role_-__background__-_down", e)
+    }
+}
+function backgroundUp(event) {
+    if (preview.dataset.type == "run") {
+        const e = {
+            x: event.offsetX,
+            y: event.offsetY,
+        }
+        events.emit("on_role_-__background__-_up", e)
+    }
+}
+preview.addEventListener("click", backgroundClick)
+preview.addEventListener("mousedown", backgroundDown)
+preview.addEventListener("touchstart", backgroundDown)
+preview.addEventListener("mouseup", backgroundUp)
+preview.addEventListener("touchend", backgroundUp)
+${code}
+addEventListener("message", e => {
+    if (e.data == "stop") {
+        preview.removeEventListener("click", backgroundClick)
+        preview.removeEventListener("mousedown", backgroundDown)
+        preview.removeEventListener("touchstart", backgroundDown)
+        preview.removeEventListener("mouseup", backgroundUp)
+        preview.removeEventListener("touchend", backgroundUp)
+    }
+})
+events.emit("when_start");`
             eval(code)
             console.log(code)
         } else if (e.type == "stop") {
@@ -63,6 +96,7 @@ addEventListener("load", () => {
                 success: true,
                 origin: "preview",
             })
+            postMessage("stop")
             parentWindow.Csl.log("已收到停止指令")
         }
     })
