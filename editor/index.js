@@ -190,7 +190,8 @@ addEventListener("load", () => {
         var blockly5 = document.getElementById("blockly-5")
         blocksBoxes.push({ blockly: blockly5, color: "#FFA500FF" })
         blocksBoxes.forEach(blockly => {
-            blockly.blockly.style.borderLeft = "8px solid " + blockly.color
+            console.log(blockly)
+            blockly.blockly.style.borderLeft = "8px solid " + blockly.color;
             blockly.blockly.style.backgroundColor = "#FFFFFF00"
             blockly.blockly.addEventListener("click", () => {
                 const blocklyTreeLabels = document.querySelectorAll(".blocklyTreeLabel")
