@@ -17,7 +17,7 @@ addEventListener('load', function () {
     }, [null])
     block.code("events_when_start", function (block) {
         var blocks = Blockly.JavaScript.statementToCode(block, 'blocks')
-        var code = `events.on("when_start",function() {\n${blocks}\n})`
+        var code = `events.on("when_start",function() {\nparentWindow.Csl.log("\\"当 开始运行 时\\"已被触发")\n${blocks}\n})`
         return code
     })
     block.add("events_role_event", function () {
