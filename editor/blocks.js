@@ -53,11 +53,9 @@ addEventListener('load', function () {
         message0: '%{BKY_CONTROLS_REPEAT_TITLE}',
         args0: [
             {
-                type: 'field_number',
+                type: 'input_value',
                 name: 'TIMES',
-                value: 20,
-                min: 0,
-                precision: 1,
+                check: 'Number',
             },
         ],
         message1: '%{BKY_CONTROLS_REPEAT_INPUT_DO} %1',
@@ -70,8 +68,7 @@ addEventListener('load', function () {
         previousStatement: null,
         nextStatement: null,
         style: 'loop_blocks',
-        tooltip: '%{BKY_CONTROLS_REPEAT_TOOLTIP}',
-        helpUrl: '%{BKY_CONTROLS_REPEAT_HELPURL}',
+        tooltip: '重复执行指定次数，为空时不循环\n警告：此积木没有等待保护，设置过大值会导致卡顿甚至卡死',
     }
     Blockly.Blocks['controls_repeat'] = {
         init: function () {
@@ -155,14 +152,36 @@ addEventListener('load', function () {
         return code
     })
     // Actions
+    var ActionsMoveJson = {
+        type: 'actions_move',
+        message0: '角色%1向%2移动%3步',
+        args0: [
+            {
+                type: 'field_dropdown',
+                name: 'role',
+                options: roles
+            },
+            {
+                type: 'field_dropdown',
+                name: 'direction',
+                options: [
+                    ["前", "forward"],
+                    ["后", "backward"],
+                    ["左", "left"],
+                    ["右", "right"],
+                ]
+            },
+            {
+                type: 'input_value',
+                name: 'distance',
+                value: 1
+            }
+        ],
+        tooltip: '移动角色，1步=1px',
+    }
     block.add("actions_move_forward", function () {
         console.log(this)
-        this.appendDummyInput()
-            .appendField('角色')
-            .appendField(new Blockly.FieldDropdown(roles), "role")
-            .appendField('向前移动')
-            .appendField(new Blockly.FieldNumber(10, 0), "distance")
-            .appendField('步');
+        this.jsonInit(ActionsMoveJson);
         this.setPreviousStatement(true, null);
         this.setNextStatement(true, null);
         this.svgGroup_.classList.add('ActionsBlocks');
@@ -171,17 +190,18 @@ addEventListener('load', function () {
             return roles
         }
     })
-    block.code("actions_move_forward", function (block) {
+    block.code("actions_move_forward", function (block, generator) {
         var role = block.getFieldValue("role")
-        var distance = block.getFieldValue("distance")
+        var direction = block.getFieldValue("direction")
+        var distance = generator.valueToCode(block, 'distance', Blockly.JavaScript.ORDER_ASSIGNMENT) || '1';
         var code = "";
         if (role == "__background__") {
             const Csl = new Console(csl)
             Csl.error("背景不是角色\n背景不能移动", "积木:角色[背景]向前移动(" + distance + ")步")
             console.error("背景不是角色\n背景不能移动")
-            code = `// actions.move_forward(${role}, ${distance})`
+            code = `// actions.move_forward(${role}, ${direction}, ${distance})`
         } else {
-            code = `actions.move_forward(${role}, ${distance})`
+            code = `actions.move_forward(${role}, ${direction}, ${distance})`
         }
         return code
     })
