@@ -136,10 +136,10 @@ addEventListener('load', function () {
             this.svgGroup_.classList.add('ControlsBlocks');
         }
     };
-    block.code("controls_output", function (block) {
+    block.code("controls_output", function (block, generator) {
         var type = block.getFieldValue("type")
-        var text = block.getFieldValue("text")
-        var code = `parentWindow.Csl.${type}(${String(text)});\n`
+        const argument0 = generator.valueToCode(block, 'text', Blockly.JavaScript.ORDER_ASSIGNMENT) || '0';
+        var code = `parentWindow.Csl.${type}(${String(argument0)});\n`
         return code
     })
     block.add("controls_clear-output", function () {
@@ -212,6 +212,136 @@ addEventListener('load', function () {
     // Pen
     // Sound
     // Operators
+    var OperatorsTextJson = {
+        type: 'text',
+        message0: '“%1”',
+        args0: [
+            {
+                type: 'field_input',
+                name: 'TEXT',
+                text: '',
+            },
+        ],
+        output: 'String',
+        tooltip: '字符串',
+    }
+    block.add("text", function () {
+        this.jsonInit(OperatorsTextJson);
+        this.svgGroup_.classList.add('OperatorsBlocks');
+    }, {})
+    block.code("text", function (block) {
+        var text = block.getFieldValue("TEXT")
+        var code = `"${text}"`
+        return [code, Blockly.JavaScript.ORDER_ATOMIC]
+    })
+    var OperatorsNumberJson = {
+        type: 'math_number',
+        message0: '%1',
+        args0: [
+            {
+                type: 'field_number',
+                name: 'NUM',
+                value: 0,
+            },
+        ],
+        output: 'Number',
+        style: 'math_blocks',
+        tooltip: '数值',
+    }
+    block.add("math_number", function () {
+        this.jsonInit(OperatorsNumberJson);
+        this.svgGroup_.classList.add('OperatorsBlocks');
+    }, {})
+    var OperatorsJoinJson =
+    {
+        type: 'text_join',
+        message0: '%1',
+        args0: [
+            {
+                type: 'input_value',
+                name: 'ADD0',
+            },
+        ],
+        message1: '+',
+        message2: '%1',
+        args2: [
+            {
+                type: 'input_value',
+                name: 'ADD1',
+            },
+        ],
+        output: 'String',
+        tooltip: '字符串合并',
+    }
+    block.add("text_join", function () {
+        this.jsonInit(OperatorsJoinJson);
+        this.svgGroup_.classList.add('OperatorsBlocks');
+    }, {})
+    block.code("text_join", function (block, generator) {
+        var add0 = generator.valueToCode(block, 'ADD0', Blockly.JavaScript.ORDER_ADDITION) || '""';
+        var add1 = generator.valueToCode(block, 'ADD1', Blockly.JavaScript.ORDER_ADDITION) || '""';
+        var code = `(${add0} + ${add1})`;
+        return [code, Blockly.JavaScript.ORDER_ADDITION];
+    })
+    var OperatorsSimpleJson = {
+        type: 'math_simple_operator',
+        message0: '%1',
+        args0: [
+            {
+                type: 'input_value',
+                check: 'Number',
+                name: 'NUM1',
+            },
+        ],
+        message1: ' %1',
+        args1: [
+            {
+                type: 'field_dropdown',
+                name: 'OP',
+                options: [
+                    ['+', '+'],
+                    ['-', '-'],
+                    ['×', '*'],
+                    ['÷', '/'],
+                    ['%', '%'],
+                ]
+            },
+        ],
+        message2: ' %1',
+        args2: [
+            {
+                type: 'input_value',
+                check: 'Number',
+                name: 'NUM2',
+            },
+        ],
+        output: 'Number',
+        style: 'math_blocks',
+        tooltip: '简单运算(加法、减法、乘法、除法、取余)',
+    }
+    block.add("math_simple_operator", function () {
+        this.jsonInit(OperatorsSimpleJson);
+        this.svgGroup_.classList.add('OperatorsBlocks');
+    }, {})
+    block.code("math_simple_operator", function (block, generator) {
+        var operator = block.getFieldValue('OP');
+        var num = generator.valueToCode(block, 'NUM1', Blockly.JavaScript.ORDER_ADDITION) || '0';
+        var num2 = generator.valueToCode(block, 'NUM2', Blockly.JavaScript.ORDER_ADDITION) || '0';
+        var code = `(${num} ${operator} ${num2})`
+        var Order = 0;
+        if (operator == '+') {
+            Order = Blockly.JavaScript.ORDER_UNARY_PLUS;
+        } else if (operator == '-') {
+            Order = Blockly.JavaScript.ORDER_UNARY_NEGATION;
+        } else if (operator == '*') {
+            Order = Blockly.JavaScript.ORDER_MULTIPLICATION;
+        } else if (operator == '/') {
+            Order = Blockly.JavaScript.ORDER_DIVISION;
+        } else if (operator == '%') {
+            Order = Blockly.JavaScript.ORDER_MODULUS;
+        }
+        return [code, Order];
+    })
     // Variables
     var VariablesGetJson = {
         type: 'variables_get',
@@ -234,9 +364,51 @@ addEventListener('load', function () {
         }
     };
     block.code("variables_get", function (block) {
-        var varName = block.getFieldValue('var');
-        console.log(varName)
-        return varName;
+        var code = Blockly.JavaScript.nameDB_.getName(
+            block.getFieldValue('var'), Blockly.Variables.CATEGORY_NAME);
+        console.log(code)
+        return [code, Blockly.JavaScript.ORDER_ATOMIC];
+    })
+    var VariablesSetterJson = {
+        type: "variables_setter",
+        message0: "变量%1自%2%3",
+        args0: [
+            {
+                type: 'field_variable',
+                name: 'var',
+                variable: '%{BKY_VARIABLES_DEFAULT_NAME}',
+            },
+            {
+                type: 'field_dropdown',
+                name: 'type',
+                options: [
+                    ['增', '+='],
+                    ['减', '-='],
+                    ['乘', '*='],
+                    ['除', '/='],
+                ]
+            },
+            {
+                type: 'input_value',
+                name: 'num',
+                check: 'Number',
+            },
+        ],
+        previousStatement: true,
+        nextStatement: true,
+        tooltip: '变量自增、自减、自乘、自除',
+    }
+    block.add("variables_setter", function () {
+        this.jsonInit(VariablesSetterJson);
+        this.svgGroup_.classList.add('VariablesBlocks');
+    }, {})
+    block.code("variables_setter", function (block, generator) {
+        var operator = block.getFieldValue('type');
+        var varName = Blockly.JavaScript.nameDB_.getName(
+            block.getFieldValue('var'), Blockly.Variables.CATEGORY_NAME);
+        var num = generator.valueToCode(block, 'num', Blockly.JavaScript.ORDER_ADDITION) || '0';
+        var code = `${varName} ${operator} ${num};\n`;
+        return code;
     })
     var VariablesSetJson = {
         type: 'variables_set',
