@@ -60,6 +60,28 @@ window.toolbox = {
         },
         {
             kind: "category",
+            name: "运算",
+            contents: [
+                {
+                    kind: "block",
+                    type: "text",
+                },
+                {
+                    kind: "block",
+                    type: "math_number",
+                },
+                {
+                    kind: "block",
+                    type: "text_join",
+                },
+                {
+                    kind: "block",
+                    type: "math_simple_operator",
+                },
+            ]
+        },
+        {
+            kind: "category",
             name: "变量",
             contents: [
                 {
@@ -71,6 +93,10 @@ window.toolbox = {
                 {
                     kind: "block",
                     type: "variables_set",
+                },
+                {
+                    kind: "block",
+                    type: "variables_setter",
                 },
                 {
                     kind: "block",
