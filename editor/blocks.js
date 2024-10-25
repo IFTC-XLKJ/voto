@@ -44,7 +44,7 @@ addEventListener('load', function () {
         var role = block.getFieldValue("role")
         var eventName = block.getFieldValue("eventName")
         var blocks = Blockly.JavaScript.statementToCode(block, 'blocks')
-        var code = `events.on("on_role_-${role}-_${eventName}",funtion() {\n${blocks}\n})`
+        var code = `events.on("on_role_-${role}-_${eventName}",function() {\nparentWindow.Csl.log("\\"当 角色${role} 被 ${eventName} 时\\"被触发");\n${blocks}\n})`
         return code
     })
     // Controls
