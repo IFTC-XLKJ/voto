@@ -6,10 +6,9 @@ const generatorWorkId = () => {
 const isNew = workId => {
     return workId.includes("__")
 }
-localStorage.setItem("tempWorkId", generatorWorkId())
 window.workdata = {
     title: "新的Voto作品",
-    workId: localStorage.getItem("tempWorkId"),
+    workId: generatorWorkId(),
     x: 0,
     y: 0,
     blockData: [],
@@ -37,6 +36,7 @@ window.workdata = {
     ],
 }
 window.workId = ""
+window.events = {};
 function getURLParameters() {
     const queryString = window.location.search.substring(1);
     const params = {};
@@ -65,11 +65,8 @@ function formatTimestamp(timestamp) {
     const seconds = String(date.getSeconds()).padStart(2, '0');
     return `${year}年${month}月${day}日 ${hours}时${minutes}分${seconds}秒`;
 }
-window.message = {
-    time: Date.now(),
-}
-const sendMessage = data => {
-    preview.contentWindow.message = data
+const dispatchEvents = e => {
+    preview.contentWindow.events.emit("editor", e)
 }
 window.Csl = {};
 window.vvzh = {}
@@ -98,6 +95,7 @@ async function login() {
     }
 }
 addEventListener("load", () => {
+    events = new Events();
     Csl = new Console(csl, true)
     Csl.log("正在加载...")
     onerror = (msg, url, lineNo, columnNo, error) => {
@@ -171,15 +169,12 @@ addEventListener("load", () => {
                         }
                     }
                 }
-            } else {
-                //location.href = `/editor`
             }
         } else {
             workdata.workId = `__${workdata.workId}__`
             workId = workdata.workId
-            location.search = `?workId=${workdata.workId}`
+            preview.src = `/preview`
             console.log(workdata.workId)
-            preview.src = `/preview/?workId=${workdata.workId}`
         }
         let blocksBoxes = []
         var blockly0 = document.getElementById("blockly-0")
@@ -188,10 +183,12 @@ addEventListener("load", () => {
         blocksBoxes.push({ blockly: blockly1, color: "#68CDFFFF" })
         var blockly2 = document.getElementById("blockly-2")
         blocksBoxes.push({ blockly: blockly2, color: "#F46767FF" })
-        var blockly2 = document.getElementById("blockly-3")
-        blocksBoxes.push({ blockly: blockly2, color: "#E76CEAFF" })
-        var blockly2 = document.getElementById("blockly-4")
-        blocksBoxes.push({ blockly: blockly2, color: "#FFA500FF" })
+        var blockly3 = document.getElementById("blockly-3")
+        blocksBoxes.push({ blockly: blockly3, color: "#E76CEAFF" })
+        var blockly4 = document.getElementById("blockly-4")
+        blocksBoxes.push({ blockly: blockly4, color: "#FEAE8AFF" })
+        var blockly5 = document.getElementById("blockly-5")
+        blocksBoxes.push({ blockly: blockly5, color: "#FFA500FF" })
         blocksBoxes.forEach(blockly => {
             blockly.blockly.style.borderLeft = "8px solid " + blockly.color
             blockly.blockly.style.backgroundColor = "#FFFFFF00"
@@ -227,6 +224,7 @@ addEventListener("load", () => {
             if (event.type == "var_create") { }
             if (event.type == "finished_loading") {
                 blocklyMainBackground.dispatchEvent(clickEvent);
+                Blockly.JavaScript.init(workspace)
                 console.log("加载完成")
                 Csl.log("控制台")
                 isLoaded = true
@@ -321,46 +319,13 @@ addEventListener("load", () => {
     console.log("editor loaded")
     preview.addEventListener("load", () => {
         console.log("preview loaded")
-        sendMessage({
+        dispatchEvents({
             type: "init",
             workId: workdata.workId,
             origin: "editor"
         })
         preview.style.width = `${previewBody.offsetWidth}px`
         preview.style.height = `${(previewBody.offsetWidth / 16) * 9}px`
-    })
-    function Processing(e) {
-        console.log("editor", e)
-        if (e.type === "reply") {
-            if (e.success) {
-                console.log("reply", "success")
-            } else {
-                console.log("reply", "fail")
-            }
-        }
-        if (e.type == "log") {
-            Csl.log(e.data)
-        }
-        if (e.type == "print") {
-            Csl.print(e.data)
-        }
-        if (e.type == "warn") {
-            Csl.warn(e.data)
-        }
-        if (e.type == "error") {
-            Csl.error(e.data)
-        }
-        if (e.type == "clear") {
-            Csl.clear()
-        }
-    }
-    let last = message;
-    setInterval(() => {
-        if (last != message) {
-            last = message
-            Processing(message)
-            console.log("editor meassge changed")
-        }
     })
     runMask.addEventListener("click", () => {
         previewBtn.click()
@@ -369,6 +334,16 @@ addEventListener("load", () => {
     preview.style.height = `${(previewBody.offsetWidth / 16) * 9}px`
     Csl.log("加载完成")
     Csl.log("欢迎使用 Voto编辑器")
+    events.on("preview", e => {
+        console.log("preview", e)
+        if (e.type == "reply") {
+            if (e.success) {
+                console.log("reply", "success")
+            } else {
+                console.log("reply", "fail")
+            }
+        }
+    })
 })
 
 addEventListener("load", () => {
@@ -497,7 +472,7 @@ addEventListener("load", () => {
                 runMask.style.display = "none"
                 run = false
                 Csl.log("<em>已停止</em>", true)
-                sendMessage({
+                dispatchEvents({
                     type: "stop",
                     workId: workdata.workId,
                     origin: "editor"
@@ -510,7 +485,7 @@ addEventListener("load", () => {
                 runMask.style.display = "flex"
                 run = true
                 Csl.log("<em>已运行</em>", true)
-                sendMessage({
+                dispatchEvents({
                     type: "run",
                     workId: workdata.workId,
                     origin: "editor",
