@@ -1,4 +1,10 @@
 class Action {
+    #screenWidth() {
+        return preview.clientWidth;
+    };
+    #screenHieght() {
+        return preview.clientHeight;
+    }
     constructor() {
         this.rolesId = workdata.roleData.map(role => role.id);
         this.roles = {};

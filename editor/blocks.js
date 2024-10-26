@@ -203,10 +203,10 @@ addEventListener('load', function () {
                 type: 'field_dropdown',
                 name: 'direction',
                 options: [
-                    ["前", "forward"],
-                    ["后", "backward"],
-                    ["左", "upward"],
-                    ["右", "downward"],
+                    ["左", "forward"],
+                    ["右", "backward"],
+                    ["上", "upward"],
+                    ["下", "downward"],
                 ]
             },
             {
