@@ -101,7 +101,8 @@ events.emit("when_start");`
             postMessage("stop")
             parentWindow.Csl.log("已收到停止指令")
         } else if (e.type == "newWork") {
-            const roles = e.data.roleData;
+            const roles = e.data;
+            console.log(roles)
             roles.forEach(role => {
                 
             });
