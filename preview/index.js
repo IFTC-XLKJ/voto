@@ -104,7 +104,18 @@ events.emit("when_start");`
             const roles = e.data;
             console.log(roles)
             roles.forEach(role => {
-                
+                var roleImg = document.createElement("img");
+                roleImg.src = role.url;
+                roleImg.style.width = `${role.width}px`;
+                roleImg.style.height = `${role.height}px`;
+                roleImg.classList.add("role");
+                roleImg.style.left = `${role.x}px`;
+                roleImg.style.top = `${role.y}px`;
+                roleImg.addEventListener("dragstart", e => {
+                    e.preventDefault();
+                    return false;
+                })
+                preview.appendChild(roleImg);
             });
         }
     })
