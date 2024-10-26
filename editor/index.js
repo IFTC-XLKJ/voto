@@ -15,13 +15,7 @@ window.workdata = {
     roleData: [
         {
             name: "role",
-            at: "0",
-            Keyframes: [
-                {
-                    name: "default",
-                    url: "/assets/role.svg"
-                }
-            ],
+            url: "/assets/role.svg",
             x: 0,
             y: 0,
             width: 100,
@@ -168,6 +162,7 @@ addEventListener("load", () => {
             workdata.workId = `__${workdata.workId}__`
             workId = workdata.workId
             preview.src = `/preview`
+            dispatchEvents({ type: "ewWork", data: workdata.roleData })
             console.log(workdata.workId)
         }
         let blocksBoxes = []
