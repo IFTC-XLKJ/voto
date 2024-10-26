@@ -12,12 +12,6 @@ window.workdata = {
     x: 0,
     y: 0,
     blockData: [],
-    screenData: [
-        {
-            id: "0",
-            background: "#FFFFFF"
-        }
-    ],
     roleData: [
         {
             name: "role",
@@ -491,7 +485,8 @@ addEventListener("load", () => {
                     workId: workdata.workId,
                     origin: "editor",
                     data: {
-                        code: Blockly.JavaScript.workspaceToCode(workspace)
+                        code: Blockly.JavaScript.workspaceToCode(workspace),
+                        renderCode: generatorRenderCode(),
                     }
                 })
             }
