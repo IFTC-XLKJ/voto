@@ -11,3 +11,8 @@ body {
 ::-webkit-scrollbar {
     width: 0px;
 }
+
+.role {
+    position: absolute;
+    user-select: none;
+}
