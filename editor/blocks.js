@@ -1,10 +1,30 @@
 const blockLoad = new Event('blockLoad', { isTrust: true })
 window.roles = [
-    ["背景", "__background__"],
+    ["背景", "__background__", "BACKGROUND"],
+    ["示例角色", "example", "角色-1"]
 ]
 addEventListener('load', function () {
     const block = new Block()
     const events = new Events()
+    /* 自定义字段 */
+    // Roles
+    Blockly.FieldRoles = class extends Blockly.FieldDropdown {
+        constructor(opt_value, opt_validator) {
+            super(roles, opt_validator);
+            console.log(this)
+            const options = this.getOptions();
+            this.setValue(opt_value || options[0][1]);
+        }
+        getOptions() {
+            return roles;
+        }
+        showEditor_() {
+            super.showEditor_();
+            this.doValueUpdate_(this.getOptions());
+        }
+    };
+    Blockly.fieldRegistry.register("field_roles", Blockly.FieldRoles)
+    /* 自定义字段 */
     // Events
     block.add("events_when_start", function () {
         console.log(this)
@@ -24,7 +44,7 @@ addEventListener('load', function () {
         console.log(this)
         this.appendDummyInput()
             .appendField('当')
-            .appendField(new Blockly.FieldDropdown(roles), "role")
+            .appendField(new Blockly.FieldRoles("__background__"), "role")
             .appendField('被')
             .appendField(new Blockly.FieldDropdown([
                 ["点击", "click"],
@@ -35,11 +55,7 @@ addEventListener('load', function () {
             .appendField('');
         this.setOutput(false, "String");
         this.svgGroup_.classList.add('EventsBlocks');
-    }, {
-        role: function (block) {
-            return roles
-        }
-    })
+    }, {})
     block.code("events_role_event", function (block) {
         var role = block.getFieldValue("role")
         var eventName = block.getFieldValue("eventName")
@@ -155,8 +171,9 @@ addEventListener('load', function () {
         message0: '角色%1向%2移动%3步',
         args0: [
             {
-                type: 'field_dropdown',
+                type: 'field_roles',
                 name: 'role',
+                value: "example",
                 options: roles
             },
             {
@@ -172,23 +189,20 @@ addEventListener('load', function () {
             {
                 type: 'input_value',
                 name: 'distance',
+                check: 'Number',
                 value: 1
             }
         ],
         tooltip: '移动角色，1步=1px',
     }
-    block.add("actions_move_forward", function () {
+    block.add("actions_move", function () {
         console.log(this)
         this.jsonInit(ActionsMoveJson);
         this.setPreviousStatement(true, null);
         this.setNextStatement(true, null);
         this.svgGroup_.classList.add('ActionsBlocks');
-    }, {
-        role: function (block) {
-            return roles
-        }
-    })
-    block.code("actions_move_forward", function (block, generator) {
+    }, {})
+    block.code("actions_move", function (block, generator) {
         var role = block.getFieldValue("role")
         var direction = block.getFieldValue("direction")
         var distance = generator.valueToCode(block, 'distance', Blockly.JavaScript.ORDER_ASSIGNMENT) || '1';
