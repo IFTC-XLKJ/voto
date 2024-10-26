@@ -485,7 +485,6 @@ addEventListener("load", () => {
                     origin: "editor",
                     data: {
                         code: Blockly.JavaScript.workspaceToCode(workspace),
-                        renderCode: generatorRenderCode(),
                     }
                 })
             }
