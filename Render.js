@@ -1,7 +1,7 @@
+const { workerData } = require("worker_threads");
+
 class Render {
     constructor() {
-        this.render = function (node, data) {
-            return node;
-        };
+        workerData
     }
 }

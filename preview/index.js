@@ -19,6 +19,40 @@ addEventListener("load", () => {
         console.log("editor", e)
         if (e.type == "init") {
             workId = e.workId
+            var selectedRole = document.createElement("div");
+            selectedRole.id = "selectedRole";
+            selectedRole.classList.add("selectedRole");
+            selectedRole.style.display = "none"
+            selectedRole.dataset.selected = "BACKGROUND"
+            preview.addEventListener("click", event => {
+                if (preview.dataset.type == "edit") {
+                    if (!event.target.className.split(" ").includes("role")) {
+                        selectedRole.style.display = "none"
+                        selectedRole.dataset.selected = "BACKGROUND"
+                    }
+                }
+            })
+            document.body.appendChild(selectedRole);
+            var leftDot = document.createElement("div");
+            leftDot.id = "leftDot";
+            leftDot.classList.add("dot");
+            leftDot.classList.add("leftDot");
+            selectedRole.appendChild(leftDot);
+            var rightDot = document.createElement("div");
+            rightDot.id = "rightDot";
+            rightDot.classList.add("dot");
+            rightDot.classList.add("rightDot");
+            selectedRole.appendChild(rightDot);
+            var topDot = document.createElement("div");
+            topDot.id = "topDot";
+            topDot.classList.add("dot");
+            topDot.classList.add("topDot");
+            selectedRole.appendChild(topDot);
+            var bottomDot = document.createElement("div");
+            bottomDot.id = "bottomDot";
+            bottomDot.classList.add("dot");
+            bottomDot.classList.add("bottomDot");
+            selectedRole.appendChild(bottomDot);
             dispatchEvents({
                 type: "reply",
                 success: true,
@@ -31,6 +65,7 @@ addEventListener("load", () => {
                 console.log("editor", "fail")
             }
         } else if (e.type == "run") {
+            preview.click();
             preview.dataset.type = "run"
             dispatchEvents({
                 type: "reply",
@@ -43,6 +78,7 @@ addEventListener("load", () => {
             let code = e.data.code
             let renderCode = e.data.renderCode
             code = `const parentWindow = parent || top;
+const actions = new Action();
 const events = new Events();
 function backgroundClick(event) {
     if (preview.dataset.type == "run") {
@@ -99,26 +135,46 @@ events.emit("when_start");`
                 origin: "preview",
             })
             postMessage("stop")
+            const roles = parentWindow.workdata.roleData;
+            render(roles)
             parentWindow.Csl.log("已收到停止指令")
         } else if (e.type == "newWork") {
             const roles = e.data;
-            console.log(roles)
-            roles.forEach(role => {
-                var roleImg = document.createElement("img");
-                roleImg.src = role.url;
-                roleImg.style.width = `${role.width}px`;
-                roleImg.style.height = `${role.height}px`;
-                roleImg.classList.add("role");
-                roleImg.style.left = `${role.x}px`;
-                roleImg.style.top = `${role.y}px`;
-                roleImg.addEventListener("dragstart", e => {
-                    e.preventDefault();
-                    return false;
-                })
-                preview.appendChild(roleImg);
-            });
+            render(roles)
         }
     })
+    function render(roles) {
+        preview.innerHTML = ""
+        console.log(roles)
+        var selectedRole = document.getElementById("selectedRole");
+        roles.forEach(role => {
+            var roleImg = document.createElement("img");
+            roleImg.src = role.url;
+            roleImg.style.width = `${role.width}px`;
+            roleImg.style.height = `${role.height}px`;
+            roleImg.classList.add("role");
+            roleImg.style.left = `${role.x}px`;
+            roleImg.style.top = `${role.y}px`;
+            roleImg.addEventListener("dragstart", e => {
+                e.preventDefault();
+                return false;
+            })
+            roleImg.id = `ROLE_${role.id}`
+            roleImg.dataset.name = role.name
+            roleImg.dataset.type = role.type
+            roleImg.addEventListener("click", e => {
+                if (preview.dataset.type == "edit") {
+                    selectedRole.style.display = "flex"
+                    selectedRole.style.width = `${roleImg.clientWidth - 6}px`
+                    selectedRole.style.height = `${roleImg.clientHeight - 6}px`
+                    selectedRole.style.left = `${roleImg.offsetLeft}px`
+                    selectedRole.style.top = `${roleImg.offsetTop}px`
+                    selectedRole.dataset.selected = role.id;
+                }
+            })
+            preview.appendChild(roleImg);
+        });
+    }
 })
 
 addEventListener("resize", () => {

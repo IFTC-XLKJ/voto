@@ -3,6 +3,7 @@ window.roles = [
     ["背景", "__background__", "BACKGROUND"],
     ["示例角色", "example", "角色-1"]
 ]
+/* 角色名 */ /* 角色ID */ /* 角色类型 */
 addEventListener('load', function () {
     const block = new Block()
     const events = new Events()
@@ -37,7 +38,7 @@ addEventListener('load', function () {
     }, [null])
     block.code("events_when_start", function (block) {
         var blocks = Blockly.JavaScript.statementToCode(block, 'blocks')
-        var code = `events.on("when_start",function() {\nparentWindow.Csl.log("\\"当 开始运行 时\\"已被触发")\n${blocks}\n})`
+        var code = `events.on("when_start",async function() {\nparentWindow.Csl.log("\\"当 开始运行 时\\"已被触发")\n${blocks}\n})`
         return code
     })
     block.add("events_role_event", function () {
@@ -120,6 +121,28 @@ addEventListener('load', function () {
             this.svgGroup_.classList.add('ControlsBlocks');
         }
     };
+    var WaitJson = {
+        type: 'controls_wait',
+        message0: '等待 %1 秒',
+        args0: [
+            {
+                type: 'input_value',
+                name: 'WAIT',
+                check: 'Number',
+            },
+        ],
+        previousStatement: null,
+        nextStatement: null,
+    }
+    block.add("controls_wait", function () {
+        this.jsonInit(WaitJson);
+        this.svgGroup_.classList.add('ControlsBlocks');
+    }, {})
+    block.code("controls_wait", function (block) {
+        var times = Blockly.JavaScript.valueToCode(block, 'WAIT', Blockly.JavaScript.ORDER_ASSIGNMENT) || "1";
+        var code = `await new Promise(resolve => setTimeout(resolve, ${times} * 1000))`
+        return code;
+    })
     var ControlsOutputJson = {
         type: 'controls_output',
         message0: '在控制台 %1 %2',
@@ -182,8 +205,8 @@ addEventListener('load', function () {
                 options: [
                     ["前", "forward"],
                     ["后", "backward"],
-                    ["左", "left"],
-                    ["右", "right"],
+                    ["左", "leftward"],
+                    ["右", "rightward"],
                 ]
             },
             {
@@ -213,7 +236,7 @@ addEventListener('load', function () {
             console.error("背景不是角色\n背景不能移动")
             code = `// actions.move_forward(${role}, ${direction}, ${distance})\n`
         } else {
-            code = `actions.move_forward(${role}, ${direction}, ${distance})\n`
+            code = `actions.move("${role}", "${direction}", ${distance})\nparentWindow.Csl.log("角色${role} 向 ${direction} 移动 ${distance} 步")\n`
         }
         return code
     })

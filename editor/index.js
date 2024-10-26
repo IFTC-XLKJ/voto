@@ -15,11 +15,13 @@ window.workdata = {
     roleData: [
         {
             name: "role",
+            id: "example",
+            type: "角色-1",
             url: "/assets/role.svg",
             x: 100,
             y: 50,
             width: 100,
-            height: 100
+            height: 100,
         }
     ],
 }

@@ -30,6 +30,10 @@ window.toolbox = {
                 },
                 {
                     kind: "block",
+                    type: "controls_wait",
+                },
+                {
+                    kind: "block",
                     type: "controls_output",
                 },
                 {

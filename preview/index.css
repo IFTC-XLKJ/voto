@@ -8,6 +8,50 @@ body {
     overflow: hidden;
 }
 
+.selectedRole {
+    position: absolute;
+    border: 3px solid #474747;
+    cursor: grab;
+}
+
+.selectedRole:active {
+    cursor: grabbing;
+}
+
+.dot {
+    width: 10px;
+    height: 10px;
+    background-color: #474747;
+    border-radius: 50%;
+    position: absolute;
+}
+
+.leftDot {
+    left: -7px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: e-resize;
+}
+
+.rightDot {
+    left: calc(100% - 3px);
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: e-resize;
+}
+
+.topDot {
+    left: calc(50% - 5px);
+    top: -7px;
+    cursor: n-resize;
+}
+
+.bottomDot {
+    left: calc(50% - 5px);
+    top: calc(100% - 3px);
+    cursor: n-resize;
+}
+
 ::-webkit-scrollbar {
     width: 0px;
 }
