@@ -32,6 +32,41 @@ addEventListener("load", () => {
                     }
                 }
             })
+            var isDragging = false;
+            var initialOffset = { x: 0, y: 0 };
+            var dragStartPos = { x: 0, y: 0 };
+            var newX = 0;
+            var newY = 0;
+            var CX = 0;
+            var CY = 0;
+            selectedRole.addEventListener('mousedown', function (_event) {
+                _event.preventDefault();
+                dragStartPos.x = _event.clientX;
+                dragStartPos.y = _event.clientY;
+                initialOffset.x = selectedRole.offsetLeft;
+                initialOffset.y = selectedRole.offsetTop;
+                document.addEventListener('mousemove', onMouseMove);
+                document.addEventListener('mouseup', onMouseUp);
+            });
+            function onMouseMove(_event) {
+                isDragging = true;
+                CX = _event.clientX - dragStartPos.x;
+                CY = _event.clientY - dragStartPos.y;
+                newX = initialOffset.x + _event.clientX - dragStartPos.x;
+                newY = initialOffset.y + _event.clientY - dragStartPos.y;
+                newY = newY - 5;
+                selectedRole.style.left = newX + 'px';
+                selectedRole.style.top = newY + 'px';
+                var role = document.getElementById(`ROLE_${selectedRole.dataset.selected}`)
+                role.style.left = newX + 'px';
+                role.style.top = newY + 'px';
+            }
+
+            function onMouseUp() {
+                document.removeEventListener('mousemove', onMouseMove);
+                document.removeEventListener('mouseup', onMouseUp);
+                isDragging = false;
+            }
             document.body.appendChild(selectedRole);
             var leftDot = document.createElement("div");
             leftDot.id = "leftDot";
