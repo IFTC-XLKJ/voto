@@ -205,8 +205,8 @@ addEventListener('load', function () {
                 options: [
                     ["前", "forward"],
                     ["后", "backward"],
-                    ["左", "leftward"],
-                    ["右", "rightward"],
+                    ["左", "upward"],
+                    ["右", "downward"],
                 ]
             },
             {
