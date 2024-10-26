@@ -78,7 +78,7 @@ addEventListener('load', function () {
     };
     var ControlsIfJson = {
         type: 'controls_if',
-        message0: '%{BKY_CONTROLS_IF_MSG_IF} %1',
+        message0: '如果 %1',
         args0: [
             {
                 type: 'input_value',
@@ -86,7 +86,7 @@ addEventListener('load', function () {
                 check: 'Boolean',
             },
         ],
-        message1: '%{BKY_CONTROLS_IF_MSG_THEN} %1',
+        message1: '%1',
         args1: [
             {
                 type: 'input_statement',
@@ -95,10 +95,8 @@ addEventListener('load', function () {
         ],
         previousStatement: null,
         nextStatement: null,
-        style: 'logic_blocks',
         suppressPrefixSuffix: true,
         mutator: 'controls_if_mutator',
-        extensions: ['controls_if_tooltip'],
     }
     Blockly.Blocks['controls_if'] = {
         init: function () {
@@ -199,9 +197,9 @@ addEventListener('load', function () {
             const Csl = new Console(csl)
             Csl.error("背景不是角色\n背景不能移动", "积木:角色[背景]向前移动(" + distance + ")步")
             console.error("背景不是角色\n背景不能移动")
-            code = `// actions.move_forward(${role}, ${direction}, ${distance})`
+            code = `// actions.move_forward(${role}, ${direction}, ${distance})\n`
         } else {
-            code = `actions.move_forward(${role}, ${direction}, ${distance})`
+            code = `actions.move_forward(${role}, ${direction}, ${distance})\n`
         }
         return code
     })
@@ -375,7 +373,7 @@ addEventListener('load', function () {
         ],
         output: null,
         style: 'variable_blocks',
-        extensions: ['contextMenu_variableSetterGetter'],
+        tooltip: "获取变量的值"
     }
     Blockly.Blocks['variables_get'] = {
         init: function () {
@@ -391,7 +389,7 @@ addEventListener('load', function () {
     })
     var VariablesSetterJson = {
         type: "variables_setter",
-        message0: "变量%1自%2%3",
+        message0: "将%1自%2%3",
         args0: [
             {
                 type: 'field_variable',
@@ -432,7 +430,7 @@ addEventListener('load', function () {
     })
     var VariablesSetJson = {
         type: 'variables_set',
-        message0: '%{BKY_VARIABLES_SET}',
+        message0: '设置%1为%2',
         args0: [
             {
                 type: 'field_variable',
@@ -446,10 +444,7 @@ addEventListener('load', function () {
         ],
         previousStatement: null,
         nextStatement: null,
-        style: 'variable_blocks',
-        tooltip: '%{BKY_VARIABLES_SET_TOOLTIP}',
-        helpUrl: '%{BKY_VARIABLES_SET_HELPURL}',
-        extensions: ['contextMenu_variableSetterGetter'],
+        tooltip: '给变量赋值，类型为任意',
     }
     Blockly.Blocks['variables_set'] = {
         init: function () {
