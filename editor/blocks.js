@@ -149,7 +149,7 @@ addEventListener('load', function () {
     };
     block.code("controls_output", function (block, generator) {
         var type = block.getFieldValue("type")
-        const argument0 = generator.valueToCode(block, 'text', Blockly.JavaScript.ORDER_ASSIGNMENT) || '0';
+        const argument0 = generator.valueToCode(block, 'text', Blockly.JavaScript.ORDER_ASSIGNMENT) || null;
         var code = `parentWindow.Csl.${type}(${String(argument0)});\n`
         return code
     })
@@ -172,9 +172,9 @@ addEventListener('load', function () {
         args0: [
             {
                 type: 'field_roles',
+                options: roles,
                 name: 'role',
                 value: "example",
-                options: roles
             },
             {
                 type: 'field_dropdown',
@@ -220,7 +220,7 @@ addEventListener('load', function () {
     // Looks
     var LooksSetBackgroundImgJson = {
         type: 'looks_set_background_img',
-        message0: '设置背景为 %1',
+        message0: '设置背景图片为 %1',
         args0: [
             {
                 type: 'input_value',
