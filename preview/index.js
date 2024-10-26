@@ -60,6 +60,8 @@ addEventListener("load", () => {
                 var role = document.getElementById(`ROLE_${selectedRole.dataset.selected}`)
                 role.style.left = newX + 'px';
                 role.style.top = newY + 'px';
+                parentWindow.workdata.roleData[`${selectedRole.dataset.selected}`].x = newX
+                parentWindow.workdata.roleData[`${selectedRole.dataset.selected}`].y = newY
             }
 
             function onMouseUp() {
