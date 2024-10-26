@@ -44,7 +44,7 @@ window.toolbox = {
             contents: [
                 {
                     kind: "block",
-                    type: "actions_move_forward",
+                    type: "actions_move",
                 },
             ]
         },
