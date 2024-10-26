@@ -41,6 +41,7 @@ addEventListener("load", () => {
             workdata = parentWindow.workdata;
             parentWindow.Csl.log("已收到运行指令")
             let code = e.data.code
+            let renderCode = e.data.renderCode
             code = `const parentWindow = parent || top;
 const events = new Events();
 function backgroundClick(event) {
@@ -85,6 +86,7 @@ addEventListener("message", e => {
         preview.removeEventListener("touchend", backgroundUp)
     }
 })
+${renderCode}
 events.emit("when_start");`
             eval(code)
             console.log(code)
