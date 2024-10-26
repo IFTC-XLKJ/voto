@@ -162,7 +162,9 @@ addEventListener("load", () => {
             workdata.workId = `__${workdata.workId}__`
             workId = workdata.workId
             preview.src = `/preview`
-            dispatchEvents({ type: "ewWork", data: workdata.roleData })
+            preview.onload = () => {
+                dispatchEvents({ type: "newWork", data: workdata.roleData })
+            }
             console.log(workdata.workId)
         }
         let blocksBoxes = []
