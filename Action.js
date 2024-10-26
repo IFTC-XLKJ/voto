@@ -11,9 +11,11 @@ class Action {
         if (direction == "forward") {
             this.roles[role].style.left = `${this.roles[role].offsetLeft + distance}px`
         } else if (direction == "backward") {
-            this.roles[role].style.top = `${parseInt(this.roles[role].style.top) - distance}px`
-        } else if (direction == "left") {
-            this.roles[role].style.left = `${parseInt(this.roles[role].style.left)}`
+            this.roles[role].style.left = `${this.roles[role].offsetLeft - distance}px`
+        } else if (direction == "upward") {
+            this.roles[role].style.top = `${this.roles[role].offsetTop - distance}px`
+        } else if (direction == "downward") {
+            this.roles[role].style.top = `${this.roles[role].offsetTop + distance}px`
         }
     }
 }
