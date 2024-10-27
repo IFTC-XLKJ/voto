@@ -60,10 +60,13 @@ addEventListener("load", () => {
                 var role = document.getElementById(`ROLE_${selectedRole.dataset.selected}`)
                 role.style.left = newX + 'px';
                 role.style.top = newY + 'px';
-                parentWindow.workdata.roleData[`${selectedRole.dataset.selected}`].x = newX
-                parentWindow.workdata.roleData[`${selectedRole.dataset.selected}`].y = newY
+                parentWindow.workdata.roleData.forEach((Role, index) => {
+                    if (Role.id == selectedRole.dataset.selected) {
+                        parentWindow.workdata.roleData[index].x = newX / (preview.clientWidth / 640)
+                        parentWindow.workdata.roleData[index].y = newY / (preview.clientHeight / 360)
+                    }
+                })
             }
-
             function onMouseUp() {
                 document.removeEventListener('mousemove', onMouseMove);
                 document.removeEventListener('mouseup', onMouseUp);
@@ -117,6 +120,8 @@ addEventListener("load", () => {
             code = `const parentWindow = parent || top;
 const actions = new Action();
 const events = new Events();
+const globalAbortController = new AbortController();
+const globalSignal = globalAbortController.signal;
 function backgroundClick(event) {
     if (preview.dataset.type == "run") {
         const e = {
@@ -160,6 +165,17 @@ addEventListener("message", e => {
     }
 })
 ${renderCode}
+function createTimeoutPromise(timeout) {
+    return new Promise((resovle, reject) => {
+        setTimeout(() => {
+            reject(new Error('Operation timed out'));
+        }, timeout);
+    });
+}
+parentWindow.document.getElementById("previewBtn").addEventListener("click", () => {
+    console.log("114514")
+    events.emit("stop");
+})
 events.emit("when_start");`
             eval(code)
             console.log(code)
@@ -187,11 +203,15 @@ events.emit("when_start");`
         roles.forEach(role => {
             var roleImg = document.createElement("img");
             roleImg.src = role.url;
-            roleImg.style.width = `${role.width}px`;
-            roleImg.style.height = `${role.height}px`;
+            const W = (preview.clientWidth / 640) * role.width;
+            const H = (preview.clientHeight / 360) * role.height;
+            roleImg.style.width = `${W}px`
+            roleImg.style.height = `${H}px`
             roleImg.classList.add("role");
-            roleImg.style.left = `${role.x}px`;
-            roleImg.style.top = `${role.y}px`;
+            const X = (preview.clientWidth / 640) * role.x;
+            const Y = (preview.clientHeight / 360) * role.y;
+            roleImg.style.left = `${X}px`;
+            roleImg.style.top = `${Y}px`;
             roleImg.addEventListener("dragstart", e => {
                 e.preventDefault();
                 return false;
@@ -202,10 +222,10 @@ events.emit("when_start");`
             roleImg.addEventListener("click", e => {
                 if (preview.dataset.type == "edit") {
                     selectedRole.style.display = "flex"
-                    selectedRole.style.width = `${roleImg.clientWidth - 6}px`
-                    selectedRole.style.height = `${roleImg.clientHeight - 6}px`
-                    selectedRole.style.left = `${roleImg.offsetLeft}px`
-                    selectedRole.style.top = `${roleImg.offsetTop}px`
+                    selectedRole.style.width = `${W - 6}px`
+                    selectedRole.style.height = `${H - 6}px`
+                    selectedRole.style.left = `${X}px`
+                    selectedRole.style.top = `${Y}px`
                     selectedRole.dataset.selected = role.id;
                 }
             })
@@ -217,4 +237,27 @@ events.emit("when_start");`
 addEventListener("resize", () => {
     preview.style.width = `${innerWidth}px`
     preview.style.height = `${(innerWidth / 16) * 9}px`
+    const X = role => {
+        let w = parentWindow.workdata.roleData.filter(r => `ROLE_${r.id}` == role.id)[0].width
+        return (preview.clientWidth / 640) * w
+    };
+    const Y = role => {
+        let h = parentWindow.workdata.roleData.filter(r => `ROLE_${r.id}` == role.id)[0].height
+        return (preview.clientHeight / 360) * h;
+    }
+    const W = role => {
+        let w = parentWindow.workdata.roleData.filter(r => `ROLE_${r.id}` == role.id)[0].width
+        return (preview.clientWidth / 640) * w
+    };
+    const H = role => {
+        let h = parentWindow.workdata.roleData.filter(r => `ROLE_${r.id}` == role.id)[0].height
+        return (preview.clientHeight / 360) * h
+    };
+    const roles = document.querySelectorAll(".role")
+    roles.forEach(role => {
+        role.style.left = `${X(role)}px`
+        role.style.top = `${Y(role)}px`
+        role.style.width = `${W(role)}px`
+        role.style.height = `${H(role)}px`
+    })
 })

@@ -108,6 +108,16 @@ window.toolbox = {
                 },
             ]
         },
+        {
+            kind: "category",
+            name: "列表",
+            contents: [
+                {
+                    kind: "block",
+                    type: "lists_create_with",
+                },
+            ]
+        }
     ]
 }
 

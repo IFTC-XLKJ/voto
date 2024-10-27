@@ -140,6 +140,7 @@ class Console {
                     console.error('Failed to copy text: ', err);
                 });
         }
+        this.#check();
     }
     print(text) {
         var print = document.createElement("li");
@@ -160,6 +161,7 @@ class Console {
                     console.error('Failed to copy text: ', err);
                 });
         }
+        this.#check();
     }
     warn(text) {
         var warn = document.createElement("li");
@@ -180,6 +182,7 @@ class Console {
                     console.error('Failed to copy text: ', err);
                 });
         }
+        this.#check();
     }
     error(text, line) {
         var error = document.createElement("li");
@@ -203,6 +206,7 @@ class Console {
                     console.error('Failed to copy text: ', err);
                 });
         }
+        this.#check();
     }
     clear() {
         this.console.innerHTML = "";
@@ -225,6 +229,53 @@ class Console {
             } catch (e) {
                 console.error(String(e));
             }
+        }
+    }
+    #check() {
+        const num = this.console.querySelectorAll("li").length;
+        if (num == 99) {
+            this.warn(`注意：控制台输出100条记录`)
+        } else if (num == 199) {
+            this.warn(`注意：控制台输出200条记录`)
+        } else if (num == 199) {
+            this.warn(`注意：控制台输出300条记录`)
+        } else if (num == 299) {
+            this.warn(`注意：控制台输出400条记录`)
+        } else if (num == 399) {
+            this.warn(`注意：控制台输出500条记录`)
+        } else if (num == 499) {
+            this.warn(`注意：控制台输出600条记录`)
+        } else if (num == 599) {
+            this.warn(`注意：控制台输出700条记录`)
+        } else if (num == 699) {
+            this.warn(`注意：控制台输出800条记录`)
+        } else if (num == 799) {
+            this.warn(`注意：控制台输出900条记录`)
+        } else if (num == 899) {
+            this.warn(`注意：控制台输出1000条记录`)
+        } else if (num == 999) {
+            this.warn(`注意：控制台输出1100条记录`)
+        } else if (num == 1999) {
+            this.warn(`注意：控制台输出1200条记录`)
+        } else if (num == 2999) {
+            this.warn(`注意：控制台输出1300条记录`)
+        } else if (num == 3999) {
+            this.warn(`注意：控制台输出1400条记录`)
+        } else if (num == 4999) {
+            this.warn(`注意：控制台输出1500条记录`)
+        } else if (num == 5999) {
+            this.warn(`注意：控制台输出1600条记录`)
+        } else if (num == 6999) {
+            this.warn(`注意：控制台输出1700条记录`)
+        } else if (num == 7999) {
+            this.warn(`注意：控制台输出1800条记录`)
+        } else if (num == 8999) {
+            this.warn(`注意：控制台输出1900条记录`)
+        } else if (num == 9999) {
+            this.warn(`注意：控制台输出2000条记录`)
+        } else if (num > 10000) {
+            this.clear();
+            this.warn(`记录超过10000条，已自动清理`)
         }
     }
 }
