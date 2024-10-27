@@ -89,6 +89,10 @@ addEventListener("load", () => {
     Csl = new Console(csl, true)
     Csl.log("正在加载...")
     onerror = (msg, url, lineNo, columnNo, error) => {
+        if (error == "TypeError: Cannot read properties of undefined (reading 'null')") {
+            Csl.error("积木中含有空值\n问题可能出现在“列表”积木中")
+            return 0;
+        }
         Csl.error("错误：" + msg + "在" + url + "的" + lineNo + "行" + columnNo + "列\n" + error)
     }
     vvzh = new pgdbs(dbs_a6b2a4d6c02022e831626d31ab805a468a151b90d5161660485a73cc6e1ea902)
