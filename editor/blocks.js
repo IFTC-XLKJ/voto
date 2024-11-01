@@ -188,6 +188,17 @@ addEventListener('load', function () {
         var code = `parentWindow.Csl.clear();\n`
         return code
     })
+    block.add("controls_comment", function () {
+        this.appendDummyInput()
+            .appendField("注释")
+            .appendField(new Blockly.FieldTextInput(''), 'TEXT')
+        this.svgGroup_.classList.add('ControlsBlocks')
+    }, [null])
+    block.code("controls_comment", function (block) {
+        var text = block.getFieldValue('TEXT')
+        return `// ${text}\n`
+
+    })
     // Actions
     var ActionsMoveJson = {
         type: 'actions_move',
@@ -517,7 +528,7 @@ addEventListener('load', function () {
                 this.removeInput('EMPTY');
             } else if (!this.itemCount_ && !this.getInput('EMPTY')) {
                 this.appendDummyInput('EMPTY')
-                    .appendField("创建数组");
+                    .appendField("空数组");
             }
             for (let i = 0; i < this.itemCount_; i++) {
                 if (!this.getInput('ADD' + i)) {
