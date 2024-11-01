@@ -186,6 +186,8 @@ addEventListener("load", () => {
         blocksBoxes.push({ blockly: blockly4, color: "#FEAE8AFF" })
         var blockly5 = document.getElementById("blockly-5")
         blocksBoxes.push({ blockly: blockly5, color: "#FFA500FF" })
+        var blockly6 = document.getElementById("blockly-6")
+        blocksBoxes.push({ blockly: blockly6, color: "#F9CC37FF" })
         blocksBoxes.forEach(blockly => {
             console.log(blockly)
             blockly.blockly.style.borderLeft = "8px solid " + blockly.color;
