@@ -40,6 +40,10 @@ window.toolbox = {
                     kind: "block",
                     type: "controls_clear-output",
                 },
+                {
+                    kind: "block",
+                    type: "controls_comment",
+                },
             ]
         },
         {
