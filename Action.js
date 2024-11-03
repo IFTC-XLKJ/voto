@@ -14,14 +14,16 @@ class Action {
         console.log(this)
     }
     move(role, direction, distance) {
-        if (direction == "forward") {
-            this.roles[role].style.left = `${(this.roles[role].offsetLeft - distance) / (preview.clientWidth / 640)}px`
-        } else if (direction == "backward") {
-            this.roles[role].style.left = `${(this.roles[role].offsetLeft + distance) / (preview.clientWidth / 640)}px`
-        } else if (direction == "upward") {
-            this.roles[role].style.top = `${(this.roles[role].offsetTop - distance) / (preview.clientHeight / 360)}px`
-        } else if (direction == "downward") {
-            this.roles[role].style.top = `${(this.roles[role].offsetTop + distance) / (preview.clientHeight / 360)}px`
+        if (role == "__background__") {
+            if (direction == "forward") {
+                this.roles[role].style.left = `${(this.roles[role].offsetLeft - distance) / (preview.clientWidth / 640)}px`
+            } else if (direction == "backward") {
+                this.roles[role].style.left = `${(this.roles[role].offsetLeft + distance) / (preview.clientWidth / 640)}px`
+            } else if (direction == "upward") {
+                this.roles[role].style.top = `${(this.roles[role].offsetTop - distance) / (preview.clientHeight / 360)}px`
+            } else if (direction == "downward") {
+                this.roles[role].style.top = `${(this.roles[role].offsetTop + distance) / (preview.clientHeight / 360)}px`
+            }
         }
     }
 }
