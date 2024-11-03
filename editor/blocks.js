@@ -140,7 +140,12 @@ addEventListener('load', function () {
     }, {})
     block.code("controls_wait", function (block) {
         var times = Blockly.JavaScript.valueToCode(block, 'WAIT', Blockly.JavaScript.ORDER_ASSIGNMENT) || "1";
-        var code = `new Promise(resolve => setTimeout(resolve, 1 * 1000));`
+        var code = `await new Promise(resolve => {
+    const id = setTimeout(resolve, ${times} * 1000)
+    signal.addEventListener('abort', () => {
+        clearTimeout(id);
+    });
+});\n`
         return code;
     })
     var ControlsOutputJson = {

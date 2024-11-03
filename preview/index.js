@@ -123,8 +123,8 @@ addEventListener("load", () => {
             code = `const parentWindow = parent || top;
 const actions = new Action();
 const events = new Events();
-const globalAbortController = new AbortController();
-const globalSignal = globalAbortController.signal;
+const controller = new AbortController();
+const signal = controller.signal;
 function backgroundClick(event) {
     if (event.target.className == "preview") {
         const e = {
@@ -176,6 +176,7 @@ function createTimeoutPromise(timeout) {
 }
 parentWindow.document.getElementById("previewBtn").addEventListener("click", () => {
     console.log("114514")
+    controller.abort();
     events.emit("stop");
 })
 events.emit("when_start");`
@@ -183,6 +184,7 @@ events.emit("when_start");`
                 eval(code)
             } catch (e) {
                 parentWindow.Csl.error("运行时发生错误")
+                console.log(e)
             }
             console.log(code)
         } else if (e.type == "stop") {
