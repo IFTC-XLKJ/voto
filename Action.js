@@ -14,7 +14,7 @@ class Action {
         console.log(this)
     }
     move(role, direction, distance) {
-        if (role == "__background__") {
+        if (role != "__background__") {
             if (direction == "forward") {
                 this.roles[role].style.left = `${(this.roles[role].offsetLeft - distance) / (preview.clientWidth / 640)}px`
             } else if (direction == "backward") {
@@ -24,6 +24,8 @@ class Action {
             } else if (direction == "downward") {
                 this.roles[role].style.top = `${(this.roles[role].offsetTop + distance) / (preview.clientHeight / 360)}px`
             }
+        } else {
+            parentWindow.Csl.error("背景不是角色\n背景不能移动")
         }
     }
 }
