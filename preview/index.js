@@ -126,25 +126,31 @@ const events = new Events();
 const globalAbortController = new AbortController();
 const globalSignal = globalAbortController.signal;
 function backgroundClick(event) {
+    if (event.target.className == "preview") {
         const e = {
             x: event.offsetX,
             y: event.offsetY,
         }
         events.emit("on_role_-__background__-_click", e)
+    }
 }
 function backgroundDown(event) {
+    if (event.target.className == "preview") {
         const e = {
             x: event.offsetX,
             y: event.offsetY,
         }
         events.emit("on_role_-__background__-_down", e)
+    }
 }
 function backgroundUp(event) {
+    if (event.target.className == "preview") {
         const e = {
             x: event.offsetX,
             y: event.offsetY,
         }
         events.emit("on_role_-__background__-_up", e)
+    }
 }
 preRun.addEventListener("click", backgroundClick)
 preRun.addEventListener("mousedown", backgroundDown)
