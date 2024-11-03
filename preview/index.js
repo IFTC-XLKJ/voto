@@ -12,9 +12,13 @@ const dispatchEvents = e => {
     parentWindow.events.emit("preview", e)
 }
 addEventListener("load", () => {
+    const preEdit = document.querySelector("[data-type=\"edit\"]")
+    const preRun = document.querySelector("[data-type=\"run\"]")
     events = new Events();
-    preview.style.width = `${innerWidth}px`
-    preview.style.height = `${(innerWidth / 16) * 9}px`
+    preEdit.style.width = `${innerWidth}px`
+    preEdit.style.height = `${(innerWidth / 16) * 9}px`
+    preRun.style.width = `${innerWidth}px`
+    preRun.style.height = `${(innerWidth / 16) * 9}px`
     events.on("editor", e => {
         console.log("editor", e)
         if (e.type == "init") {
@@ -24,12 +28,10 @@ addEventListener("load", () => {
             selectedRole.classList.add("selectedRole");
             selectedRole.style.display = "none"
             selectedRole.dataset.selected = "BACKGROUND"
-            preview.addEventListener("click", event => {
-                if (preview.dataset.type == "edit") {
-                    if (!event.target.className.split(" ").includes("role")) {
-                        selectedRole.style.display = "none"
-                        selectedRole.dataset.selected = "BACKGROUND"
-                    }
+            preEdit.addEventListener("click", event => {
+                if (!event.target.className.split(" ").includes("role")) {
+                    selectedRole.style.display = "none"
+                    selectedRole.dataset.selected = "BACKGROUND"
                 }
             })
             var isDragging = false;
@@ -62,8 +64,8 @@ addEventListener("load", () => {
                 role.style.top = newY + 'px';
                 parentWindow.workdata.roleData.forEach((Role, index) => {
                     if (Role.id == selectedRole.dataset.selected) {
-                        parentWindow.workdata.roleData[index].x = newX / (preview.clientWidth / 640)
-                        parentWindow.workdata.roleData[index].y = newY / (preview.clientHeight / 360)
+                        parentWindow.workdata.roleData[index].x = newX / (preEdit.clientWidth / 640)
+                        parentWindow.workdata.roleData[index].y = newY / (preEdit.clientHeight / 360)
                     }
                 })
             }
@@ -105,8 +107,9 @@ addEventListener("load", () => {
                 console.log("editor", "fail")
             }
         } else if (e.type == "run") {
-            preview.click();
-            preview.dataset.type = "run"
+            preEdit.click();
+            preEdit.style.display = "none"
+            preRun.style.display = "block"
             dispatchEvents({
                 type: "reply",
                 workId: workId,
@@ -116,7 +119,7 @@ addEventListener("load", () => {
             workdata = parentWindow.workdata;
             parentWindow.Csl.log("已收到运行指令")
             let code = e.data.code
-            let renderCode = e.data.renderCode
+            render(parentWindow.workdata.roleData, preRun)
             code = `const parentWindow = parent || top;
 const actions = new Action();
 const events = new Events();
@@ -149,22 +152,21 @@ function backgroundUp(event) {
         events.emit("on_role_-__background__-_up", e)
     }
 }
-preview.addEventListener("click", backgroundClick)
-preview.addEventListener("mousedown", backgroundDown)
-preview.addEventListener("touchstart", backgroundDown)
-preview.addEventListener("mouseup", backgroundUp)
-preview.addEventListener("touchend", backgroundUp)
+preRun.addEventListener("click", backgroundClick)
+preRun.addEventListener("mousedown", backgroundDown)
+preRun.addEventListener("touchstart", backgroundDown)
+preRun.addEventListener("mouseup", backgroundUp)
+preRun.addEventListener("touchend", backgroundUp)
 ${code}
 addEventListener("message", e => {
     if (e.data == "stop") {
-        preview.removeEventListener("click", backgroundClick)
-        preview.removeEventListener("mousedown", backgroundDown)
-        preview.removeEventListener("touchstart", backgroundDown)
-        preview.removeEventListener("mouseup", backgroundUp)
-        preview.removeEventListener("touchend", backgroundUp)
+        preRun.removeEventListener("click", backgroundClick)
+        preRun.removeEventListener("mousedown", backgroundDown)
+        preRun.removeEventListener("touchstart", backgroundDown)
+        preRun.removeEventListener("mouseup", backgroundUp)
+        preRun.removeEventListener("touchend", backgroundUp)
     }
 })
-${renderCode}
 function createTimeoutPromise(timeout) {
     return new Promise((resovle, reject) => {
         setTimeout(() => {
@@ -177,10 +179,15 @@ parentWindow.document.getElementById("previewBtn").addEventListener("click", () 
     events.emit("stop");
 })
 events.emit("when_start");`
-            eval(code)
+            try {
+                eval(code)
+            } catch (e) {
+                parentWindow.Csl.error("运行时发生错误")
+            }
             console.log(code)
         } else if (e.type == "stop") {
-            preview.dataset.type = "edit"
+            preEdit.style.display = "block"
+            preRun.style.display = "none"
             dispatchEvents({
                 type: "reply",
                 workId: workId,
@@ -189,27 +196,27 @@ events.emit("when_start");`
             })
             postMessage("stop")
             const roles = parentWindow.workdata.roleData;
-            render(roles)
+            render(roles, preEdit)
             parentWindow.Csl.log("已收到停止指令")
         } else if (e.type == "newWork") {
             const roles = e.data;
-            render(roles)
+            render(roles, preEdit)
         }
     })
-    function render(roles) {
-        preview.innerHTML = ""
+    function render(roles, pre) {
+        pre.innerHTML = ""
         console.log(roles)
         var selectedRole = document.getElementById("selectedRole");
         roles.forEach(role => {
             var roleImg = document.createElement("img");
             roleImg.src = role.url;
-            const W = (preview.clientWidth / 640) * role.width;
-            const H = (preview.clientHeight / 360) * role.height;
+            const W = (pre.clientWidth / 640) * role.width;
+            const H = (pre.clientHeight / 360) * role.height;
             roleImg.style.width = `${W}px`
             roleImg.style.height = `${H}px`
             roleImg.classList.add("role");
-            const X = (preview.clientWidth / 640) * role.x;
-            const Y = (preview.clientHeight / 360) * role.y;
+            const X = (pre.clientWidth / 640) * role.x;
+            const Y = (pre.clientHeight / 360) * role.y;
             roleImg.style.left = `${X}px`;
             roleImg.style.top = `${Y}px`;
             roleImg.addEventListener("dragstart", e => {
@@ -220,7 +227,7 @@ events.emit("when_start");`
             roleImg.dataset.name = role.name
             roleImg.dataset.type = role.type
             roleImg.addEventListener("click", e => {
-                if (preview.dataset.type == "edit") {
+                if (pre.dataset.type == "edit") {
                     selectedRole.style.display = "flex"
                     selectedRole.style.width = `${W - 6}px`
                     selectedRole.style.height = `${H - 6}px`
@@ -229,29 +236,33 @@ events.emit("when_start");`
                     selectedRole.dataset.selected = role.id;
                 }
             })
-            preview.appendChild(roleImg);
+            pre.appendChild(roleImg);
         });
     }
 })
 
 addEventListener("resize", () => {
-    preview.style.width = `${innerWidth}px`
-    preview.style.height = `${(innerWidth / 16) * 9}px`
+    const preEdit = document.querySelector("[data-type=\"edit\"]")
+    const preRun = document.querySelector("[data-type=\"run\"]")
+    preEdit.style.width = `${innerWidth}px`
+    preEdit.style.height = `${(innerWidth / 16) * 9}px`
+    preRun.style.width = `${innerWidth}px`
+    preRun.style.height = `${(innerWidth / 16) * 9}px`
     const X = role => {
         let w = parentWindow.workdata.roleData.filter(r => `ROLE_${r.id}` == role.id)[0].width
-        return (preview.clientWidth / 640) * w
+        return (preEdit.clientWidth / 640) * w
     };
     const Y = role => {
         let h = parentWindow.workdata.roleData.filter(r => `ROLE_${r.id}` == role.id)[0].height
-        return (preview.clientHeight / 360) * h;
+        return (preEdit.clientHeight / 360) * h;
     }
     const W = role => {
         let w = parentWindow.workdata.roleData.filter(r => `ROLE_${r.id}` == role.id)[0].width
-        return (preview.clientWidth / 640) * w
+        return (preEdit.clientWidth / 640) * w
     };
     const H = role => {
         let h = parentWindow.workdata.roleData.filter(r => `ROLE_${r.id}` == role.id)[0].height
-        return (preview.clientHeight / 360) * h
+        return (preEdit.clientHeight / 360) * h
     };
     const roles = document.querySelectorAll(".role")
     roles.forEach(role => {

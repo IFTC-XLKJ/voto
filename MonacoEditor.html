@@ -1,13 +1,9 @@
-<!--<link rel="stylesheet" data-name="vs/editor/editor.main"
-    href="http://monaco.iftc.free.nf/dev/vs/editor/editor.main.css">
-<script src="http://monaco.iftc.free.nf/dev/vs/loader.js"></script>-->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.33.0/min/vs/loader.js"></script>
-<script src="https://static.codemao.cn/IFTC-Studio/rJccLtmZkl.js" data-name="tsWorker.js"></script>
 <script>
     require.config({ paths: { 'vs': 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.33.0/min/vs' } });
     require(['vs/editor/editor.main'], function () {
         var editor1 = monaco.editor.create(document.getElementById('container1'), {
-            value: '// 在这里输入你的代码...',
+            value: '// 在这里输入你的代码...\nconsole.log("Hello, world!")',
             language: 'javascript',
             theme: 'vs-dark',
             useShadows: true,
@@ -21,7 +17,8 @@
             readOnly: true,
         });
         editor1.onDidChangeModelContent((event) => {
-            editor1.setValue(editor1.getValue());
+            console.log(event);
+            editor2.setValue(editor1.getValue());
         });
     });
 </script>
