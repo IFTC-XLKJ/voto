@@ -131,47 +131,60 @@ addEventListener("load", () => {
                 scaleSpeed: 1.5
             }
         });
-        if (urlParams.workId) {
-            console.log(isNew(urlParams.workId))
-            if (!isNew(urlParams.workId)) {
-                if (localStorage.getItem("UID").trim() == "") {
-                    Csl.error("请先登录")
-                } else {
-                    const isTrust = await login();
-                    if (isTrust) {
-                        Csl.log("作品已加载中...")
-                        const json = await Porject.getTableData({
-                            limit: 1,
-                            page: 1,
-                            filter: `ID="${localStorage.getItem("UID")}" AND WID="${workdata.workId}"`
-                        })
-                        if (json.fields.length == 0) {
-                            Csl.error("作品不存在")
-                        } else {
-                            Csl.log("作品数据获取成功")
-                            try {
-                                const data = JSON.parse(json.fields[0].workdata)
-                                workId = json.fields[0].workId
-                                workdata.workId = workId
-                                workdata = JSON.parse(json.fields[0].workdata)
-                                Blockly.serialization.workspaces.load(workdata.blockData, workspace);
-                                preview.src = `/preview/?workId=${workdata.workId}`
-                                Csl.log("作品已加载完成")
-                            } catch (e) {
-                                Csl.error("作品数据损坏")
+        if (urlParams.workUrl) {
+            try {
+                const workdata = await fetch(urlParams.workUrl)
+                workdata = await workdata.json()
+                workdata.workId = urlParams.workId
+                workdata.blockData = JSON.parse(workdata.blockData)
+                Blockly.serialization.workspaces.load(workdata.blockData, workspace);
+                preview.src = `/preview/?workId=${workdata.workId}`
+            } catch (e) {
+                Csl.error("作品加载失败")
+            }
+        } else {
+            if (urlParams.workId) {
+                console.log(isNew(urlParams.workId))
+                if (!isNew(urlParams.workId)) {
+                    if (localStorage.getItem("UID").trim() == "") {
+                        Csl.error("请先登录")
+                    } else {
+                        const isTrust = await login();
+                        if (isTrust) {
+                            Csl.log("作品已加载中...")
+                            const json = await Porject.getTableData({
+                                limit: 1,
+                                page: 1,
+                                filter: `ID="${localStorage.getItem("UID")}" AND WID="${workdata.workId}"`
+                            })
+                            if (json.fields.length == 0) {
+                                Csl.error("作品不存在")
+                            } else {
+                                Csl.log("作品数据获取成功")
+                                try {
+                                    const data = JSON.parse(json.fields[0].workdata)
+                                    workId = json.fields[0].workId
+                                    workdata.workId = workId
+                                    workdata = JSON.parse(json.fields[0].workdata)
+                                    Blockly.serialization.workspaces.load(workdata.blockData, workspace);
+                                    preview.src = `/preview/?workId=${workdata.workId}`
+                                    Csl.log("作品已加载完成")
+                                } catch (e) {
+                                    Csl.error("作品数据损坏")
+                                }
                             }
                         }
                     }
                 }
+            } else {
+                workdata.workId = `__${workdata.workId}__`
+                workId = workdata.workId
+                preview.src = `/preview`
+                preview.onload = () => {
+                    dispatchEvents({ type: "newWork", data: workdata.roleData })
+                }
+                console.log(workdata.workId)
             }
-        } else {
-            workdata.workId = `__${workdata.workId}__`
-            workId = workdata.workId
-            preview.src = `/preview`
-            preview.onload = () => {
-                dispatchEvents({ type: "newWork", data: workdata.roleData })
-            }
-            console.log(workdata.workId)
         }
         let blocksBoxes = []
         var blockly0 = document.getElementById("blockly-0")
