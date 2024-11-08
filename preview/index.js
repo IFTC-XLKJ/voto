@@ -34,6 +34,7 @@ addEventListener("load", () => {
                     selectedRole.dataset.selected = "BACKGROUND"
                 }
             })
+            let isResize = false;
             var isDragging = false;
             var initialOffset = { x: 0, y: 0 };
             var dragStartPos = { x: 0, y: 0 };
@@ -51,7 +52,7 @@ addEventListener("load", () => {
                 document.addEventListener('mouseup', onMouseUp);
             });
             function onMouseMove(_event) {
-                if (_event.target == selectedRole) {
+                if (_event.target == selectedRole && !isResize) {
                     isDragging = true;
                     CX = _event.clientX - dragStartPos.x;
                     CY = _event.clientY - dragStartPos.y;
@@ -102,8 +103,38 @@ addEventListener("load", () => {
                 success: true,
                 origin: "preview",
             })
+            let dragLeft = false;
+            var lastLeftX = 0;
+            var dragLeftStartPosX = 0;
+            var leftInitialOffsetX = 0;
+            var CLeftX = 0;
+            var newLeftX = 0;
             leftDot.addEventListener("mousedown", function (_event) {
+                lastLeftX = selectedRole.offsetLeft;
                 _event.preventDefault();
+                dragLeft = true;
+                dragLeftStartPosX = _event.clientX;
+                leftInitialOffsetX = selectedRole.offsetLeft;
+                function onDragLeft(event) {
+                    isResize = true;
+                    CLeftX = event.clientX - dragLeftStartPosX;
+                    newLeftX = leftInitialOffsetX + event.clientX - dragLeftStartPosX;
+                    console.log(selectedRole.offsetWidth + CLeftX)
+                    console.log(CLeftX)
+                    var role = document.getElementById(`ROLE_${selectedRole.dataset.selected}`)
+                    selectedRole.style.width = (role.offsetWidth + (newLeftX - lastLeftX)) + 'px';
+                    role.style.width = (role.offsetWidth + (newLeftX - lastLeftX)) + 'px';
+                    selectedRole.style.left = newLeftX + 'px';
+                    role.style.left = newLeftX + 'px';
+                    lastLeftX = newLeftX
+                }
+                function onNoDragLeft() {
+                    dragLeft = false;
+                    document.removeEventListener('mousemove', onDragLeft);
+                    document.removeEventListener('mouseup', onNoDragLeft);
+                }
+                document.addEventListener('mousemove', onDragLeft);
+                document.addEventListener('mouseup', onNoDragLeft);
             })
             rightDot.addEventListener("mousedown", function (_event) {
                 _event.preventDefault();
@@ -194,8 +225,8 @@ parentWindow.document.getElementById("previewBtn").addEventListener("click", () 
     events.emit("stop");
 })
 events.emit("when_start");`
+            eval(code)
             try {
-                eval(code)
             } catch (e) {
                 parentWindow.Csl.error("运行时发生错误")
                 console.log(e)
