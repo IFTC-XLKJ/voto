@@ -37,7 +37,6 @@ addEventListener("load", () => {
             document.body.appendChild(selectedRole);
             $("#selectedRole").draggable({
                 drag: function (e) {
-                    console.log("drag", e)
                     var role = document.getElementById(`ROLE_${selectedRole.dataset.selected}`)
                     role.style.left = selectedRole.offsetLeft + 'px';
                     role.style.top = selectedRole.offsetTop + 'px';
@@ -45,6 +44,8 @@ addEventListener("load", () => {
                         if (Role.id == selectedRole.dataset.selected) {
                             parentWindow.workdata.roleData[index].x = selectedRole.offsetLeft / (preEdit.clientWidth / 640)
                             parentWindow.workdata.roleData[index].y = selectedRole.offsetTop / (preEdit.clientHeight / 360)
+                            role.dataset.x = parentWindow.workdata.roleData[index].x;
+                            role.dataset.y = parentWindow.workdata.roleData[index].y;
                         }
                     })
                 },
@@ -75,39 +76,12 @@ addEventListener("load", () => {
                 success: true,
                 origin: "preview",
             })
-            let dragLeft = false;
-            var lastLeftX = 0;
-            var dragLeftStartPosX = 0;
-            var leftInitialOffsetX = 0;
-            var CLeftX = 0;
-            var newLeftX = 0;
-            leftDot.addEventListener("mousedown", function (_event) {
-                lastLeftX = selectedRole.offsetLeft;
-                _event.preventDefault();
-                dragLeft = true;
-                dragLeftStartPosX = _event.clientX;
-                leftInitialOffsetX = selectedRole.offsetLeft;
-                function onDragLeft(event) {
-                    isResize = true;
-                    CLeftX = event.clientX - dragLeftStartPosX;
-                    newLeftX = leftInitialOffsetX + event.clientX - dragLeftStartPosX;
-                    console.log(selectedRole.offsetWidth + CLeftX)
-                    console.log(CLeftX)
-                    var role = document.getElementById(`ROLE_${selectedRole.dataset.selected}`)
-                    selectedRole.style.width = (role.offsetWidth + (newLeftX - role.offsetLeft)) + 'px';
-                    role.style.width = (role.offsetWidth + (newLeftX - lastLeftX)) + 'px';
-                    selectedRole.style.left = newLeftX + 'px';
-                    role.style.left = newLeftX + 'px';
-                    lastLeftX = newLeftX
-                }
-                function onNoDragLeft() {
-                    dragLeft = false;
-                    document.removeEventListener('mousemove', onDragLeft);
-                    document.removeEventListener('mouseup', onNoDragLeft);
-                }
-                document.addEventListener('mousemove', onDragLeft);
-                document.addEventListener('mouseup', onNoDragLeft);
-            })
+            $("#leftDot").draggable({
+                axis: "x",
+                drag: function (e) {
+                    console.log(e)
+                },
+            });
             rightDot.addEventListener("mousedown", function (_event) {
                 _event.preventDefault();
             })
@@ -245,13 +219,15 @@ events.emit("when_start");`
             roleImg.id = `ROLE_${role.id}`
             roleImg.dataset.name = role.name
             roleImg.dataset.type = role.type
+            roleImg.dataset.x = role.x;
+            roleImg.dataset.y = role.y;
             roleImg.addEventListener("click", e => {
                 if (pre.dataset.type == "edit") {
                     selectedRole.style.display = "flex"
                     selectedRole.style.width = `${W - 6}px`
                     selectedRole.style.height = `${H - 6}px`
-                    selectedRole.style.left = `${X}px`
-                    selectedRole.style.top = `${Y}px`
+                    selectedRole.style.left = `${(pre.clientWidth / 640) * roleImg.dataset.x}px`
+                    selectedRole.style.top = `${(pre.clientHeight / 360) * roleImg.dataset.y}px`
                     selectedRole.dataset.selected = role.id;
                     console.log(X, Y)
                 }
