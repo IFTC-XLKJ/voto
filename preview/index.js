@@ -50,6 +50,9 @@ addEventListener("load", () => {
                     })
                 },
                 stack: "#selectedRole",
+                stop: function (e) {
+                    render(parentWindow.workdata.roleData, preEdit)
+                }
             });
             var leftDot = document.createElement("div");
             leftDot.id = "leftDot";
@@ -81,23 +84,24 @@ addEventListener("load", () => {
             $("#leftDot").draggable({
                 axis: "x",
                 drag: function (e) {
-                    console.log(e)
-                    currentLeft = e.clientX;
+                    console.log("dragLeft", e)
+                    currentLeft = e.offsetX;
                     console.log(currentLeft - lastLeft)
-                    selectedRole.style.left = leftDot.offsetLeft + "px";
-                    //selectedRole.style.width = (selectedRole.offsetWidth + (currentLeft - lastLeft)) + "px";
+                    selectedRole.style.width = (selectedRole.offsetWidth + (currentLeft - lastLeft)) + "px";
+                    selectedRole.style.left = e.offsetX
                     lastLeft = currentLeft;
                 },
             });
-            rightDot.addEventListener("mousedown", function (_event) {
-                _event.preventDefault();
-            })
-            topDot.addEventListener("mousedown", function (_event) {
-                _event.preventDefault();
-            })
-            bottomDot.addEventListener("mousedown", function (_event) {
-                _event.preventDefault();
-            })
+            let lastRight = rightDot.offsetLeft;
+            let currentRight = rightDot.offsetLeft;
+            $("#rightDot").draggable({
+                axis: "x",
+                drag: function (e) {
+                    console.log("dragRight", e)
+                    currentRight = e.offsetX;
+                    lastRight = currentRight;
+                },
+            });
         } else if (e.type == "reply") {
             if (e.data.success) {
                 console.log("editor", "success")
