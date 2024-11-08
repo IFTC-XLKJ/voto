@@ -34,50 +34,22 @@ addEventListener("load", () => {
                     selectedRole.dataset.selected = "BACKGROUND"
                 }
             })
-            let isResize = false;
-            var isDragging = false;
-            var initialOffset = { x: 0, y: 0 };
-            var dragStartPos = { x: 0, y: 0 };
-            var newX = 0;
-            var newY = 0;
-            var CX = 0;
-            var CY = 0;
-            selectedRole.addEventListener('mousedown', function (_event) {
-                _event.preventDefault();
-                dragStartPos.x = _event.clientX;
-                dragStartPos.y = _event.clientY;
-                initialOffset.x = selectedRole.offsetLeft;
-                initialOffset.y = selectedRole.offsetTop;
-                document.addEventListener('mousemove', onMouseMove);
-                document.addEventListener('mouseup', onMouseUp);
-            });
-            function onMouseMove(_event) {
-                if (_event.target == selectedRole && !isResize) {
-                    isDragging = true;
-                    CX = _event.clientX - dragStartPos.x;
-                    CY = _event.clientY - dragStartPos.y;
-                    newX = initialOffset.x + _event.clientX - dragStartPos.x;
-                    newY = initialOffset.y + _event.clientY - dragStartPos.y;
-                    newY = newY - 5;
-                    selectedRole.style.left = newX + 'px';
-                    selectedRole.style.top = newY + 'px';
+            document.body.appendChild(selectedRole);
+            $("#selectedRole").draggable({
+                drag: function (e) {
+                    console.log("drag", e)
                     var role = document.getElementById(`ROLE_${selectedRole.dataset.selected}`)
-                    role.style.left = newX + 'px';
-                    role.style.top = newY + 'px';
+                    role.style.left = selectedRole.offsetLeft + 'px';
+                    role.style.top = selectedRole.offsetTop + 'px';
                     parentWindow.workdata.roleData.forEach((Role, index) => {
                         if (Role.id == selectedRole.dataset.selected) {
-                            parentWindow.workdata.roleData[index].x = newX / (preEdit.clientWidth / 640)
-                            parentWindow.workdata.roleData[index].y = newY / (preEdit.clientHeight / 360)
+                            parentWindow.workdata.roleData[index].x = selectedRole.offsetLeft / (preEdit.clientWidth / 640)
+                            parentWindow.workdata.roleData[index].y = selectedRole.offsetTop / (preEdit.clientHeight / 360)
                         }
                     })
-                }
-            }
-            function onMouseUp() {
-                document.removeEventListener('mousemove', onMouseMove);
-                document.removeEventListener('mouseup', onMouseUp);
-                isDragging = false;
-            }
-            document.body.appendChild(selectedRole);
+                },
+                stack: "#selectedRole",
+            });
             var leftDot = document.createElement("div");
             leftDot.id = "leftDot";
             leftDot.classList.add("dot");
@@ -122,7 +94,7 @@ addEventListener("load", () => {
                     console.log(selectedRole.offsetWidth + CLeftX)
                     console.log(CLeftX)
                     var role = document.getElementById(`ROLE_${selectedRole.dataset.selected}`)
-                    selectedRole.style.width = (role.offsetWidth + (newLeftX - lastLeftX)) + 'px';
+                    selectedRole.style.width = (role.offsetWidth + (newLeftX - role.offsetLeft)) + 'px';
                     role.style.width = (role.offsetWidth + (newLeftX - lastLeftX)) + 'px';
                     selectedRole.style.left = newLeftX + 'px';
                     role.style.left = newLeftX + 'px';
@@ -281,6 +253,7 @@ events.emit("when_start");`
                     selectedRole.style.left = `${X}px`
                     selectedRole.style.top = `${Y}px`
                     selectedRole.dataset.selected = role.id;
+                    console.log(X, Y)
                 }
             })
             pre.appendChild(roleImg);
@@ -318,4 +291,5 @@ addEventListener("resize", () => {
         role.style.width = `${W(role)}px`
         role.style.height = `${H(role)}px`
     })
+    render(parentWindow.workdata.roleData, preEdit)
 })
