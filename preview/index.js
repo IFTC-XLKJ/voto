@@ -51,23 +51,25 @@ addEventListener("load", () => {
                 document.addEventListener('mouseup', onMouseUp);
             });
             function onMouseMove(_event) {
-                isDragging = true;
-                CX = _event.clientX - dragStartPos.x;
-                CY = _event.clientY - dragStartPos.y;
-                newX = initialOffset.x + _event.clientX - dragStartPos.x;
-                newY = initialOffset.y + _event.clientY - dragStartPos.y;
-                newY = newY - 5;
-                selectedRole.style.left = newX + 'px';
-                selectedRole.style.top = newY + 'px';
-                var role = document.getElementById(`ROLE_${selectedRole.dataset.selected}`)
-                role.style.left = newX + 'px';
-                role.style.top = newY + 'px';
-                parentWindow.workdata.roleData.forEach((Role, index) => {
-                    if (Role.id == selectedRole.dataset.selected) {
-                        parentWindow.workdata.roleData[index].x = newX / (preEdit.clientWidth / 640)
-                        parentWindow.workdata.roleData[index].y = newY / (preEdit.clientHeight / 360)
-                    }
-                })
+                if (_event.target == selectedRole) {
+                    isDragging = true;
+                    CX = _event.clientX - dragStartPos.x;
+                    CY = _event.clientY - dragStartPos.y;
+                    newX = initialOffset.x + _event.clientX - dragStartPos.x;
+                    newY = initialOffset.y + _event.clientY - dragStartPos.y;
+                    newY = newY - 5;
+                    selectedRole.style.left = newX + 'px';
+                    selectedRole.style.top = newY + 'px';
+                    var role = document.getElementById(`ROLE_${selectedRole.dataset.selected}`)
+                    role.style.left = newX + 'px';
+                    role.style.top = newY + 'px';
+                    parentWindow.workdata.roleData.forEach((Role, index) => {
+                        if (Role.id == selectedRole.dataset.selected) {
+                            parentWindow.workdata.roleData[index].x = newX / (preEdit.clientWidth / 640)
+                            parentWindow.workdata.roleData[index].y = newY / (preEdit.clientHeight / 360)
+                        }
+                    })
+                }
             }
             function onMouseUp() {
                 document.removeEventListener('mousemove', onMouseMove);
@@ -99,6 +101,18 @@ addEventListener("load", () => {
                 type: "reply",
                 success: true,
                 origin: "preview",
+            })
+            leftDot.addEventListener("mousedown", function (_event) {
+                _event.preventDefault();
+            })
+            rightDot.addEventListener("mousedown", function (_event) {
+                _event.preventDefault();
+            })
+            topDot.addEventListener("mousedown", function (_event) {
+                _event.preventDefault();
+            })
+            bottomDot.addEventListener("mousedown", function (_event) {
+                _event.preventDefault();
             })
         } else if (e.type == "reply") {
             if (e.data.success) {
