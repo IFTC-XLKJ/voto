@@ -76,10 +76,17 @@ addEventListener("load", () => {
                 success: true,
                 origin: "preview",
             })
+            let lastLeft = leftDot.offsetLeft;
+            let currentLeft = leftDot.offsetLeft;
             $("#leftDot").draggable({
                 axis: "x",
                 drag: function (e) {
                     console.log(e)
+                    currentLeft = e.clientX;
+                    console.log(currentLeft - lastLeft)
+                    selectedRole.style.left = leftDot.offsetLeft + "px";
+                    //selectedRole.style.width = (selectedRole.offsetWidth + (currentLeft - lastLeft)) + "px";
+                    lastLeft = currentLeft;
                 },
             });
             rightDot.addEventListener("mousedown", function (_event) {
