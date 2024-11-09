@@ -61,6 +61,55 @@ onload = () => {
                     next.href = "?doc=" + docs[docs.indexOf(doc) + 1].name
                     document.body.appendChild(next)
                 }
+                var h1s = document.querySelectorAll("h1");
+                h1s.forEach(h1 => {
+                    h1.setAttribute("iftc-h1", `{ "text": "${h1.innerText.replace(/"/g, '\\"')}" }`)
+                });
+                var h2s = document.querySelectorAll("h2");
+                h2s.forEach(h2 => {
+                    h2.setAttribute("iftc-h2", `{ "text": "${h2.innerText.replace(/"/g, '\\"')}" }`)
+                });
+                var h3s = document.querySelectorAll("h3");
+                h3s.forEach(h3 => {
+                    h3.setAttribute("iftc-h3", `{ "text": "${h3.innerText.replace(/"/g, '\\"')}" }`)
+                });
+                var h4s = document.querySelectorAll("h4");
+                h4s.forEach(h4 => {
+                    h4.setAttribute("iftc-h4", `{ "text": "${h4.innerText.replace(/"/g, '\\"')}" }`)
+                });
+                var h5s = document.querySelectorAll("h5");
+                h5s.forEach(h5 => {
+                    h5.setAttribute("iftc-h5", `{ "text": "${h5.innerText.replace(/"/g, '\\"')}" }`)
+                });
+                var h6s = document.querySelectorAll("h6");
+                h6s.forEach(h6 => {
+                    h6.setAttribute("iftc-h6", `{ "text": "${h6.innerText.replace(/"/g, '\\"')}" }`)
+                });
+                var ps = document.querySelectorAll("p");
+                ps.forEach(p => {
+                    p.setAttribute("iftc-p", `{ "text": "${p.innerText.replace(/"/g, '\\"')}" }`)
+                });
+                var imgs = document.querySelectorAll("img");
+                imgs.forEach(img => {
+                    img.setAttribute("iftc-img", `{ "src": "${img.src}" }`)
+                });
+                var links = document.querySelectorAll("a");
+                links.forEach(link => {
+                    link.setAttribute("iftc-a", `{ "href": "${link.href}", "text": "${link.innerText.replace(/"/g, '\\"')}" }`)
+                });
+                var tables = document.querySelectorAll("table");
+                tables.forEach(table => {
+                    var rows = table.querySelectorAll("tr");
+                    var rowData = [];
+                    rows.forEach(row => {
+                        var cells = row.querySelectorAll("td");
+                        var cellData = [];
+                        cells.forEach(cell => {
+                            cellData.push(cell.innerText.replace(/"/g, '\\"'));
+                        });
+                        rowData.push(cellData);
+                    })
+                })
             })
             .catch(error => {
                 docContent = "Error: " + error;
