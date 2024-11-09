@@ -117,4 +117,58 @@ onload = () => {
     } else {
         docContent = doc.Error;
     }
+    document.oncontextmenu = function (e) {
+        e.preventDefault();
+        document.querySelectorAll(".menu").forEach(menu => {
+            menu.remove();
+        });
+        var menuDiv = document.createElement("div");
+        menuDiv.className = "menu";
+        document.body.appendChild(menuDiv);
+        if (e.target.tagName == "IMG") {
+            var imgSrc = e.target.src;
+            var imgMenu = document.createElement("div");
+            imgMenu.className = "imgMenu";
+            imgMenu.innerText = "查看图片"
+            imgMenu.onclick = () => {
+                window.open(imgSrc);
+            }
+            menuDiv.appendChild(imgMenu);
+            addHr();
+            var imgCopyMenu = document.createElement("div");
+            imgCopyMenu.className = "imgCopyMenu";
+            imgCopyMenu.innerText = "复制图片"
+            imgCopyMenu.onclick = () => {
+                async function copyImage() {
+                    const image = document.getElementById('imageToCopy');
+                    try {
+                        const response = await fetch(imgSrc);
+                        const blob = await response.blob();
+                        const objectUrl = URL.createObjectURL(blob);
+                        const dataTransfer = new DataTransfer();
+                        dataTransfer.items.add(new Blob([blob], { type: 'image/jpeg' }));
+                        navigator.clipboard.write([new ClipboardItem(dataTransfer.items)]);
+                        console.log('Image copied to clipboard!');
+                    } catch (error) {
+                        console.error('Failed to copy image:', error);
+                    }
+                }
+            }
+            menuDiv.appendChild(imgCopyMenu);
+        }
+        if (menuDiv.offsetLeft + menuDiv.offsetWidth > document.body.offsetWidth) {
+            menuDiv.style.left = (document.body.offsetWidth - menuDiv.offsetWidth) + "px";
+        }
+        menuDiv.style.left = e.clientX + "px";
+        menuDiv.style.top = e.clientY + "px";
+        document.onclick = () => {
+            menuDiv.remove();
+        }
+        function addHr() {
+            var hr = document.createElement("hr");
+            hr.className = "menuHr";
+            menuDiv.appendChild(hr);
+        }
+        return false;
+    };
 }
