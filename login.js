@@ -12,19 +12,24 @@ onload = () => {
             page: 1,
             filter: `ID="${username.value}" OR 昵称="${username.value}" OR 邮箱="${username.value}" AND 密码="${CryptoJS.MD5(password.value)}"`
         }).then(data => {
-            if (data.fields.length == 0) {
-                alert("ID/邮箱/ID或密码错误或者该账号不存在");
-            } else {
-                localStorage.setItem("token", data.fields[0].token);
-                localStorage.setItem("UNM", data.fields[0].昵称);
-                localStorage.setItem("UID", data.fields[0].ID);
-                localStorage.setItem("PWD", password.value);
-                if (location.hash) {
-                    window.location.href = location.hash.slice(1);
+            if (data.code == 200) {
+                if (data.fields.length == 0) {
+                    alert("ID/邮箱/ID或密码错误或者该账号不存在");
                 } else {
-                    window.location.href = "home";
+                    localStorage.setItem("token", data.fields[0].token);
+                    localStorage.setItem("UNM", data.fields[0].昵称);
+                    localStorage.setItem("UID", data.fields[0].ID);
+                    localStorage.setItem("PWD", password.value);
+                    if (location.hash) {
+                        window.location.href = location.hash.slice(1);
+                    } else {
+                        window.location.href = "home";
+                    }
+                    alert("登录成功");
                 }
-                alert("登录成功");
+            } else {
+                alert("登录失败，原因" + data.msg);
+                console.error(data);
             }
         })
     }
