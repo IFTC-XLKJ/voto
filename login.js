@@ -12,8 +12,8 @@ onload = () => {
             filter: `ID="${username.value}" OR 昵称="${username.value}" OR 邮箱="${username.value}" AND 密码="${CryptoJS.MD5(password.value)}"`
         }).then(data => {
             if (data.fields.length == 0) {
-                alert("账号不存在");
-            } else { }
+                alert("ID/邮箱/ID或密码错误或者该账号不存在");
+            } else {}
         })
     }
     console.log(vvzh);
