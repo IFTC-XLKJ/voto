@@ -1,0 +1,72 @@
+.prev,
+.next,
+.back {
+    width: fit-content;
+    height: 40px;
+    border-radius: 50%;
+    border: 1px solid #474744;
+    padding: 10px;
+    margin: 5px;
+}
+
+.menu {
+    position: fixed;
+    padding: 5px;
+    border-radius: 10px;
+    background-color: white;
+    -webkit-filter: drop-shadow(0 0 5px #47474788);
+    filter: drop-shadow(0 0 5px #47474788);
+}
+
+.menu div {
+    cursor: pointer;
+    padding: 5px;
+}
+
+.menuHr {
+    width: calc(100% - 4px);
+    height: 1px;
+    color: #47474740;
+    background-color: #474744;
+    border: none;
+    margin: 2px;
+}
+
+.menuDot {
+    position: fixed;
+    width: 5px;
+    height: 5px;
+    background-color: lightgray;
+    margin: 5px;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    color: cornflowerblue;
+}
+
+p {
+    color: #474744;
+}
+
+a {
+    color: #0078d7;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+img {
+    margin: 15px;
+    max-width: calc(100% - 30px);
+    border-radius: 15px;
+    -webkit-filter: drop-shadow(2px 2px 5px #474744);
+    filter: drop-shadow(2px 2px 5px #474744);
+}
+
+p {
+    margin: 10px 0;
+}
