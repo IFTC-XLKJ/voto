@@ -4,5 +4,17 @@ onload = () => {
     if (localStorage.getItem("token") && localStorage.getItem("UID") && localStorage.getItem("PWD")) {
         window.location.href = "editor";
     }
+    Submit.onclick = (e) => {
+        e.preventDefault();
+        vvzh.getTableData({
+            limit: 1,
+            page: 1,
+            filter: `ID="${document.querySelector("#ID").value}" AND 密码="${CryptoJS.MD5(document.querySelector("#PWD").value)}"`
+        }).then(data => {
+            if (data.fields.length == 0) {
+                alert("账号不存在");
+            }
+        })
+    }
     console.log(vvzh);
 }
