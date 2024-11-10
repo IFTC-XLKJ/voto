@@ -1,8 +1,10 @@
+window.isLogin = false
 onload = () => {
     const Submit = document.querySelector(".submit>button");
     var vvzh = new pgdbs(dbs_a6b2a4d6c02022e831626d31ab805a468a151b90d5161660485a73cc6e1ea902);
     setInterval(() => {
-        if (localStorage.getItem("token") && localStorage.getItem("UID") && localStorage.getItem("PWD")) {
+        if (localStorage.getItem("token") && localStorage.getItem("UID") && localStorage.getItem("PWD") && isLogin != 10) {
+            isLogin = true
             if (location.hash) {
                 window.location.href = location.hash.slice(1);
             } else {
@@ -31,6 +33,7 @@ onload = () => {
                     } else {
                         window.location.href = "home";
                     }
+                    isLogin = 10;
                     alert("登录成功");
                 }
             } else {
