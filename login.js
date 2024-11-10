@@ -9,11 +9,11 @@ onload = () => {
         vvzh.getTableData({
             limit: 1,
             page: 1,
-            filter: `ID="${document.querySelector("#ID").value}" AND 密码="${CryptoJS.MD5(document.querySelector("#PWD").value)}"`
+            filter: `ID="${username.value}" OR 昵称="${username.value}" OR 邮箱="${username.value}" AND 密码="${CryptoJS.MD5(password.value)}"`
         }).then(data => {
             if (data.fields.length == 0) {
                 alert("账号不存在");
-            }
+            } else { }
         })
     }
     console.log(vvzh);
