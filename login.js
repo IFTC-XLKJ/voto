@@ -5,6 +5,7 @@ onload = () => {
         window.location.href = "home";
         alert("你已登录过了，无法重复登录")
     }
+    console.log(CryptoJS.MD5("123456"));
     Submit.onclick = (e) => {
         e.preventDefault();
         vvzh.getTableData({
