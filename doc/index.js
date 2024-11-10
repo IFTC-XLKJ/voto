@@ -119,17 +119,37 @@ onload = () => {
     }
     document.oncontextmenu = function (e) {
         e.preventDefault();
+        document.querySelectorAll(".menuDot").forEach(dot => {
+            dot.remove();
+        });
+        var dot = document.createElement("div");
+        dot.className = "menuDot";
+        dot.style.left = e.clientX - 5 + "px";
+        dot.style.top = e.clientY - 5 + "px";
+        document.body.appendChild(dot);
         document.querySelectorAll(".menu").forEach(menu => {
             menu.remove();
         });
         var menuDiv = document.createElement("div");
         menuDiv.className = "menu";
         document.body.appendChild(menuDiv);
+        console.log(e.target)
+        if (e.target.tagName == "HTML" || e.target.tagName == "BODY" || e.target.className == "menu" || e.target.parentNode.className == "menu") {
+            document.querySelectorAll(".menu").forEach(menu => {
+                menu.remove();
+            });
+            document.querySelectorAll(".menuDot").forEach(dot => {
+                dot.remove();
+            });
+            return false;
+        }
         if (e.target.tagName == "IMG") {
             var imgSrc = e.target.src;
             var imgMenu = document.createElement("div");
             imgMenu.className = "imgMenu";
             imgMenu.innerText = "查看图片"
+            menuDiv.style.left = "0px";
+            menuDiv.style.top = "0px";
             imgMenu.onclick = () => {
                 window.open(imgSrc);
             }
@@ -144,26 +164,90 @@ onload = () => {
                     try {
                         const response = await fetch(imgSrc);
                         const blob = await response.blob();
-                        const objectUrl = URL.createObjectURL(blob);
-                        const dataTransfer = new DataTransfer();
-                        dataTransfer.items.add(new Blob([blob], { type: 'image/jpeg' }));
-                        navigator.clipboard.write([new ClipboardItem(dataTransfer.items)]);
+                        const clipboardItem = new ClipboardItem({
+                            'image/png': blob
+                        });
+                        await navigator.clipboard.write([clipboardItem]);
                         console.log('Image copied to clipboard!');
+                        window.alert("复制成功");
                     } catch (error) {
                         console.error('Failed to copy image:', error);
+                        window.alert("复制失败");
                     }
                 }
+                copyImage();
             }
             menuDiv.appendChild(imgCopyMenu);
+        } else if (e.target.tagName == "A") {
+            var href = e.target.href;
+            var aMenu = document.createElement("div");
+            aMenu.className = "aMenu";
+            aMenu.innerText = "复制链接"
+            menuDiv.style.left = "0px";
+            menuDiv.style.top = "0px";
+            aMenu.onclick = () => {
+                navigator.clipboard.writeText(href);
+                window.alert("复制成功");
+            }
+            menuDiv.appendChild(aMenu);
+            addHr();
+            var copyMenu = document.createElement("div");
+            copyMenu.className = "copyMenu";
+            copyMenu.innerText = "复制文本"
+            copyMenu.onclick = () => {
+                navigator.clipboard.writeText(text);
+                window.alert("复制成功");
+            }
+            menuDiv.appendChild(copyMenu);
+            addHr();
+            var openMenu = document.createElement("div");
+            openMenu.className = "openMenu";
+            openMenu.innerText = "打开链接"
+            openMenu.onclick = () => {
+                window.open(href);
+            }
+            menuDiv.appendChild(openMenu);
+        } else if (e.target.tagName == "P") {
+            var pText = e.target.innerText;
+            var pMenu = document.createElement("div");
+            pMenu.className = "pMenu";
+            pMenu.innerText = "复制文本"
+            menuDiv.style.left = "0px";
+            menuDiv.style.top = "0px";
+            pMenu.onclick = () => {
+                navigator.clipboard.writeText(pText);
+                window.alert("复制成功");
+            }
+            menuDiv.appendChild(pMenu);
+        } else {
+            var text = e.target.getAttribute("iftc-" + e.target.tagName.toLowerCase());
+            if (text) {
+                var textMenu = document.createElement("div");
+                textMenu.className = "textMenu";
+                textMenu.innerText = "复制文本"
+                menuDiv.style.left = "0px";
+                menuDiv.style.top = "0px";
+                textMenu.onclick = () => {
+                    navigator.clipboard.writeText(JSON.parse(text).text);
+                    window.alert("复制成功");
+                }
+            }
+            menuDiv.appendChild(textMenu);
         }
-        if (menuDiv.offsetLeft + menuDiv.offsetWidth > document.body.offsetWidth) {
+        console.log(e.clientX + menuDiv.offsetWidth > document.body.offsetWidth)
+        if (e.clientX + menuDiv.offsetWidth > document.body.offsetWidth) {
             menuDiv.style.left = (document.body.offsetWidth - menuDiv.offsetWidth) + "px";
         }
         menuDiv.style.left = e.clientX + "px";
         menuDiv.style.top = e.clientY + "px";
         document.onclick = () => {
             menuDiv.remove();
+            dot.remove();
         }
+        document.addEventListener("scroll", () => {
+            menuDiv.remove();
+            dot.remove();
+        })
         function addHr() {
             var hr = document.createElement("hr");
             hr.className = "menuHr";
