@@ -60,6 +60,7 @@ const dispatchEvents = e => {
 }
 window.Csl = {};
 window.vvzh = {}
+window.selectedRole = ""
 async function login() {
     Csl.log("登录中...")
     try {
@@ -471,6 +472,22 @@ addEventListener("load", () => {
             }
         }
     })
+    roleX.onchange = e => {
+        if (roleX.value.trim() == "") {
+            roleX.value = preview.contentWindow.document.getElementById(`ROLE_${selectedRole}`).style.left.slice(0, -1)
+        } else {
+            preview.contentWindow.document.getElementById(`ROLE_${selectedRole}`).style.left = `${roleX.value}%`
+            preview.contentWindow.document.getElementById(`selectedRole`).style.left = `${roleX.value}%`
+        }
+    }
+    roleY.onchange = e => {
+        if (roleY.value.trim() == "") {
+            roleY.value = preview.contentWindow.document.getElementById(`ROLE_${selectedRole}`).style.top.slice(0, -1)
+        } else {
+            preview.contentWindow.document.getElementById(`ROLE_${selectedRole}`).style.top = `${roleY.value}%`
+            preview.contentWindow.document.getElementById(`selectedRole`).style.top = `${roleY.value}%`
+        }
+    }
     document.addEventListener("click", e => {
         if (e.target.id != "file" && isFile) {
             isFile = false
