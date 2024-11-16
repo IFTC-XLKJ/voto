@@ -122,7 +122,8 @@ addEventListener("load", () => {
             parentWindow.Csl.log("已收到运行指令")
             let code = e.data.code
             render(parentWindow.workdata.roleData, preRun)
-            code = `const parentWindow = parent || top;
+            code = `let isEnd = false
+const parentWindow = parent || top;
 const actions = new Action();
 const events = new Events();
 const controller = new AbortController();
@@ -180,6 +181,7 @@ parentWindow.document.getElementById("previewBtn").addEventListener("click", () 
     console.log("114514")
     controller.abort();
     events.emit("stop");
+    isEnd = true
 })
 events.emit("when_start");`
             eval(code)
@@ -219,10 +221,8 @@ events.emit("when_start");`
             roleImg.style.width = `${W}px`
             roleImg.style.height = `${H}px`
             roleImg.classList.add("role");
-            const X = (pre.clientWidth / 640) * role.x;
-            const Y = (pre.clientHeight / 360) * role.y;
-            roleImg.style.left = `${X}px`;
-            roleImg.style.top = `${Y}px`;
+            roleImg.style.left = `${role.x}%`;
+            roleImg.style.top = `${role.y}%`;
             roleImg.addEventListener("dragstart", e => {
                 e.preventDefault();
                 return false;
