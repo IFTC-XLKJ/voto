@@ -11,6 +11,9 @@ window.workdata = {};
 const dispatchEvents = e => {
     parentWindow.events.emit("preview", e)
 }
+function calcPer(num, total) {
+    return (num / total) * 100
+}
 addEventListener("load", () => {
     const preEdit = document.querySelector("[data-type=\"edit\"]")
     const preRun = document.querySelector("[data-type=\"run\"]")
@@ -35,21 +38,24 @@ addEventListener("load", () => {
                 }
             })
             document.body.appendChild(selectedRole);
-            $("#selectedRole").draggable({
+            /*$("#selectedRole").draggable({
                 drag: function (e) {
                     var role = document.getElementById(`ROLE_${selectedRole.dataset.selected}`)
-                    role.style.left = selectedRole.offsetLeft + 'px';
-                    role.style.top = selectedRole.offsetTop + 'px';
+                    role.style.left = calcPer(selectedRole.offsetLeft, preEdit.offsetWidth) + '%';
+                    role.style.top = calcPer(selectedRole.offsetTop, preEdit.offsetHeight) + '%';
+                    parentWindow.document.getElementById("roleX").value = role.style.left.slice(0, -1)
+                    parentWindow.document.getElementById("roleY").value = role.style.top.slice(0, -1)
                     parentWindow.workdata.roleData.forEach((Role, index) => {
                         if (Role.id == selectedRole.dataset.selected) {
-                            parentWindow.workdata.roleData[index].x = selectedRole.offsetLeft / (preEdit.clientWidth / 640)
-                            parentWindow.workdata.roleData[index].y = selectedRole.offsetTop / (preEdit.clientHeight / 360)
+                            parentWindow.workdata.roleData[index].x = role.style.left.slice(0, -1)
+                            parentWindow.workdata.roleData[index].y = role.style.top.slice(0, -1)
                             role.dataset.x = parentWindow.workdata.roleData[index].x;
                             role.dataset.y = parentWindow.workdata.roleData[index].y;
                         }
                     })
                 },
                 stack: "#selectedRole",
+                snap: false,
                 stop: function (e) {
                     render(parentWindow.workdata.roleData, preEdit)
                 }
@@ -101,7 +107,7 @@ addEventListener("load", () => {
                     currentRight = e.offsetX;
                     lastRight = currentRight;
                 },
-            });
+            });*/
         } else if (e.type == "reply") {
             if (e.data.success) {
                 console.log("editor", "success")
@@ -237,9 +243,13 @@ events.emit("when_start");`
                     selectedRole.style.display = "flex"
                     selectedRole.style.width = `${W - 6}px`
                     selectedRole.style.height = `${H - 6}px`
-                    selectedRole.style.left = `${(pre.clientWidth / 640) * roleImg.dataset.x}px`
-                    selectedRole.style.top = `${(pre.clientHeight / 360) * roleImg.dataset.y}px`
+                    selectedRole.style.left = `${role.x}%`
+                    selectedRole.style.top = `${role.y}%`
                     selectedRole.dataset.selected = role.id;
+                    parentWindow.selectedRole = role.id
+                    parentWindow.document.getElementById("roleName").value = role.name
+                    parentWindow.document.getElementById("roleX").value = role.x
+                    parentWindow.document.getElementById("roleY").value = role.y
                     console.log(X, Y)
                 }
             })
