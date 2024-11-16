@@ -1,9 +1,6 @@
 class Action {
-    #screenWidth() {
-        return preview.clientWidth;
-    };
-    #screenHieght() {
-        return preview.clientHeight;
+    #getPer(role) {
+        return role.style.left.slice(0, -1);
     }
     constructor() {
         this.rolesId = workdata.roleData.map(role => role.id);
@@ -16,7 +13,7 @@ class Action {
     move(role, direction, distance) {
         if (role != "__background__") {
             if (direction == "forward") {
-                this.roles[role].style.left = `${(this.roles[role].offsetLeft - distance) / (preview.clientWidth / 640)}px`
+                this.roles[role].style.left = `${this.#getPer(this.roles[role]) + distance}%`
             } else if (direction == "backward") {
                 this.roles[role].style.left = `${(this.roles[role].offsetLeft + distance) / (preview.clientWidth / 640)}px`
             } else if (direction == "upward") {
