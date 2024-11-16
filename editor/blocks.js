@@ -252,7 +252,7 @@ addEventListener('load', function () {
             console.error("背景不是角色\n背景不能移动")
             code = `// actions.move_forward(${role}, ${direction}, ${distance})\n`
         } else {
-            code = `actions.move("${role}", "${direction}", ${distance})\nparentWindow.Csl.log("角色${role} 向 ${direction} 移动)\n`
+            code = `actions.move("${role}", "${direction}", ${distance})\nparentWindow.Csl.log("角色${role} 向 ${direction} 移动")\n`
         }
         return code
     })
