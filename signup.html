@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="signup.css">
     <script src="signup.js"></script>
     <script src="crypto-js.min.js"></script>
+    <script src="SHA256.js"></script>
     <script src="https://static2.pgaot.com/Assets/js/jquery-2.2.4.min.js"></script>
     <script src="https://static2.pgaot.com/Assets/js/sipg_jcokxlcsd9.js"></script>
     <script src="https://static2.pgaot.com/Assets/js.class/pgdbs.class.js"></script>
@@ -20,16 +21,22 @@
         <h1>注册</h1>
         <form id="signupForm">
             <label for="email">邮箱:</label>
-            <input type="text" id="email" name="email" required><br><br>
+            <input type="text" id="email" name="email" required><br>
             <label for="verifyCode">验证码:</label>
             <div class="verifyCode">
-                <input type="text" id="verifyCode" name="verifyCode" required disabled>
-                <button type="button" id="sendCode">发送验证码</button>
-            </div><br><br>
+                <input type="text" id="verifyCode" name="verifyCode" required>
+                <button type="button" id="sendCode" disabled>发送验证码</button>
+            </div><br>
+            <label for="avatar">头像：</label>
+            <input type="file" id="avatar" name="avatar" accept="image/*" hidden />
+            <div style="height: 100px;">
+                <img src="https://static.codemao.cn/IFTC-Studio/Syl_QricR.png" alt="默认头像" id="avatarPreview">
+                <div class="avatarUpload"></div>
+            </div>
             <label for="username">昵称:</label>
-            <input type="text" id="username" name="username" required><br><br>
+            <input type="text" id="username" name="username" required><br>
             <label for="password">密码:</label>
-            <input type="password" id="password" name="password" required><br><br>
+            <input type="password" id="password" name="password" required><br>
             <div class="submit">
                 <button type="submit">注册</button>
             </div>
