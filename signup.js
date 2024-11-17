@@ -2,6 +2,7 @@ let Email = ""
 let isVerify = false
 let Avatar = "https://static.codemao.cn/IFTC-Studio/Syl_QricR.png"
 onload = () => {
+    const toast = new Toast();
     const Submit = document.querySelector(".submit>button");
     var vvzh = new pgdbs(dbs_a6b2a4d6c02022e831626d31ab805a468a151b90d5161660485a73cc6e1ea902);
     email.oninput = e => {
@@ -23,16 +24,19 @@ onload = () => {
                 title: "VV账号注册验证码",
                 t: t,
             }
+            const id = toast.loading("发送中")
             ajax(json, "customize_sand", data => {
                 if (data.status == "1") {
                     Email = email.value
-                    alert("验证码已发送，请查看邮箱")
+                    toast.loadend(id)
+                    toast.success("验证码已发送，请查看邮箱")
                 } else {
-                    alert(data.msg)
+                    toast.loadend(id)
+                    toast.error(data.msg)
                 }
             })
         } else {
-            alert('邮箱格式不正确')
+            toast.error('邮箱格式不正确')
         }
     }
     verifyCode.oninput = () => {
