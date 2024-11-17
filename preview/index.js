@@ -35,79 +35,16 @@ addEventListener("load", () => {
                 if (!event.target.className.split(" ").includes("role")) {
                     selectedRole.style.display = "none"
                     selectedRole.dataset.selected = "BACKGROUND"
+                    if (parentWindow.selectedRole != "") {
+                        parentWindow.Csl.log("已取消选择角色")
+                    }
+                    parentWindow.selectedRole = ""
+                    parentWindow.document.getElementById("roleX").value = 0
+                    parentWindow.document.getElementById("roleY").value = 0
+                    parentWindow.document.getElementById("roleName").value = "-未选中角色-"
                 }
             })
             document.body.appendChild(selectedRole);
-            /*$("#selectedRole").draggable({
-                drag: function (e) {
-                    var role = document.getElementById(`ROLE_${selectedRole.dataset.selected}`)
-                    role.style.left = calcPer(selectedRole.offsetLeft, preEdit.offsetWidth) + '%';
-                    role.style.top = calcPer(selectedRole.offsetTop, preEdit.offsetHeight) + '%';
-                    parentWindow.document.getElementById("roleX").value = role.style.left.slice(0, -1)
-                    parentWindow.document.getElementById("roleY").value = role.style.top.slice(0, -1)
-                    parentWindow.workdata.roleData.forEach((Role, index) => {
-                        if (Role.id == selectedRole.dataset.selected) {
-                            parentWindow.workdata.roleData[index].x = role.style.left.slice(0, -1)
-                            parentWindow.workdata.roleData[index].y = role.style.top.slice(0, -1)
-                            role.dataset.x = parentWindow.workdata.roleData[index].x;
-                            role.dataset.y = parentWindow.workdata.roleData[index].y;
-                        }
-                    })
-                },
-                stack: "#selectedRole",
-                snap: false,
-                stop: function (e) {
-                    render(parentWindow.workdata.roleData, preEdit)
-                }
-            });
-            var leftDot = document.createElement("div");
-            leftDot.id = "leftDot";
-            leftDot.classList.add("dot");
-            leftDot.classList.add("leftDot");
-            selectedRole.appendChild(leftDot);
-            var rightDot = document.createElement("div");
-            rightDot.id = "rightDot";
-            rightDot.classList.add("dot");
-            rightDot.classList.add("rightDot");
-            selectedRole.appendChild(rightDot);
-            var topDot = document.createElement("div");
-            topDot.id = "topDot";
-            topDot.classList.add("dot");
-            topDot.classList.add("topDot");
-            selectedRole.appendChild(topDot);
-            var bottomDot = document.createElement("div");
-            bottomDot.id = "bottomDot";
-            bottomDot.classList.add("dot");
-            bottomDot.classList.add("bottomDot");
-            selectedRole.appendChild(bottomDot);
-            dispatchEvents({
-                type: "reply",
-                success: true,
-                origin: "preview",
-            })
-            let lastLeft = leftDot.offsetLeft;
-            let currentLeft = leftDot.offsetLeft;
-            $("#leftDot").draggable({
-                axis: "x",
-                drag: function (e) {
-                    console.log("dragLeft", e)
-                    currentLeft = e.offsetX;
-                    console.log(currentLeft - lastLeft)
-                    selectedRole.style.width = (selectedRole.offsetWidth + (currentLeft - lastLeft)) + "px";
-                    selectedRole.style.left = e.offsetX
-                    lastLeft = currentLeft;
-                },
-            });
-            let lastRight = rightDot.offsetLeft;
-            let currentRight = rightDot.offsetLeft;
-            $("#rightDot").draggable({
-                axis: "x",
-                drag: function (e) {
-                    console.log("dragRight", e)
-                    currentRight = e.offsetX;
-                    lastRight = currentRight;
-                },
-            });*/
         } else if (e.type == "reply") {
             if (e.data.success) {
                 console.log("editor", "success")
