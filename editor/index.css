@@ -191,5 +191,10 @@ input {
 }
 
 .roleConfigItem>input {
-    width: 100%;
+    width: calc(100% - 10px);
+    padding-left: 0;
+}
+
+td {
+    padding: 5px;
 }
