@@ -69,7 +69,7 @@ onload = () => {
             const reader = new FileReader()
             reader.readAsDataURL(file)
             reader.onload = () => {
-                alert("正在上传头像，请稍等")
+                const id = toast.loading("正在上传头像，请稍等")
                 var data = new FormData();
                 data.append('path', "IFTC/avatar");
                 data.append('file', file);
@@ -82,17 +82,19 @@ onload = () => {
                     data: data,
                     success: data => {
                         const json = JSON.parse(data);
-                        console.log('success', json)
                         if (json.code == 200) {
                             avatarPreview.src = json.url
                             Avatar = json.url
-                            alert('上传成功')
+                            toast.loadend(id)
+                            toast.success('上传成功', 2000)
                         } else {
-                            alert('上传失败')
+                            toast.loadend(id)
+                            toast.error('上传失败', 2000)
                         }
                     },
                     error: data => {
-                        alert('上传失败')
+                        toast.loadend(id)
+                        toast.error('上传失败', 2000)
                     }
                 })
             }
