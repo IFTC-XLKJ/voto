@@ -473,11 +473,16 @@ addEventListener("load", () => {
         }
     })
     roleX.onchange = e => {
-        if (roleX.value.trim() == "") {
-            roleX.value = preview.contentWindow.document.getElementById(`ROLE_${selectedRole}`).style.left.slice(0, -1)
+        if (selectedRole) {
+            if (roleX.value.trim() == "") {
+                roleX.value = preview.contentWindow.document.getElementById(`ROLE_${selectedRole}`).style.left.slice(0, -1)
+            } else {
+                preview.contentWindow.document.getElementById(`ROLE_${selectedRole}`).style.left = `${roleX.value}%`
+                preview.contentWindow.document.getElementById(`selectedRole`).style.left = `${roleX.value}%`
+            }
         } else {
-            preview.contentWindow.document.getElementById(`ROLE_${selectedRole}`).style.left = `${roleX.value}%`
-            preview.contentWindow.document.getElementById(`selectedRole`).style.left = `${roleX.value}%`
+            Csl.warn("未选择角色")
+            roleX.value = 0
         }
     }
     roleY.onchange = e => {
