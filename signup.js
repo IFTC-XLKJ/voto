@@ -103,11 +103,11 @@ onload = () => {
     Submit.onclick = async e => {
         e.preventDefault();
         if (!isVerify) {
-            alert("请先验证邮箱")
+            toast.warn("请先验证邮箱", 2000)
             return
         }
         if (username.value.trim() == "" && password.value.trim() == "") {
-            alert("请输入账号和密码");
+            toast.warn("请输入账号和密码", 2000);
         } else {
             vvzh.getTableData({
                 limit: 1,
