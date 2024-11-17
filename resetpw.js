@@ -1,3 +1,5 @@
+let Email = ""
+
 onload = () => {
     const Submit = document.querySelector(".submit>button");
     var vvzh = new pgdbs(dbs_a6b2a4d6c02022e831626d31ab805a468a151b90d5161660485a73cc6e1ea902);
@@ -51,6 +53,21 @@ onload = () => {
                 }
             })
         }
+    }
+    Submit.onclick = e => {
+        e.preventDefault()
+        vvzh.setTableData({
+            type: "UPDATE",
+            filter: `邮箱="${Email}"`,
+            fields: `密码="${CryptoJS.MD5(password.value)}"`
+        }).then(data => {
+            if (data.code == 200) {
+                alert("重置成功")
+                window.location.href = "login.html"
+            } else {
+                alert("重置失败")
+            }
+        })
     }
 }
 function ajax(json, path, callback) {
