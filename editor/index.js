@@ -486,11 +486,29 @@ addEventListener("load", () => {
         }
     }
     roleY.onchange = e => {
-        if (roleY.value.trim() == "") {
-            roleY.value = preview.contentWindow.document.getElementById(`ROLE_${selectedRole}`).style.top.slice(0, -1)
+        if (selectedRole) {
+            if (roleY.value.trim() == "") {
+                roleY.value = preview.contentWindow.document.getElementById(`ROLE_${selectedRole}`).style.top.slice(0, -1)
+            } else {
+                preview.contentWindow.document.getElementById(`ROLE_${selectedRole}`).style.top = `${roleY.value}%`
+                preview.contentWindow.document.getElementById(`selectedRole`).style.top = `${roleY.value}%`
+            }
         } else {
-            preview.contentWindow.document.getElementById(`ROLE_${selectedRole}`).style.top = `${roleY.value}%`
-            preview.contentWindow.document.getElementById(`selectedRole`).style.top = `${roleY.value}%`
+            Csl.warn("未选择角色")
+            roleY.value = 0
+        }
+    }
+    roleName.onchange = e => {
+        if (selectedRole) {
+            if (roleName.value.trim() == "") {
+                roleName.value = preview.contentWindow.document.getElementById(`ROLE_${selectedRole}`).dataset.name
+            } else {
+                preview.contentWindow.document.getElementById(`ROLE_${selectedRole}`).dataset.name = roleName.value
+                preview.contentWindow.document.getElementById(`selectedRole`).dataset.name = roleName.value
+            }
+        } else {
+            Csl.warn("未选择角色")
+            roleName.value = "-未选中角色-"
         }
     }
     document.addEventListener("click", e => {
