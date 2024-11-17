@@ -1,4 +1,5 @@
 let Email = ""
+let isVerify = false
 
 onload = () => {
     const Submit = document.querySelector(".submit>button");
@@ -48,6 +49,7 @@ onload = () => {
                 if (data.code == 200) {
                     sendCode.disabled = true
                     verifyCode.disabled = true
+                    isVerify = true
                 } else {
                     alert("验证失败")
                 }
@@ -56,18 +58,22 @@ onload = () => {
     }
     Submit.onclick = e => {
         e.preventDefault()
-        vvzh.setTableData({
-            type: "UPDATE",
-            filter: `邮箱="${Email}"`,
-            fields: `密码="${CryptoJS.MD5(password.value)}"`
-        }).then(data => {
-            if (data.code == 200) {
-                alert("重置成功")
-                window.location.href = "login.html"
-            } else {
-                alert("重置失败")
-            }
-        })
+        if (isVerify) {
+            vvzh.setTableData({
+                type: "UPDATE",
+                filter: `邮箱="${Email}"`,
+                fields: `密码="${CryptoJS.MD5(password.value)}"`
+            }).then(data => {
+                if (data.code == 200) {
+                    alert("重置成功")
+                    window.location.href = "login.html"
+                } else {
+                    alert("重置失败")
+                }
+            })
+        } else {
+            alert("请先验证邮箱")
+        }
     }
 }
 function ajax(json, path, callback) {
