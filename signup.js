@@ -29,20 +29,20 @@ onload = () => {
                 if (data.status == "1") {
                     Email = email.value
                     toast.loadend(id)
-                    toast.success("验证码已发送，请查看邮箱")
+                    toast.success("验证码已发送，请查看邮箱", 2000)
                 } else {
                     toast.loadend(id)
-                    toast.error(data.msg)
+                    toast.error(data.msg, 2000)
                 }
             })
         } else {
-            toast.error('邮箱格式不正确')
+            toast.error('邮箱格式不正确', 2000)
         }
     }
     verifyCode.oninput = () => {
         if (typeof Number(verifyCode.value) != "number") {
             verifyCode.value = ""
-            alert("请输入正确的验证码格式")
+            toast.error("请输入正确的验证码格式", 2000)
         } else {
             let t = Math.round(new Date().getTime() / 1000);
             let json = {
@@ -55,7 +55,7 @@ onload = () => {
                     verifyCode.disabled = true
                     isVerify = true
                 } else {
-                    alert("验证失败")
+                    toast.error("验证失败", 2000)
                 }
             })
         }
