@@ -116,7 +116,7 @@ onload = () => {
             }).then(async json => {
                 if (json.code == 200) {
                     if (json.fields.length == 0) {
-                        toast.warn("该邮箱已注册或昵称已存在");
+                        toast.warn("该邮箱已注册或昵称已存在", 2000);
                     } else {
                         const count = data.count
                         await new Promise(resolve => setTimeout(resolve, 200))
@@ -135,7 +135,7 @@ onload = () => {
                         })
                     }
                 } else {
-                    alert("发生错误，请稍后再试");
+                    toast.error("发生错误，请稍后再试", 2000);
                 }
             })
         }
