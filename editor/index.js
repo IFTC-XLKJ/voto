@@ -477,8 +477,10 @@ addEventListener("load", () => {
             if (roleX.value.trim() == "") {
                 roleX.value = preview.contentWindow.document.getElementById(`ROLE_${selectedRole}`).style.left.slice(0, -1)
             } else {
+                const data = getRole(selectedRole)
                 preview.contentWindow.document.getElementById(`ROLE_${selectedRole}`).style.left = `${roleX.value}%`
                 preview.contentWindow.document.getElementById(`selectedRole`).style.left = `${roleX.value}%`
+                data.x = Number(roleX.value)
             }
         } else {
             Csl.warn("未选择角色")
@@ -490,8 +492,10 @@ addEventListener("load", () => {
             if (roleY.value.trim() == "") {
                 roleY.value = preview.contentWindow.document.getElementById(`ROLE_${selectedRole}`).style.top.slice(0, -1)
             } else {
+                const data = getRole(selectedRole)
                 preview.contentWindow.document.getElementById(`ROLE_${selectedRole}`).style.top = `${roleY.value}%`
                 preview.contentWindow.document.getElementById(`selectedRole`).style.top = `${roleY.value}%`
+                data.y = Number(roleY.value)
             }
         } else {
             Csl.warn("未选择角色")
@@ -503,8 +507,10 @@ addEventListener("load", () => {
             if (roleName.value.trim() == "") {
                 roleName.value = preview.contentWindow.document.getElementById(`ROLE_${selectedRole}`).dataset.name
             } else {
+                const data = getRole(selectedRole)
                 preview.contentWindow.document.getElementById(`ROLE_${selectedRole}`).dataset.name = roleName.value
                 preview.contentWindow.document.getElementById(`selectedRole`).dataset.name = roleName.value
+                data.name = roleName.value
             }
         } else {
             Csl.warn("未选择角色")
@@ -555,3 +561,6 @@ addEventListener("resize", () => {
     preview.style.width = `${previewBody.offsetWidth}px`
     preview.style.height = `${(previewBody.offsetWidth / 16) * 9}px`
 })
+function getRole(id) {
+    return workdata.roleData.filter(r => r.id == id)[0]
+}
