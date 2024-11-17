@@ -36,13 +36,13 @@ onload = () => {
                 }
             })
         } else {
-            alert('邮箱格式不正确')
+            toast.warn('邮箱格式不正确', 2000)
         }
     }
     verifyCode.oninput = () => {
         if (typeof Number(verifyCode.value) != "number") {
             verifyCode.value = ""
-            alert("请输入正确的验证码格式")
+            toast.warn("请输入正确的验证码格式", 2000)
         } else {
             let t = Math.round(new Date().getTime() / 1000);
             let json = {
@@ -55,7 +55,7 @@ onload = () => {
                     verifyCode.disabled = true
                     isVerify = true
                 } else {
-                    alert("验证失败")
+                    toast.error("验证失败", 2000)
                 }
             })
         }
@@ -63,20 +63,23 @@ onload = () => {
     Submit.onclick = e => {
         e.preventDefault()
         if (isVerify) {
+            const id = toast.loading("重置中")
             vvzh.setTableData({
                 type: "UPDATE",
                 filter: `邮箱="${Email}"`,
                 fields: `密码="${CryptoJS.MD5(password.value)}"`
             }).then(data => {
                 if (data.code == 200) {
-                    alert("重置成功")
+                    toast.loadend(id)
+                    toast.success("重置成功", 2000)
                     window.location.href = "login.html"
                 } else {
-                    alert("重置失败")
+                    toast.loadend(id)
+                    toast.error("重置失败", 2000)
                 }
             })
         } else {
-            alert("请先验证邮箱")
+            toast.warn("请先验证邮箱", 2000)
         }
     }
 }
