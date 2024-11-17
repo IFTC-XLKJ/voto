@@ -4,7 +4,7 @@ onload = () => {
     const Submit = document.querySelector(".submit>button");
     var vvzh = new pgdbs(dbs_a6b2a4d6c02022e831626d31ab805a468a151b90d5161660485a73cc6e1ea902);
     setInterval(async () => {
-        if (localStorage.getItem("token") && localStorage.getItem("UID") && localStorage.getItem("PWD") && isLogin != 10) {
+        if (localStorage.getItem("token") && localStorage.getItem("UID") && localStorage.getItem("PWD") && isLogin != 10 && !isLogin) {
             isLogin = true
             toast.warn("你已登录过了，无法重复登录", 500)
             await new Promise(resolve => setTimeout(resolve, 500))
