@@ -61,3 +61,11 @@ button {
 button:hover {
     background-color: #0056b3;
 }
+
+a {
+    display: inline-block;
+    width: 265px;
+    color: #007BFF;
+    text-decoration: none;
+    text-align: center;
+}
