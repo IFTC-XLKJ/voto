@@ -4,11 +4,11 @@
   "description": "***提示：该图形化编辑器正在制作中，暂未发布。。。***",
   "main": "main.js",
   "directories": {
-    "doc": "doc",
-    "start": "node main.js"
+    "doc": "doc"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node main.js"
   },
   "keywords": [],
   "author": "",
