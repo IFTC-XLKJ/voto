@@ -105,3 +105,11 @@ button:hover {
     background-repeat: no-repeat;
     cursor: pointer;
 }
+
+a {
+    display: inline-block;
+    width: 265px;
+    color: #007BFF;
+    text-decoration: none;
+    text-align: center;
+}
