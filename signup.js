@@ -128,7 +128,7 @@ onload = () => {
                             if (data.code == 200) {
                                 toast.success("注册成功，正在跳转登录页", 2000)
                                 await new Promise(resolve => setTimeout(resolve, 2000))
-                                location.href = "/login.html"
+                                location.href = "/login"
                             } else {
                                 toast.error("注册失败，请稍后再试", 2000)
                             }
