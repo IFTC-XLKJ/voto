@@ -1,4 +1,5 @@
 let Email = ""
+let isVerify = false
 let Avatar = "https://static.codemao.cn/IFTC-Studio/Syl_QricR.png"
 onload = () => {
     const Submit = document.querySelector(".submit>button");
@@ -48,6 +49,7 @@ onload = () => {
                 if (data.code == 200) {
                     sendCode.disabled = true
                     verifyCode.disabled = true
+                    isVerify = true
                 } else {
                     alert("验证失败")
                 }
@@ -94,6 +96,10 @@ onload = () => {
     }
     Submit.onclick = async e => {
         e.preventDefault();
+        if (!isVerify) {
+            alert("请先验证邮箱")
+            return
+        }
         if (username.value.trim() == "" && password.value.trim() == "") {
             alert("请输入账号和密码");
         } else {
