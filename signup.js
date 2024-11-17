@@ -116,7 +116,7 @@ onload = () => {
             }).then(async json => {
                 if (json.code == 200) {
                     if (json.fields.length == 0) {
-                        alert("该邮箱已注册或昵称已存在");
+                        toast.warn("该邮箱已注册或昵称已存在");
                     } else {
                         const count = data.count
                         await new Promise(resolve => setTimeout(resolve, 200))
@@ -124,8 +124,14 @@ onload = () => {
                             type: "INSERT",
                             filter: "ID,昵称,头像,V币,邮箱,密码",
                             fields: `(${count},"${username.value.trim()}}","${Avatar}",0,"${email.value}","${crypto.MD5(password.value)}")`
-                        }).then(data => {
-
+                        }).then(async data => {
+                            if (data.code == 200) {
+                                toast.success("注册成功，正在跳转登录页", 2000)
+                                await new Promise(resolve => setTimeout(resolve, 2000))
+                                location.href = "/login.html"
+                            } else {
+                                toast.error("注册失败，请稍后再试", 2000)
+                            }
                         })
                     }
                 } else {
