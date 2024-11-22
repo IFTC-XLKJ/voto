@@ -20,8 +20,8 @@ window.workdata = {
             url: "/assets/role.svg",
             x: 10,
             y: 5,
-            width: 100,
-            height: 100,
+            width: 15.625,
+            height: 27.777777777777777,
         }
     ],
 }
@@ -515,6 +515,36 @@ addEventListener("load", () => {
         } else {
             Csl.warn("未选择角色")
             roleName.value = "-未选中角色-"
+        }
+    }
+    roleWidth.onchange = e => {
+        if (selectedRole) {
+            if (roleWidth.value.trim() == "") {
+                roleWidth.value = preview.contentWindow.document.getElementById(`ROLE_${selectedRole}`).style.width.slice(0, -1)
+            } else {
+                const data = getRole(selectedRole)
+                preview.contentWindow.document.getElementById(`ROLE_${selectedRole}`).style.width = `${roleWidth.value}%`
+                preview.contentWindow.document.getElementById(`selectedRole`).style.width = `${roleWidth.value - 0.9375}%`
+                data.width = Number(roleWidth.value)
+            }
+        } else {
+            Csl.warn("未选择角色")
+            roleWidth.value = 0
+        }
+    }
+    roleHeight.onchange = e => {
+        if (selectedRole) {
+            if (roleHeight.value.trim() == "") {
+                roleHeight.value = preview.contentWindow.document.getElementById(`ROLE_${selectedRole}`).style.height.slice(0, -1)
+            } else {
+                const data = getRole(selectedRole)
+                preview.contentWindow.document.getElementById(`ROLE_${selectedRole}`).style.height = `${roleHeight.value}%`
+                preview.contentWindow.document.getElementById(`selectedRole`).style.height = `${roleHeight.value - 1.6666666666666667}%`
+                data.height = Number(roleHeight.value)
+            }
+        } else {
+            Csl.warn("未选择角色")
+            roleHeight.value = 0
         }
     }
     document.addEventListener("click", e => {
