@@ -3,7 +3,7 @@ const app = express();
 const port = 3000;
 
 // 定义一个简单的路由
-app.get('/', (req, res) => {
+app.get('/api', (req, res) => {
     res.json({ code: 200, msg: '连接成功' });
 });
 
