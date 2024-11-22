@@ -9,7 +9,7 @@ app.get('/api', (req, res) => {
 
 // 创建一个API端点
 app.get('/api/hello', (req, res) => {
-    res.json({ message: 'Hello from API!' });
+    res.json({ msg: 'Hello from API!' });
 });
 
 // 启动服务器
