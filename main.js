@@ -4,7 +4,7 @@ const port = 3000;
 
 // 定义一个简单的路由
 app.get('/', (req, res) => {
-    res.send('Hello World!');
+    res.json({ code: 200, msg: '连接成功' });
 });
 
 // 创建一个API端点
