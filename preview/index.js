@@ -159,10 +159,10 @@ events.emit("when_start");`
         roles.forEach(role => {
             var roleImg = document.createElement("img");
             roleImg.src = role.url;
-            const W = (pre.clientWidth / 640) * role.width;
-            const H = (pre.clientHeight / 360) * role.height;
-            roleImg.style.width = `${W}px`
-            roleImg.style.height = `${H}px`
+            const W = role.width;
+            const H = role.height;
+            roleImg.style.width = `${W}%`
+            roleImg.style.height = `${H}%`
             roleImg.classList.add("role");
             roleImg.style.left = `${role.x}%`;
             roleImg.style.top = `${role.y}%`;
@@ -178,8 +178,8 @@ events.emit("when_start");`
             roleImg.addEventListener("click", e => {
                 if (pre.dataset.type == "edit") {
                     selectedRole.style.display = "flex"
-                    selectedRole.style.width = `${W - 6}px`
-                    selectedRole.style.height = `${H - 6}px`
+                    selectedRole.style.width = `${W - 0.9375}%`
+                    selectedRole.style.height = `${H - 1.6666666666666667}%`
                     selectedRole.style.left = `${role.x}%`
                     selectedRole.style.top = `${role.y}%`
                     selectedRole.dataset.selected = role.id;
@@ -187,7 +187,8 @@ events.emit("when_start");`
                     parentWindow.document.getElementById("roleName").value = role.name
                     parentWindow.document.getElementById("roleX").value = role.x
                     parentWindow.document.getElementById("roleY").value = role.y
-                    console.log(X, Y)
+                    parentWindow.document.getElementById("roleWidth").value = role.width
+                    parentWindow.document.getElementById("roleHeight").value = role.height
                 }
             })
             pre.appendChild(roleImg);
