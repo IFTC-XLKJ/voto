@@ -17,6 +17,11 @@ function calcPer(num, total) {
 addEventListener("load", () => {
     const preEdit = document.querySelector("[data-type=\"edit\"]")
     const preRun = document.querySelector("[data-type=\"run\"]")
+    parentWindow.document.getElementById("roleX").value = null
+    parentWindow.document.getElementById("roleY").value = null
+    parentWindow.document.getElementById("roleWidth").value = null
+    parentWindow.document.getElementById("roleHeight").value = null
+    parentWindow.document.getElementById("roleName").readOnly = true
     events = new Events();
     preEdit.style.width = `${innerWidth}px`
     preEdit.style.height = `${(innerWidth / 16) * 9}px`
@@ -39,9 +44,12 @@ addEventListener("load", () => {
                         parentWindow.Csl.log("已取消选择角色")
                     }
                     parentWindow.selectedRole = ""
-                    parentWindow.document.getElementById("roleX").value = 0
-                    parentWindow.document.getElementById("roleY").value = 0
+                    parentWindow.document.getElementById("roleX").value = null
+                    parentWindow.document.getElementById("roleY").value = null
+                    parentWindow.document.getElementById("roleWidth").value = null
+                    parentWindow.document.getElementById("roleHeight").value = null
                     parentWindow.document.getElementById("roleName").value = "-未选中角色-"
+                    parentWindow.document.getElementById("roleName").readOnly = true
                 }
             })
             document.body.appendChild(selectedRole);
@@ -189,6 +197,7 @@ events.emit("when_start");`
                     parentWindow.document.getElementById("roleY").value = role.y
                     parentWindow.document.getElementById("roleWidth").value = role.width
                     parentWindow.document.getElementById("roleHeight").value = role.height
+                    parentWindow.document.getElementById("roleName").readOnly = false
                 }
             })
             pre.appendChild(roleImg);
