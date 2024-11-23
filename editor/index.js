@@ -22,6 +22,18 @@ window.workdata = {
             y: 5,
             width: 15.625,
             height: 27.777777777777777,
+            scale: 1
+        },
+        {
+            name: "role",
+            id: "example2",
+            type: "角色-2",
+            url: "/assets/role.svg",
+            x: 30,
+            y: 5,
+            width: 15.625,
+            height: 27.777777777777777,
+            scale: 1
         }
     ],
 }
@@ -545,6 +557,21 @@ addEventListener("load", () => {
         } else {
             Csl.warn("未选择角色")
             roleHeight.value = null
+        }
+    }
+    roleScale.onchange = e => {
+        if (selectedRole) {
+            if (roleScale.value.trim() == "") {
+                roleScale.value = preview.contentWindow.document.getElementById(`ROLE_${selectedRole}`).style.transform.slice(6, -1)
+            } else {
+                const data = getRole(selectedRole)
+                preview.contentWindow.document.getElementById(`ROLE_${selectedRole}`).style.transform = `scale(${roleScale.value / 100})`
+                preview.contentWindow.document.getElementById(`selectedRole`).style.transform = `scale(${roleScale.value /100})`
+                data.scale = Number(roleScale.value / 100)
+            }
+        } else {
+            Csl.warn("未选择角色")
+            roleScale.value = null
         }
     }
     document.addEventListener("click", e => {
