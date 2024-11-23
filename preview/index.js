@@ -174,6 +174,7 @@ events.emit("when_start");`
             roleImg.classList.add("role");
             roleImg.style.left = `${role.x}%`;
             roleImg.style.top = `${role.y}%`;
+            roleImg.style.transform = `scale(${role.rotate})`
             roleImg.addEventListener("dragstart", e => {
                 e.preventDefault();
                 return false;
@@ -198,6 +199,7 @@ events.emit("when_start");`
                     parentWindow.document.getElementById("roleWidth").value = role.width
                     parentWindow.document.getElementById("roleHeight").value = role.height
                     parentWindow.document.getElementById("roleName").readOnly = false
+                    parentWindow.document.getElementById("roleScale").value = role.scale
                 }
             })
             pre.appendChild(roleImg);
