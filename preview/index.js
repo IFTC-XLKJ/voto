@@ -199,32 +199,6 @@ events.emit("when_start");`
 addEventListener("resize", () => {
     const preEdit = document.querySelector("[data-type=\"edit\"]")
     const preRun = document.querySelector("[data-type=\"run\"]")
-    preEdit.style.width = `${innerWidth}px`
-    preEdit.style.height = `${(innerWidth / 16) * 9}px`
-    preRun.style.width = `${innerWidth}px`
-    preRun.style.height = `${(innerWidth / 16) * 9}px`
-    const X = role => {
-        let w = parentWindow.workdata.roleData.filter(r => `ROLE_${r.id}` == role.id)[0].width
-        return (preEdit.clientWidth / 640) * w
-    };
-    const Y = role => {
-        let h = parentWindow.workdata.roleData.filter(r => `ROLE_${r.id}` == role.id)[0].height
-        return (preEdit.clientHeight / 360) * h;
-    }
-    const W = role => {
-        let w = parentWindow.workdata.roleData.filter(r => `ROLE_${r.id}` == role.id)[0].width
-        return (preEdit.clientWidth / 640) * w
-    };
-    const H = role => {
-        let h = parentWindow.workdata.roleData.filter(r => `ROLE_${r.id}` == role.id)[0].height
-        return (preEdit.clientHeight / 360) * h
-    };
-    const roles = document.querySelectorAll(".role")
-    roles.forEach(role => {
-        role.style.left = `${X(role)}px`
-        role.style.top = `${Y(role)}px`
-        role.style.width = `${W(role)}px`
-        role.style.height = `${H(role)}px`
-    })
     render(parentWindow.workdata.roleData, preEdit)
+    render(parentWindow.workdata.roleData, preRun)
 })
