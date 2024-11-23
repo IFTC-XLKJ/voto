@@ -484,7 +484,7 @@ addEventListener("load", () => {
             }
         } else {
             Csl.warn("未选择角色")
-            roleX.value = 0
+            roleX.value = null
         }
     }
     roleY.onchange = e => {
@@ -499,7 +499,7 @@ addEventListener("load", () => {
             }
         } else {
             Csl.warn("未选择角色")
-            roleY.value = 0
+            roleY.value = null
         }
     }
     roleName.onchange = e => {
@@ -529,7 +529,7 @@ addEventListener("load", () => {
             }
         } else {
             Csl.warn("未选择角色")
-            roleWidth.value = 0
+            roleWidth.value = null
         }
     }
     roleHeight.onchange = e => {
@@ -544,7 +544,7 @@ addEventListener("load", () => {
             }
         } else {
             Csl.warn("未选择角色")
-            roleHeight.value = 0
+            roleHeight.value = null
         }
     }
     document.addEventListener("click", e => {
