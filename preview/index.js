@@ -22,6 +22,7 @@ addEventListener("load", () => {
     parentWindow.document.getElementById("roleWidth").value = null
     parentWindow.document.getElementById("roleHeight").value = null
     parentWindow.document.getElementById("roleName").readOnly = true
+    parentWindow.document.getElementById("roleScale").value = null
     events = new Events();
     preEdit.style.width = `${innerWidth}px`
     preEdit.style.height = `${(innerWidth / 16) * 9}px`
@@ -50,6 +51,7 @@ addEventListener("load", () => {
                     parentWindow.document.getElementById("roleHeight").value = null
                     parentWindow.document.getElementById("roleName").value = "-未选中角色-"
                     parentWindow.document.getElementById("roleName").readOnly = true
+                    parentWindow.document.getElementById("roleScale").value = null
                 }
             })
             document.body.appendChild(selectedRole);
