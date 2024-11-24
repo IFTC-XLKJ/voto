@@ -566,7 +566,7 @@ addEventListener("load", () => {
             } else {
                 const data = getRole(selectedRole)
                 preview.contentWindow.document.getElementById(`ROLE_${selectedRole}`).style.transform = `scale(${roleScale.value / 100})`
-                preview.contentWindow.document.getElementById(`selectedRole`).style.transform = `scale(${roleScale.value /100})`
+                preview.contentWindow.document.getElementById(`selectedRole`).style.transform = `scale(${roleScale.value / 100})`
                 data.scale = Number(roleScale.value / 100)
             }
         } else {
@@ -574,6 +574,15 @@ addEventListener("load", () => {
             roleScale.value = null
         }
     }
+    Export.addEventListener("click", e => {
+        const dataURL = convertJsonToDataURL(JSON.stringify(workdata))
+        console.log(dataURL)
+        var a = document.createElement("a")
+        a.href = dataURL
+        a.download = `${workdata.title}.voto`
+        document.body.appendChild(a)
+        a.click()
+    })
     document.addEventListener("click", e => {
         if (e.target.id != "file" && isFile) {
             isFile = false
@@ -620,4 +629,12 @@ addEventListener("resize", () => {
 })
 function getRole(id) {
     return workdata.roleData.filter(r => r.id == id)[0]
+}
+
+function convertJsonToDataURL(jsonString) {
+    const mimeType = 'application/json;charset=utf-8;base64';
+    const encodedJsonString = encodeURIComponent(jsonString);
+    const base64JsonString = btoa(encodedJsonString.replace(/%([0-9A-F]{2})/g, (match, p1) => String.fromCharCode('0x' + p1)));
+    const dataURL = `data:${mimeType},${base64JsonString}`;
+    return dataURL;
 }
