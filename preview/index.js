@@ -79,6 +79,7 @@ addEventListener("load", () => {
 const parentWindow = parent || top;
 const actions = new Action();
 const events = new Events();
+const looks = new Looks();
 const controller = new AbortController();
 const signal = controller.signal;
 function backgroundClick(event) {
