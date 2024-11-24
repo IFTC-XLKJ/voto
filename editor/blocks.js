@@ -61,7 +61,7 @@ addEventListener('load', function () {
         var role = block.getFieldValue("role")
         var eventName = block.getFieldValue("eventName")
         var blocks = Blockly.JavaScript.statementToCode(block, 'blocks')
-        var code = `events.on("on_role_-${role}-_${eventName}",function() {\nparentWindow.Csl.log("\\"当 角色${role} 被 ${eventName} 时\\"被触发");\n${blocks}\n})`
+        var code = `events.on("on_role_-${role}-_${eventName}",function() {\nparentWindow.Csl.log("\\"当 角色${role} 被 ${eventName} 时\\"被触发");\nif (!isEnd) {\n${blocks}\n}\n})`
         return code
     })
     // Controls
@@ -178,7 +178,7 @@ addEventListener('load', function () {
     block.code("controls_output", function (block, generator) {
         var type = block.getFieldValue("type")
         const argument0 = generator.valueToCode(block, 'text', Blockly.JavaScript.ORDER_ASSIGNMENT) || null;
-        var code = `parentWindow.Csl.${type}(${String(argument0)});\n`
+        var code = `if (!isEnd) {parentWindow.Csl.${type}(${String(argument0)});}\n`
         return code
     })
     block.add("controls_clear-output", function () {
@@ -190,7 +190,7 @@ addEventListener('load', function () {
         this.svgGroup_.classList.add('ControlsBlocks');
     }, [null])
     block.code("controls_clear-output", function (block) {
-        var code = `parentWindow.Csl.clear();\n`
+        var code = `if (!isEnd) {parentWindow.Csl.clear();}\n`
         return code
     })
     block.add("controls_comment", function () {
@@ -252,7 +252,7 @@ addEventListener('load', function () {
             console.error("背景不是角色\n背景不能移动")
             code = `// actions.move_forward(${role}, ${direction}, ${distance})\n`
         } else {
-            code = `actions.move("${role}", "${direction}", ${distance})\nparentWindow.Csl.log("角色${role} 向 ${direction} 移动")\n`
+            code = `if (!isEnd) {actions.move("${role}", "${direction}", ${distance})\nparentWindow.Csl.log("角色${role} 向 ${direction} 移动")}\n`
         }
         return code
     })
@@ -275,9 +275,9 @@ addEventListener('load', function () {
             this.svgGroup_.classList.add('LooksBlocks');
         }
     };
-    block.code("looks_set_background_img", function (block) {
-        var img = block.getFieldValue("img")
-        var code = `looks.set_background("${img}")`
+    block.code("looks_set_background_img", function (block, generator) {
+        var img = generator.valueToCode(block, 'img', Blockly.JavaScript.ORDER_ASSIGNMENT) || '';
+        var code = `if (!isEnd) {looks.set_background(${img})}`
         return code
     })
     // Sound
@@ -642,7 +642,7 @@ addEventListener('load', function () {
             this.svgGroup_.classList.add('ArrayBlocks');
         }
     };
-    
+
     console.log("blockLoad")
     document.dispatchEvent(blockLoad)
 })
