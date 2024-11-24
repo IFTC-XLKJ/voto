@@ -194,7 +194,7 @@ addEventListener("load", () => {
                 workId = workdata.workId
                 preview.src = `/preview`
                 preview.onload = () => {
-                    dispatchEvents({ type: "newWork", data: workdata.roleData })
+                    dispatchEvents({ type: "render", data: workdata.roleData })
                 }
                 console.log(workdata.workId)
             }
@@ -574,12 +574,35 @@ addEventListener("load", () => {
             roleScale.value = null
         }
     }
+    Import.addEventListener("click", e => {
+        var fileChooser = document.createElement("input")
+        fileChooser.type = "file"
+        fileChooser.accept = ".voto"
+        fileChooser.onchange = e => {
+            const file = fileChooser.files[0]
+            console.log(file)
+            if (file) {
+                const reader = new FileReader()
+                reader.onload = e => {
+                    const data = JSON.parse(e.target.result)
+                    console.log(data)
+                    workdata = data
+                    console.log(workdata)
+                    dispatchEvents({ type: "render", data: workdata.roleData })
+                    Blockly.serialization.workspaces.load(workdata.blockData, workspace)
+                }
+                reader.readAsText(file)
+            }
+        }
+        fileChooser.click()
+    })
     Export.addEventListener("click", e => {
-        const dataURL = convertJsonToDataURL(JSON.stringify(workdata))
+        const dataURL = convertJsonToDataURL(JSON.stringify(workdata, null, 4))
         console.log(dataURL)
         var a = document.createElement("a")
         a.href = dataURL
         a.download = `${workdata.title}.voto`
+        a.style.display = "none"
         document.body.appendChild(a)
         a.click()
     })
