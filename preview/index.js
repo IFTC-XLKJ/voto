@@ -157,7 +157,7 @@ events.emit("when_start");`
             const roles = parentWindow.workdata.roleData;
             render(roles, preEdit)
             parentWindow.Csl.log("已收到停止指令")
-        } else if (e.type == "newWork") {
+        } else if (e.type == "render") {
             const roles = e.data;
             render(roles, preEdit)
         }
