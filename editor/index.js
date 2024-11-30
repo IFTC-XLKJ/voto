@@ -14,9 +14,9 @@ window.workdata = {
     blockData: [],
     roleData: [
         {
-            name: "role",
-            id: "example",
-            type: "角色-1",
+            name: "role1",
+            id: "example1",
+            type: "默认角色",
             url: "/assets/role.svg",
             x: 10,
             y: 5,
@@ -25,9 +25,9 @@ window.workdata = {
             scale: 1
         },
         {
-            name: "role",
+            name: "role2",
             id: "example2",
-            type: "角色-2",
+            type: "默认角色",
             url: "/assets/role.svg",
             x: 30,
             y: 5,
@@ -106,6 +106,11 @@ addEventListener("load", () => {
     events = new Events();
     Csl = new Console(csl, true)
     Csl.log("正在加载...")
+    roles = [];
+    roles.push(["背景", "__background__", "BACKGROUND"])
+    workdata.roleData.forEach(role => {
+        roles.push([role.name, role.id, role.type])
+    });
     onerror = (msg, url, lineNo, columnNo, error) => {
         if (error == "TypeError: Cannot read properties of undefined (reading 'null')") {
             Csl.error("积木中含有空值\n问题可能出现在“列表”积木中")
@@ -258,7 +263,7 @@ addEventListener("load", () => {
                 blocklyMainBackground.dispatchEvent(clickEvent);
                 Blockly.JavaScript.init(workspace)
                 console.log("加载完成")
-                Csl.log("控制台")
+                Csl.log("加载完成")
                 isLoaded = true
             }
             if (event.type == "create" || event.type == "change" || event.type == "delete" || event.type == "move" || event.type == "comment_change" || event.type == "comment_create" || event.type == "comment_delete" || event.type == "viewport_change") {
@@ -503,6 +508,16 @@ addEventListener("load", () => {
     docItem.addEventListener("click", e => {
         open("https://voto.fandom.com/zh")
     })
+    workNameInput.value = workdata.title
+    workNameInput.onchange = e => {
+        if (workNameInput.value.trim() == "") {
+            workNameInput.value = workdata.title
+            Csl.warn("作品名称不能为空")
+        } else {
+            workdata.title = workNameInput.value
+            Csl.log("作品名称已修改为“" + workNameInput.value + "”")
+        }
+    }
     roleX.onchange = e => {
         if (selectedRole) {
             if (roleX.value.trim() == "") {
@@ -542,6 +557,9 @@ addEventListener("load", () => {
                 preview.contentWindow.document.getElementById(`ROLE_${selectedRole}`).dataset.name = roleName.value
                 preview.contentWindow.document.getElementById(`selectedRole`).dataset.name = roleName.value
                 data.name = roleName.value
+                const role = roles.find(r => r[1] == selectedRole)
+                console.log(role)
+                role[0] = roleName.value
             }
         } else {
             Csl.warn("未选择角色")
@@ -609,6 +627,11 @@ addEventListener("load", () => {
                     console.log(workdata)
                     dispatchEvents({ type: "render", data: workdata.roleData })
                     Blockly.serialization.workspaces.load(workdata.blockData, workspace)
+                    roles = [];
+                    roles.push(["背景", "__background__", "BACKGROUND"])
+                    data.roleData.forEach(role => {
+                        roles.push([role.name, role.id, role.type])
+                    });
                 }
                 reader.readAsText(file)
             }
