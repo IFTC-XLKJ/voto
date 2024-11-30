@@ -186,12 +186,13 @@ addEventListener("load", () => {
                             } else {
                                 Csl.log("作品数据获取成功")
                                 try {
+                                    preview.src = `/preview/?workId=${workdata.workId}`
                                     const data = JSON.parse(json.fields[0].workdata)
                                     workId = json.fields[0].WID
                                     workdata.workId = workId
                                     workdata = JSON.parse(json.fields[0].workdata)
                                     Blockly.serialization.workspaces.load(workdata.blockData, workspace);
-                                    preview.src = `/preview/?workId=${workdata.workId}`
+                                    workNameInput.value = workdata.title
                                     Csl.log("作品已加载完成")
                                 } catch (e) {
                                     Csl.error("作品数据损坏")
@@ -471,6 +472,7 @@ addEventListener("load", () => {
                     projectViewBox.className = "projectViewBox"
                     projectView.appendChild(projectViewBox)
                     data.forEach(projectData => {
+                        console.log(projectData)
                         const projectItem = document.createElement("div")
                         projectItem.className = "projectItem"
                         var projectCover = document.createElement("img")
@@ -480,6 +482,7 @@ addEventListener("load", () => {
                         var projectName = document.createElement("div")
                         projectName.className = "projectName"
                         projectName.title = projectData.name ? projectData.name : "未命名作品"
+                        projectName.innerText = projectData.name ? projectData.name : "未命名作品"
                         var projectTime = document.createElement("div")
                         const formattedDate = formatTimestamp(Number(String(projectData.updatedAt) + "000"));
                         requestAnimationFrame(() => {
@@ -541,6 +544,7 @@ addEventListener("load", () => {
                 if (check.fields.length != 0) {
                     try {
                         setTimeout(async () => {
+                            workdata.workId = workId
                             const json = await Porject.setTableData({
                                 type: "UPDATE",
                                 filter: `ID='${localStorage.getItem("UID")}' AND WID='${workdata.workId}'`,
