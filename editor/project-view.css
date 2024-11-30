@@ -55,7 +55,7 @@
 
 .projectViewBox {
     width: 850px;
-    height: calc(75vh - 30px);
+    height: calc(75vh - 70px);
     overflow: clip;
     overflow-y: scroll;
     display: grid;

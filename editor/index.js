@@ -83,12 +83,17 @@ async function login() {
         })
         if (user.fields.length == 0) {
             Csl.error("无法登录，可能原因：未登录、密码被修改、账号已注销或账号不存在")
+            localStorage.removeItem("UID")
+            localStorage.removeItem("PWD")
+            localStorage.removeItem("token")
+            location.href = "/login.html#editor"
             return false
         } else {
             Csl.log("登录成功")
             localStorage.setItem("token", user.fields[0].token)
             localStorage.setItem("UNM", user.fields[0].用户名)
             localStorage.setItem("UID", user.fields[0].ID)
+            localStorage.setItem("PWD", localStorage.getItem("PWD"))
             return true
         }
     } catch (e) {
@@ -168,8 +173,9 @@ addEventListener("load", () => {
                             const json = await Porject.getTableData({
                                 limit: 1,
                                 page: 1,
-                                filter: `ID="${localStorage.getItem("UID")}" AND WID="${workdata.workId}"`
+                                filter: `ID="${localStorage.getItem("UID")}" AND WID="${urlParams.workId}"`
                             })
+                            console.log(json)
                             if (json.fields.length == 0) {
                                 Csl.error("作品不存在")
                             } else {
@@ -375,6 +381,7 @@ addEventListener("load", () => {
 addEventListener("load", () => {
     const Porject = new pgdbs(dbs_8efbb73cc76b58f1e97c0faac2289f9b5cbcfc8eda08d3801958ddb27943f14e)
     let isFile = false
+    let isHelp = false
     file.addEventListener("click", () => {
         if (!isFile) {
             isFile = true
@@ -384,6 +391,16 @@ addEventListener("load", () => {
             fileList.dataset.file = "false"
         }
         console.log("file click", isFile)
+    })
+    help.addEventListener("click", () => {
+        if (!isHelp) {
+            isHelp = true
+            helpList.dataset.help = "true"
+        } else {
+            isHelp = false
+            helpList.dataset.help = "false"
+        }
+        console.log("help click", isHelp)
     })
     addNew.addEventListener("click", () => {
         location.href = "/editor"
@@ -457,7 +474,6 @@ addEventListener("load", () => {
                         projectCover.title = projectData.name ? projectData.name : "未命名作品"
                         var projectName = document.createElement("div")
                         projectName.className = "projectName"
-                        projectName.innerText = projectData.name ? projectData.name : "未命名作品";
                         projectName.title = projectData.name ? projectData.name : "未命名作品"
                         var projectTime = document.createElement("div")
                         const formattedDate = formatTimestamp(Number(String(projectData.updatedAt) + "000"));
@@ -483,6 +499,9 @@ addEventListener("load", () => {
                 return
             }
         }
+    })
+    docItem.addEventListener("click", e => {
+        open("https://voto.fandom.com/zh")
     })
     roleX.onchange = e => {
         if (selectedRole) {
@@ -642,6 +661,9 @@ addEventListener("load", () => {
                     }
                 })
             }
+        } else if (e.target.id != "help" && isHelp) {
+            isHelp = false
+            helpList.dataset.help = "false"
         }
     })
 })

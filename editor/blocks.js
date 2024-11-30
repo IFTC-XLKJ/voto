@@ -277,7 +277,7 @@ addEventListener('load', function () {
     };
     block.code("looks_set_background_img", function (block, generator) {
         var img = generator.valueToCode(block, 'img', Blockly.JavaScript.ORDER_ASSIGNMENT) || '';
-        var code = `if (!isEnd) {looks.set_background(${img})}`
+        var code = `if (!isEnd) {looks.set_background(${img})}\n`
         return code
     })
     // Sound
