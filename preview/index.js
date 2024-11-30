@@ -213,6 +213,10 @@ events.emit("when_start");`
 addEventListener("resize", () => {
     const preEdit = document.querySelector("[data-type=\"edit\"]")
     const preRun = document.querySelector("[data-type=\"run\"]")
+    preEdit.style.width = `${innerWidth}px`
+    preEdit.style.height = `${(innerWidth / 16) * 9}px`
+    preRun.style.width = `${innerWidth}px`
+    preRun.style.height = `${(innerWidth / 16) * 9}px`
     render(parentWindow.workdata.roleData, preEdit)
     render(parentWindow.workdata.roleData, preRun)
 })
