@@ -706,3 +706,23 @@ function convertJsonToDataURL(jsonString) {
     const dataURL = `data:${mimeType},${base64JsonString}`;
     return dataURL;
 }
+function captureScreen(w, h, x, y) {
+    // 创建一个新的canvas元素
+    var canvas = document.createElement('canvas');
+    // 设置canvas的宽度和高度
+    canvas.width = w;
+    canvas.height = h;
+    // 获取2D绘图上下文
+    var ctx = canvas.getContext('2d');
+
+    // 使用html2canvas库来捕获屏幕的一部分
+    html2canvas(document.body, {
+        x: x,
+        y: y,
+        width: w,
+        height: h
+    }).then(function (canvas) {
+        // 将生成的canvas对象替换为我们创建的canvas对象
+        document.body.appendChild(canvas);
+    });
+}
