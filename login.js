@@ -20,7 +20,7 @@ onload = () => {
         vvzh.getTableData({
             limit: 1,
             page: 1,
-            filter: `ID="${username.value}" OR 昵称="${username.value}" OR 邮箱="${username.value}" AND 密码="${CryptoJS.MD5(password.value)}"`
+            filter: `(ID="${username.value}" OR 昵称="${username.value}" OR 邮箱="${username.value}") AND 密码="${CryptoJS.MD5(password.value)}"`
         }).then(async data => {
             if (data.code == 200) {
                 if (data.fields.length == 0) {
