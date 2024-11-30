@@ -1,7 +1,7 @@
 const pathToMedia = "/blockly/package/media/";
 window.run = false
 const generatorWorkId = () => {
-    return Math.random().toString(36).slice(2)
+    return Math.random().toString(36).slice(2) + Math.random().toString(36).slice(2) + Math.random().toString(36).slice(2)
 }
 const isNew = workId => {
     return workId.includes("__")
@@ -187,7 +187,7 @@ addEventListener("load", () => {
                                 Csl.log("作品数据获取成功")
                                 try {
                                     const data = JSON.parse(json.fields[0].workdata)
-                                    workId = json.fields[0].workId
+                                    workId = json.fields[0].WID
                                     workdata.workId = workId
                                     workdata = JSON.parse(json.fields[0].workdata)
                                     Blockly.serialization.workspaces.load(workdata.blockData, workspace);
@@ -518,6 +518,78 @@ addEventListener("load", () => {
             Csl.log("作品名称已修改为“" + workNameInput.value + "”")
         }
     }
+    saveBtn.addEventListener("click", async e => {
+        const newToast = new Toast()
+        const id = newToast.loading("作品保存中...")
+        const url = await captureScreen(preview.offsetWidth, preview.offsetHeight, 0, 60)
+        if (!url.includes("https://static.codemao.cn/")) {
+            newToast.error("作品保存失败", 2000)
+            newToast.loadend(id)
+            return;
+        }
+        console.log("上传完成", url)
+        try {
+            workdata.workId = workId
+            const check = await Porject.getTableData({
+                limit: 1,
+                page: 1,
+                filter: `ID='${localStorage.getItem("UID")}' AND WID='${workdata.workId}'`
+            });
+            console.log(check)
+            if (check.code == 200) {
+                if (check.fields.length != 0) {
+                    try {
+                        setTimeout(async () => {
+                            const json = await Porject.setTableData({
+                                type: "UPDATE",
+                                filter: `ID='${localStorage.getItem("UID")}' AND WID='${workdata.workId}'`,
+                                fields: `name="${workdata.title}",cover="${url}",workdata='${JSON.stringify(workdata)}'`
+                            })
+                            console.log(workdata.workId)
+                            console.log(json)
+                            if (json.code == 200) {
+                                newToast.success("作品保存成功", 2000)
+                                newToast.loadend(id)
+                            } else {
+                                newToast.error("作品保存失败", 2000)
+                                newToast.loadend(id)
+                            }
+                            return;
+                        }, 200)
+                    } catch (e) {
+                        newToast.error("作品保存失败", 2000)
+                        newToast.loadend(id)
+                        return;
+                    }
+                } else {
+                    setTimeout(async () => {
+                        const WorkID = generatorWorkId().slice(2, -1)
+                        const json = await Porject.setTableData({
+                            type: "INSERT",
+                            filter: "ID,name,WID,cover,workdata",
+                            fields: `("${localStorage.getItem("UID")}","${workdata.title}","${WorkID}","${url}",'${JSON.stringify(workdata)}')`
+                        })
+                        if (json.code == 200) {
+                            location.search = "?workId=" + WorkID;
+                            newToast.success("作品保存成功", 2000)
+                            newToast.loadend(id)
+                        } else {
+                            newToast.error("作品保存失败", 2000)
+                            newToast.loadend(id)
+                        }
+                    }, 200)
+                }
+            } else {
+                newToast.error("作品保存失败", 2000)
+                newToast.loadend(id)
+                return;
+            }
+        } catch (e) {
+            newToast.error("作品保存失败", 2000)
+            newToast.loadend(id)
+            return;
+        }
+    })
     roleX.onchange = e => {
         if (selectedRole) {
             if (roleX.value.trim() == "") {
@@ -706,37 +778,46 @@ function convertJsonToDataURL(jsonString) {
     const dataURL = `data:${mimeType},${base64JsonString}`;
     return dataURL;
 }
-function captureScreen(w, h, x, y) {
+async function captureScreen(w, h, x, y) {
     var canvas = document.createElement('canvas');
     canvas.width = w;
     canvas.height = h;
     var ctx = canvas.getContext('2d');
-    html2canvas(document.body, {
-        x: x,
-        y: y,
-        width: w,
-        height: h
-    }).then(function (canvas) {
-        document.body.appendChild(canvas);
-        canvas.toBlob(blob => {
-            const file = new File([blob], 'screenshot.png', {
-                type: 'image/png'
-            });
-            const formData = new FormData();
-            formData.append('file', file);
-            formData.append('path', 'bcx');
-            fetch('https://api.pgaot.com/user/up_cat_file', {
-                method: 'POST',
-                body: formData,
-            })
-                .then(response =>
-                    response.json())
-                .then(data => {
-                    console.log('Success:', data);
-                })
-                .catch((error) => {
-                    console.error('Error:', error);
-                });
+    try {
+        const data = await html2canvas(document.body, {
+            x: x,
+            y: y,
+            width: w,
+            height: h
         })
-    })
+        console.log(data)
+        document.body.appendChild(canvas);
+        return new Promise((resolve, reject) => {
+            canvas.toBlob(async (blob) => {
+                if (!blob) {
+                    return reject(new Error('Canvas to Blob failed'));
+                }
+                const file = new File([blob], 'screenshot.png', { type: 'image/png' });
+                const formData = new FormData();
+                formData.append('file', file);
+                formData.append('path', 'voto-cover');
+                try {
+                    const response = await fetch('https://api.pgaot.com/user/up_cat_file', {
+                        method: 'POST',
+                        body: formData,
+                    });
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok ' + response.statusText);
+                    }
+                    const data = await response.json();
+                    console.log("https://static.codemao.cn/" + data.key);
+                    resolve("https://static.codemao.cn/" + data.key);
+                } catch (error) {
+                    reject(error);
+                }
+            }, 'image/png');
+        });
+    } catch (error) {
+        return error
+    }
 }
