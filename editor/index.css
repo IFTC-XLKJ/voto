@@ -16,7 +16,7 @@ body {
     height: 60px;
     background-color: #297EFFFF;
     display: grid;
-    grid-template-columns: 50px 50px 50px auto 1fr;
+    grid-template-columns: 50px 50px 50px auto 1fr 50px;
 }
 
 #file,
@@ -101,6 +101,20 @@ body {
 
 #workNameInput:focus {
     color: #FFFFFF;
+}
+
+#save {
+    margin: auto;
+    margin-right: 20px;
+}
+
+#saveBtn {
+    background-color: #4E95FF;
+    border: none;
+    padding: 10px;
+    border-radius: 7px;
+    color: white;
+    cursor: pointer;
 }
 
 #previewMain {

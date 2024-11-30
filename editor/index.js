@@ -707,22 +707,36 @@ function convertJsonToDataURL(jsonString) {
     return dataURL;
 }
 function captureScreen(w, h, x, y) {
-    // 创建一个新的canvas元素
     var canvas = document.createElement('canvas');
-    // 设置canvas的宽度和高度
     canvas.width = w;
     canvas.height = h;
-    // 获取2D绘图上下文
     var ctx = canvas.getContext('2d');
-
-    // 使用html2canvas库来捕获屏幕的一部分
     html2canvas(document.body, {
         x: x,
         y: y,
         width: w,
         height: h
     }).then(function (canvas) {
-        // 将生成的canvas对象替换为我们创建的canvas对象
         document.body.appendChild(canvas);
-    });
+        canvas.toBlob(blob => {
+            const file = new File([blob], 'screenshot.png', {
+                type: 'image/png'
+            });
+            const formData = new FormData();
+            formData.append('file', file);
+            formData.append('path', 'bcx');
+            fetch('https://api.pgaot.com/user/up_cat_file', {
+                method: 'POST',
+                body: formData,
+            })
+                .then(response =>
+                    response.json())
+                .then(data => {
+                    console.log('Success:', data);
+                })
+                .catch((error) => {
+                    console.error('Error:', error);
+                });
+        })
+    })
 }
