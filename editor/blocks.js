@@ -1,8 +1,9 @@
 const blockLoad = new Event('blockLoad', { isTrust: true })
 window.roles = [
     ["背景", "__background__", "BACKGROUND"],
-    ["示例角色", "example", "角色-1"]
+    ["role", "example", "默认角色"]
 ]
+console.log(roles)
 /* 角色名 */ /* 角色ID */ /* 角色类型 */
 addEventListener('load', function () {
     const block = new Block()
