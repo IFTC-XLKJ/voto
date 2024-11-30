@@ -461,7 +461,7 @@ addEventListener('load', function () {
             {
                 type: 'input_value',
                 name: 'num',
-                check: 'Number',
+                check: ['String', 'Number'],
             },
         ],
         previousStatement: true,
