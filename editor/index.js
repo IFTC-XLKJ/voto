@@ -522,6 +522,7 @@ addEventListener("load", () => {
         const newToast = new Toast()
         const id = newToast.loading("作品保存中...")
         const url = await captureScreen(preview.offsetWidth, preview.offsetHeight, 0, 60)
+        console.log(url)
         if (!url.includes("https://static.codemao.cn/")) {
             newToast.error("作品保存失败", 2000)
             newToast.loadend(id)
