@@ -459,45 +459,52 @@ addEventListener("load", () => {
                     projectSearch.addEventListener("keypress", e => {
                         if (e.key == "Enter") {
                             const search = projectSearch.value
-                            const result = json.data.filter(data => {
+                            const result = json.fields.filter(data => {
                                 return data.name.includes(search)
                             })
                             console.log(result)
+                            renderProjectItem(result)
                         }
                     })
                     data.sort((a, b) => {
                         return b.updatedAt - a.updatedAt
                     })
-                    var projectViewBox = document.createElement("div")
-                    projectViewBox.className = "projectViewBox"
-                    projectView.appendChild(projectViewBox)
-                    data.forEach(projectData => {
-                        console.log(projectData)
-                        const projectItem = document.createElement("div")
-                        projectItem.className = "projectItem"
-                        var projectCover = document.createElement("img")
-                        projectCover.className = "projectCover"
-                        projectCover.src = projectData.cover
-                        projectCover.title = projectData.name ? projectData.name : "未命名作品"
-                        var projectName = document.createElement("div")
-                        projectName.className = "projectName"
-                        projectName.title = projectData.name ? projectData.name : "未命名作品"
-                        projectName.innerText = projectData.name ? projectData.name : "未命名作品"
-                        var projectTime = document.createElement("div")
-                        const formattedDate = formatTimestamp(Number(String(projectData.updatedAt) + "000"));
-                        requestAnimationFrame(() => {
-                            projectTime.innerText = formattedDate;
-                        });
-                        projectTime.className = "projectTime"
-                        projectViewBox.appendChild(projectItem)
-                        projectItem.appendChild(projectCover)
-                        projectItem.appendChild(projectName)
-                        projectItem.appendChild(projectTime)
-                        projectItem.addEventListener("click", e => {
-                            console.log(`/editor/?workId=${projectData.WID}`)
-                            location.href = `/editor/?workId=${projectData.WID}`
+                    renderProjectItem(data)
+                    function renderProjectItem(data) {
+                        if (projectView.querySelector(".projectViewBox")) {
+                            projectView.querySelector(".projectViewBox").remove()
+                        }
+                        var projectViewBox = document.createElement("div")
+                        projectViewBox.className = "projectViewBox"
+                        projectView.appendChild(projectViewBox)
+                        data.forEach(projectData => {
+                            console.log(projectData)
+                            const projectItem = document.createElement("div")
+                            projectItem.className = "projectItem"
+                            var projectCover = document.createElement("img")
+                            projectCover.className = "projectCover"
+                            projectCover.src = projectData.cover
+                            projectCover.title = projectData.name ? projectData.name : "未命名作品"
+                            var projectName = document.createElement("div")
+                            projectName.className = "projectName"
+                            projectName.title = projectData.name ? projectData.name : "未命名作品"
+                            projectName.innerText = projectData.name ? projectData.name : "未命名作品"
+                            var projectTime = document.createElement("div")
+                            const formattedDate = formatTimestamp(Number(String(projectData.updatedAt) + "000"));
+                            requestAnimationFrame(() => {
+                                projectTime.innerText = formattedDate;
+                            });
+                            projectTime.className = "projectTime"
+                            projectViewBox.appendChild(projectItem)
+                            projectItem.appendChild(projectCover)
+                            projectItem.appendChild(projectName)
+                            projectItem.appendChild(projectTime)
+                            projectItem.addEventListener("click", e => {
+                                console.log(`/editor/?workId=${projectData.WID}`)
+                                location.href = `/editor/?workId=${projectData.WID}`
+                            })
                         })
-                    })
+                    }
                     Csl.print("获取作品列表成功\n总数" + json.count + "个\n已获取" + data.length + "个")
                 } catch (e) {
                     Csl.error("获取作品列表失败\n原因：" + e)
