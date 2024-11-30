@@ -83,10 +83,10 @@ async function login() {
         })
         if (user.fields.length == 0) {
             Csl.error("无法登录，可能原因：未登录、密码被修改、账号已注销或账号不存在")
-            localStorage.removeItem("UID")
-            localStorage.removeItem("PWD")
-            localStorage.removeItem("token")
-            location.href = "/login.html#editor"
+            // localStorage.removeItem("UID")
+            // localStorage.removeItem("PWD")
+            // localStorage.removeItem("token")
+            // location.href = "/login.html#editor"
             return false
         } else {
             Csl.log("登录成功")
