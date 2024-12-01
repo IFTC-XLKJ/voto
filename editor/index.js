@@ -833,3 +833,9 @@ async function captureScreen(w, h, x, y) {
         return error
     }
 }
+
+const beforeunloadHandler = (event) => {
+    event.preventDefault();
+    event.returnValue = true;
+};
+addEventListener("beforeunload", beforeunloadHandler);
