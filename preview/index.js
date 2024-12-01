@@ -14,6 +14,7 @@ const dispatchEvents = e => {
 function calcPer(num, total) {
     return (num / total) * 100
 }
+window.cover;
 addEventListener("load", () => {
     const preEdit = document.querySelector("[data-type=\"edit\"]")
     const preRun = document.querySelector("[data-type=\"run\"]")
@@ -28,7 +29,7 @@ addEventListener("load", () => {
     preEdit.style.height = `${(innerWidth / 16) * 9}px`
     preRun.style.width = `${innerWidth}px`
     preRun.style.height = `${(innerWidth / 16) * 9}px`
-    events.on("editor", e => {
+    events.on("editor", async e => {
         console.log("editor", e)
         if (e.type == "init") {
             workId = e.workId
@@ -161,6 +162,8 @@ events.emit("when_start");`
         } else if (e.type == "render") {
             const roles = e.data;
             render(roles, preEdit)
+        } else if (e.type == "save") {
+            cover = await captureScreen(innerWidth, innerHeight, 0, 0)
         }
     })
     function render(roles, pre) {
@@ -220,3 +223,46 @@ addEventListener("resize", () => {
     render(parentWindow.workdata.roleData, preEdit)
     render(parentWindow.workdata.roleData, preRun)
 })
+async function captureScreen(w, h, x, y) {
+    var canvas = document.createElement('canvas');
+    canvas.width = w;
+    canvas.height = h;
+    var ctx = canvas.getContext('2d');
+    try {
+        const data = await html2canvas(document.body, {
+            x: x,
+            y: y,
+            width: w,
+            height: h
+        })
+        console.log(data)
+        document.body.appendChild(canvas);
+        return new Promise((resolve, reject) => {
+            canvas.toBlob(async (blob) => {
+                if (!blob) {
+                    return reject(new Error('Canvas to Blob failed'));
+                }
+                const file = new File([blob], 'screenshot.png', { type: 'image/png' });
+                const formData = new FormData();
+                formData.append('file', file);
+                formData.append('path', 'voto-cover');
+                try {
+                    const response = await fetch('https://api.pgaot.com/user/up_cat_file', {
+                        method: 'POST',
+                        body: formData,
+                    });
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok ' + response.statusText);
+                    }
+                    const data = await response.json();
+                    console.log("https://static.codemao.cn/" + data.key);
+                    resolve("https://static.codemao.cn/" + data.key);
+                } catch (error) {
+                    reject(error);
+                }
+            }, 'image/png');
+        });
+    } catch (error) {
+        return error
+    }
+}
