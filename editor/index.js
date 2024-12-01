@@ -195,9 +195,17 @@ addEventListener("load", () => {
                                     workdata = JSON.parse(json.fields[0].workdata)
                                     Blockly.serialization.workspaces.load(workdata.blockData, workspace);
                                     workNameInput.value = workdata.title
+                                    roles = [];
+                                    roles.push(["背景", "__background__", "BACKGROUND"])
+                                    workdata.roleData.forEach(role => {
+                                        roles.push([role.name, role.id, role.type])
+                                    });
                                     Csl.log("作品已加载完成")
+                                    preview.onload = () => {
+                                        dispatchEvents({ type: "render", data: workdata.roleData })
+                                    }
                                 } catch (e) {
-                                    Csl.error("作品数据损坏")
+                                    Csl.error("作品数据损坏" + e)
                                 }
                             }
                         }
