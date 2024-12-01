@@ -825,7 +825,7 @@ async function captureScreen(w, h, x, y) {
     canvas.height = h;
     var ctx = canvas.getContext('2d');
     try {
-        const data = await html2canvas(document.body, {
+        const data = await html2canvas(preview.contentDocument.body, {
             x: x,
             y: y,
             width: w,
