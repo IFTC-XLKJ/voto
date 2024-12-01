@@ -542,77 +542,94 @@ addEventListener("load", () => {
     saveBtn.addEventListener("click", async e => {
         const newToast = new Toast()
         const id = newToast.loading("作品保存中...")
-        const url = await captureScreen(preview.offsetWidth, preview.offsetHeight, 0, 60)
-        console.log(url)
-        if (!url.includes("https://static.codemao.cn/")) {
-            newToast.error("作品保存失败", 2000)
-            newToast.loadend(id)
-            return;
-        }
-        console.log("上传完成", url)
-        try {
-            workdata.workId = workId
-            const check = await Porject.getTableData({
-                limit: 1,
-                page: 1,
-                filter: `ID='${localStorage.getItem("UID")}' AND WID='${workdata.workId}'`
-            });
-            console.log(check)
-            if (check.code == 200) {
-                if (check.fields.length != 0) {
-                    try {
-                        setTimeout(async () => {
-                            workdata.workId = workId
-                            const json = await Porject.setTableData({
-                                type: "UPDATE",
-                                filter: `ID='${localStorage.getItem("UID")}' AND WID='${workdata.workId}'`,
-                                fields: `name="${workdata.title}",cover="${url}",workdata='${JSON.stringify(workdata)}'`
-                            })
-                            console.log(workdata.workId)
-                            console.log(json)
-                            if (json.code == 200) {
-                                newToast.success("作品保存成功", 2000)
-                                newToast.loadend(id)
-                            } else {
+        dispatchEvents({ type: "save" })
+        let url = ""
+        var time = 0;
+        const SAVE = setInterval(async () => {
+            const URL = preview.contentWindow.cover
+            console.log(time, URL)
+            if (URL) {
+                url = URL
+                preview.contentWindow.cover = void 0;
+                console.log(url)
+                if (!url.includes("https://static.codemao.cn/")) {
+                    newToast.error("作品保存失败", 2000)
+                    newToast.loadend(id)
+                    return;
+                }
+                console.log("上传完成", url)
+                try {
+                    workdata.workId = workId
+                    const check = await Porject.getTableData({
+                        limit: 1,
+                        page: 1,
+                        filter: `ID='${localStorage.getItem("UID")}' AND WID='${workdata.workId}'`
+                    });
+                    console.log(check)
+                    if (check.code == 200) {
+                        if (check.fields.length != 0) {
+                            try {
+                                setTimeout(async () => {
+                                    workdata.workId = workId
+                                    const json = await Porject.setTableData({
+                                        type: "UPDATE",
+                                        filter: `ID='${localStorage.getItem("UID")}' AND WID='${workdata.workId}'`,
+                                        fields: `name="${workdata.title}",cover="${url}",workdata='${JSON.stringify(workdata)}'`
+                                    })
+                                    console.log(workdata.workId)
+                                    console.log(json)
+                                    if (json.code == 200) {
+                                        newToast.success("作品保存成功", 2000)
+                                        newToast.loadend(id)
+                                    } else {
+                                        newToast.error("作品保存失败", 2000)
+                                        newToast.loadend(id)
+                                    }
+                                    return;
+                                }, 200)
+                            } catch (e) {
                                 newToast.error("作品保存失败", 2000)
                                 newToast.loadend(id)
+                                return;
                             }
-                            return;
-                        }, 200)
-                    } catch (e) {
+                        } else {
+                            setTimeout(async () => {
+                                const WorkID = generatorWorkId().slice(2, -1)
+                                const json = await Porject.setTableData({
+                                    type: "INSERT",
+                                    filter: "ID,name,WID,cover,workdata",
+                                    fields: `("${localStorage.getItem("UID")}","${workdata.title}","${WorkID}","${url}",'${JSON.stringify(workdata)}')`
+                                })
+                                if (json.code == 200) {
+                                    removeEventListener("beforeunload", beforeunloadHandler);
+                                    location.search = "?workId=" + WorkID;
+                                    newToast.success("作品保存成功", 2000)
+                                    newToast.loadend(id)
+                                } else {
+                                    newToast.error("作品保存失败", 2000)
+                                    newToast.loadend(id)
+                                }
+                            }, 200)
+                        }
+                    } else {
                         newToast.error("作品保存失败", 2000)
                         newToast.loadend(id)
                         return;
                     }
-                } else {
-                    setTimeout(async () => {
-                        const WorkID = generatorWorkId().slice(2, -1)
-                        const json = await Porject.setTableData({
-                            type: "INSERT",
-                            filter: "ID,name,WID,cover,workdata",
-                            fields: `("${localStorage.getItem("UID")}","${workdata.title}","${WorkID}","${url}",'${JSON.stringify(workdata)}')`
-                        })
-                        if (json.code == 200) {
-                            romoveEventListener("beforeunload", beforeunloadHandler);
-                            location.search = "?workId=" + WorkID;
-                            newToast.success("作品保存成功", 2000)
-                            newToast.loadend(id)
-                        } else {
-                            newToast.error("作品保存失败", 2000)
-                            newToast.loadend(id)
-                        }
-                    }, 200)
+                } catch (e) {
+                    newToast.error("作品保存失败", 2000)
+                    newToast.loadend(id)
+                    return;
                 }
-            } else {
-                newToast.error("作品保存失败", 2000)
-                newToast.loadend(id)
-                return;
+                clearInterval(SAVE)
             }
-        } catch (e) {
-            newToast.error("作品保存失败", 2000)
-            newToast.loadend(id)
-            return;
-        }
+            if (time > 1000) {
+                newToast.error("封面上传超时", 2000)
+                newToast.loadend(id)
+                clearInterval(SAVE)
+            }
+            time++;
+        })
     })
     roleX.onchange = e => {
         if (selectedRole) {
