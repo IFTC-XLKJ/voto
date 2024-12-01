@@ -236,9 +236,9 @@ async function captureScreen(w, h, x, y) {
             height: h
         })
         console.log(data)
-        document.body.appendChild(canvas);
+        document.body.appendChild(data);
         return new Promise((resolve, reject) => {
-            canvas.toBlob(async (blob) => {
+            data.toBlob(async (blob) => {
                 if (!blob) {
                     return reject(new Error('Canvas to Blob failed'));
                 }
