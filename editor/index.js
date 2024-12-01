@@ -85,7 +85,9 @@ async function login() {
             Csl.error("无法登录，可能原因：未登录、密码被修改、账号已注销或账号不存在")
             localStorage.removeItem("UID")
             localStorage.removeItem("PWD")
+            localStorage.removeItem("UNM")
             localStorage.removeItem("token")
+            removeEventListener("beforeunload", beforeunloadHandler);
             location.href = "/login.html#editor"
             return false
         } else {
@@ -582,6 +584,7 @@ addEventListener("load", () => {
                             fields: `("${localStorage.getItem("UID")}","${workdata.title}","${WorkID}","${url}",'${JSON.stringify(workdata)}')`
                         })
                         if (json.code == 200) {
+                            romoveEventListener("beforeunload", beforeunloadHandler);
                             location.search = "?workId=" + WorkID;
                             newToast.success("作品保存成功", 2000)
                             newToast.loadend(id)
