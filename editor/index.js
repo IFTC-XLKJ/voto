@@ -462,17 +462,18 @@ addEventListener("load", () => {
                         if (e.key == "Enter") {
                             const search = projectSearch.value
                             const result = json.fields.filter(data => {
-                                return data.name.includes(search)
+                                return data.name.toLowerCase().includes(search.toLowerCase())
                             })
                             console.log(result)
-                            renderProjectItem(result)
+                            Csl.log("搜索结果 " + result.length + " 个作品")
+                            renderProjectItem(result, search)
                         }
                     })
                     data.sort((a, b) => {
                         return b.updatedAt - a.updatedAt
                     })
                     renderProjectItem(data)
-                    function renderProjectItem(data) {
+                    function renderProjectItem(data, key) {
                         if (projectView.querySelector(".projectViewBox")) {
                             projectView.querySelector(".projectViewBox").remove()
                         }
@@ -490,7 +491,7 @@ addEventListener("load", () => {
                             var projectName = document.createElement("div")
                             projectName.className = "projectName"
                             projectName.title = projectData.name ? projectData.name : "未命名作品"
-                            projectName.innerText = projectData.name ? projectData.name : "未命名作品"
+                            projectName.innerHTML = projectData.name ? projectData.name.replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll(new RegExp(key, 'gi'), match => `<p style="display: inline;margin: 0;background-color: yellow;border-raduis: 5px;">${match}</p>`) : "未命名作品"
                             var projectTime = document.createElement("div")
                             const formattedDate = formatTimestamp(Number(String(projectData.updatedAt) + "000"));
                             requestAnimationFrame(() => {
