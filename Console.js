@@ -1,4 +1,13 @@
 /**
+ * Console.js
+ * @author IFTC
+ * @description 输出控制台
+ * @version 1.0.0
+ * @license MIT
+ * @copyright 2023 IFTC
+ */
+
+/**
  * 日志输出
  * @param {string} text 内容
  * @param {boolean} system 是否为系统消息
