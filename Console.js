@@ -1,3 +1,9 @@
+/**
+ * 日志输出
+ * @param {string} text 内容
+ * @param {boolean} system 是否为系统消息
+ */
+
 class Console {
     constructor(preview, isDrag) {
         this.preview = preview;
