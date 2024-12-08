@@ -836,7 +836,7 @@ async function captureScreen(w, h, x, y) {
         return new Promise((resolve, reject) => {
             canvas.toBlob(async (blob) => {
                 if (!blob) {
-                    return reject(new Error('Canvas to Blob failed'));
+                    return reject(new Error('封面生成失败'));
                 }
                 const file = new File([blob], 'screenshot.png', { type: 'image/png' });
                 const formData = new FormData();
