@@ -848,7 +848,7 @@ async function captureScreen(w, h, x, y) {
                         body: formData,
                     });
                     if (!response.ok) {
-                        throw new Error('Network response was not ok ' + response.statusText);
+                        throw new Error('网络请求不OK ' + response.statusText);
                     }
                     const data = await response.json();
                     console.log("https://static.codemao.cn/" + data.key);
