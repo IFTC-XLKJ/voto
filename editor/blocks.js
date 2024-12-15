@@ -719,7 +719,7 @@ addEventListener('load', function () {
         colour: 230,
         category: 'Array',
         inputsInline: true,
-        tooltip: "获取数组指定位置的值，索引从0开始",
+        tooltip: "获取数组指定位置的值，第1项的索引从0开始",
     }
     Blockly.Blocks["array_get"] = {
         init: function () {
@@ -731,6 +731,45 @@ addEventListener('load', function () {
         var list = Blockly.JavaScript.valueToCode(block, 'LIST', Blockly.JavaScript.ORDER_MEMBER) || null;
         var index = Blockly.JavaScript.valueToCode(block, 'INDEX', Blockly.JavaScript.ORDER_NONE) || 0;
         return [`${list}[${index}]`, Blockly.JavaScript.ORDER_ATOMIC];
+    })
+    var ArraySetJson = {
+        type: 'array_set',
+        message0: '设置数组 %1 第 %2 项 为 %3',
+        args0: [
+            {
+                type: 'input_value',
+                name: 'LIST',
+                check: 'Array'
+            },
+            {
+                type: 'input_value',
+                name: 'INDEX',
+                check: 'Number',
+                value: 1
+            },
+            {
+                type: 'input_value',
+                name: 'VALUE',
+                check: 'Number'
+            },
+        ],
+        previousStatement: null,
+        nextStatement: null,
+        category: 'Array',
+        inputsInline: true,
+        tooltip: "设置数组指定位置的值，第1项的索引从0开始",
+    }
+    Blockly.Blocks["array_set"] = {
+        init: function () {
+            this.jsonInit(ArraySetJson)
+            this.svgGroup_.classList.add('ArrayBlocks');
+        }
+    };
+    block.code("array_set", function (block, generator) {
+        var list = Blockly.JavaScript.valueToCode(block, 'LIST', Blockly.JavaScript.ORDER_MEMBER) || null;
+        var index = Blockly.JavaScript.valueToCode(block, 'INDEX', Blockly.JavaScript.ORDER_NONE) || 0;
+        var value = Blockly.JavaScript.valueToCode(block, 'VALUE', Blockly.JavaScript.ORDER_NONE) || 0;
+        return `${list}[${index}] = ${value};`;
     })
 
     console.log("blockLoad")
