@@ -80,7 +80,15 @@ window.toolbox = {
                 },
                 {
                     kind: "block",
+                    type: "logic_boolean",
+                },
+                {
+                    kind: "block",
                     type: "text_join",
+                },
+                {
+                    kind: "block",
+                    type: "logic_compare",
                 },
                 {
                     kind: "block",
