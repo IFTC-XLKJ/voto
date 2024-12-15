@@ -698,6 +698,40 @@ addEventListener('load', function () {
             this.svgGroup_.classList.add('ArrayBlocks');
         }
     };
+    var ArrayGetJson = {
+        type: 'array_get',
+        message0: '获取数组 %1 第 %2 项',
+        args0: [
+            {
+                type: 'input_value',
+                name: 'LIST',
+                check: 'Array'
+            },
+            {
+                type: 'input_value',
+                name: 'INDEX',
+                check: 'Number',
+                value: 1
+            },
+        ],
+        output: 'Number',
+        tooltip: '获取数组指定位置的值',
+        colour: 230,
+        category: 'Array',
+        inputsInline: true,
+        tooltip: "获取数组指定位置的值，索引从0开始",
+    }
+    Blockly.Blocks["array_get"] = {
+        init: function () {
+            this.jsonInit(ArrayGetJson)
+            this.svgGroup_.classList.add('ArrayBlocks');
+        }
+    };
+    block.code("array_get", function (block, generator) {
+        var list = Blockly.JavaScript.valueToCode(block, 'LIST', Blockly.JavaScript.ORDER_MEMBER) || null;
+        var index = Blockly.JavaScript.valueToCode(block, 'INDEX', Blockly.JavaScript.ORDER_NONE) || 0;
+        return [`${list}[${index}]`, Blockly.JavaScript.ORDER_ATOMIC];
+    })
 
     console.log("blockLoad")
     document.dispatchEvent(blockLoad)
