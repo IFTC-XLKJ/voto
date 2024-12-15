@@ -131,7 +131,11 @@ window.toolbox = {
                 {
                     kind: "block",
                     type: "array_get"
-                }
+                },
+                {
+                    kind: "block",
+                    type: "array_set"
+                },
             ]
         }
     ]
