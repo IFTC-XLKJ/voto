@@ -128,6 +128,10 @@ window.toolbox = {
                     kind: "block",
                     type: "lists_create_with",
                 },
+                {
+                    kind: "block",
+                    type: "array_get"
+                }
             ]
         }
     ]
