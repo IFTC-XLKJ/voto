@@ -86,6 +86,10 @@ window.toolbox = {
                 },
                 {
                     kind: "block",
+                    type: "null_block",
+                },
+                {
+                    kind: "block",
                     type: "text_join",
                 },
                 {
