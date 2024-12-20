@@ -176,7 +176,7 @@ addEventListener('load', function () {
     block.code("controls_output", function (block, generator) {
         var type = block.getFieldValue("type")
         const argument0 = generator.valueToCode(block, 'text', Blockly.JavaScript.ORDER_ASSIGNMENT) || null;
-        var code = `if (!isEnd) {parentWindow.Csl.${type}(${String(argument0)});}\n`
+        var code = `if (!isEnd) {parentWindow.Csl.${type}(${String(argument0)});console.log("${type}", ${argument0});}\n`
         return code
     })
     block.add("controls_clear-output", function () {
@@ -280,6 +280,29 @@ addEventListener('load', function () {
     })
     // Sound
     // Operators
+    var GetDataTypeJson = {
+        type: 'data_get_type',
+        message0: '获取 %1 类型',
+        args0: [
+            {
+                type: 'input_value',
+                name: 'data',
+            },
+        ],
+        output: 'String',
+        tooltip: '获取变量的类型',
+    }
+    Blockly.Blocks['data_get_type'] = {
+        init: function () {
+            this.jsonInit(GetDataTypeJson);
+            this.svgGroup_.classList.add('OperatorsBlocks');
+        }
+    };
+    block.code("data_get_type", function (block, generator) {
+        var data = generator.valueToCode(block, 'data', Blockly.JavaScript.ORDER_ASSIGNMENT) || '';
+        var code = `(typeof ${data})`
+        return [code, Blockly.JavaScript.ORDER_NONE];
+    })
     var CompareJson = {
         type: 'logic_compare',
         message0: '%1 %2 %3',
@@ -345,7 +368,7 @@ addEventListener('load', function () {
             {
                 type: 'field_input',
                 name: 'TEXT',
-                text: '',
+                text: 'Hello',
             },
         ],
         output: 'String',
@@ -357,7 +380,7 @@ addEventListener('load', function () {
     }, {})
     block.code("text", function (block) {
         var text = block.getFieldValue("TEXT")
-        var code = `"${text}"`
+        var code = `("${text}")`
         return [code, Blockly.JavaScript.ORDER_ATOMIC]
     })
     var OperatorsNumberJson = {
@@ -378,6 +401,11 @@ addEventListener('load', function () {
         this.jsonInit(OperatorsNumberJson);
         this.svgGroup_.classList.add('OperatorsBlocks');
     }, {})
+    block.code("math_number", function (block) {
+        var num = block.getFieldValue("NUM")
+        var code = `(${num})`
+        return [code, Blockly.JavaScript.ORDER_ATOMIC]
+    })
     var OperatorsJoinJson =
     {
         type: 'text_join',
