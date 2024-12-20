@@ -90,6 +90,14 @@ window.toolbox = {
                 },
                 {
                     kind: "block",
+                    type: "undefined_block",
+                },
+                {
+                    kind: "block",
+                    type: "nan_block",
+                },
+                {
+                    kind: "block",
                     type: "text_join",
                 },
                 {
