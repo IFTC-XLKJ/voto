@@ -282,7 +282,7 @@ addEventListener('load', function () {
     // Operators
     var GetDataTypeJson = {
         type: 'data_get_type',
-        message0: '获取 %1 类型',
+        message0: '获取 %1 的数据类型',
         args0: [
             {
                 type: 'input_value',
