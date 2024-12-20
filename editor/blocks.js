@@ -280,23 +280,38 @@ addEventListener('load', function () {
     })
     // Sound
     // Operators
-    var UndefinedJson = {
-        type: 'operator_undefined',
-        message0: '未定义',
+    var NullBlockJson = {
+        type: 'null_block',
+        message0: '空值',
         args0: [],
-        output: 'undefined',
-        tooltip: '返回undefined',
+        output: null,
+        tooltip: '返回空值',
     };
-    Blockly.Blocks['operator_undefined'] = {
+    Blockly.Blocks['null_block'] = {
         init: function () {
-            this.jsonInit(UndefinedJson);
+            this.jsonInit(NullBlockJson);
             this.svgGroup_.classList.add('OperatorsBlocks');
         }
     };
-    Blockly.JavaScript['operator_undefined'] = function (block) {
-        var code = '(void 0)';
-        return code;
+    block.code('null_block', function (block) {
+        return ["NULL", Blockly.JavaScript.ORDER_ATOMIC];
+    })
+    var UndefinedBlockJson = {
+        type: 'undefined_block',
+        message0: '空值',
+        args0: [],
+        output: null,
+        tooltip: '返回空值',
     };
+    Blockly.Blocks['undefined_block'] = {
+        init: function () {
+            this.jsonInit(UndefinedBlockJson);
+            this.svgGroup_.classList.add('OperatorsBlocks');
+        }
+    };
+    block.code('undefined_block', function (block) {
+        return ["UNDEFINED", Blockly.JavaScript.ORDER_ATOMIC];
+    })
     var GetDataTypeJson = {
         type: 'data_get_type',
         message0: '获取 %1 的数据类型',
