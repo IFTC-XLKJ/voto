@@ -710,7 +710,6 @@ addEventListener('load', function () {
             {
                 type: 'input_value',
                 name: 'INDEX',
-                check: 'Number',
                 value: 1
             },
         ],
@@ -750,7 +749,6 @@ addEventListener('load', function () {
             {
                 type: 'input_value',
                 name: 'VALUE',
-                check: 'Number'
             },
         ],
         previousStatement: null,
