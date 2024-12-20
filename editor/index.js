@@ -382,6 +382,7 @@ addEventListener("load", () => {
     preview.style.height = `${(previewBody.offsetWidth / 16) * 9}px`
     Csl.log("加载完成")
     Csl.log("欢迎使用 Voto编辑器")
+    Csl.log("当前版本：" + VERSION)
     events.on("preview", e => {
         console.log("preview", e)
         if (e.type == "reply") {
