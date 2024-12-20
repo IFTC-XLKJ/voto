@@ -118,7 +118,9 @@ preRun.addEventListener("mousedown", backgroundDown)
 preRun.addEventListener("touchstart", backgroundDown)
 preRun.addEventListener("mouseup", backgroundUp)
 preRun.addEventListener("touchend", backgroundUp)
+console.time("run")
 ${code}
+console.timeLog("run")
 addEventListener("message", e => {
     if (e.data == "stop") {
         preRun.removeEventListener("click", backgroundClick)
@@ -139,6 +141,7 @@ parentWindow.document.getElementById("previewBtn").addEventListener("click", () 
     console.log("114514")
     controller.abort();
     events.emit("stop");
+    console.timeEnd("run")
     isEnd = true
 })
 events.emit("when_start");`
