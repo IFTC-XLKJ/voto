@@ -217,8 +217,8 @@ addEventListener('load', function () {
                 type: 'field_dropdown',
                 name: 'direction',
                 options: [
-                    ["左", "forward"],
-                    ["右", "backward"],
+                    ["右", "forward"],
+                    ["左", "backward"],
                     ["上", "upward"],
                     ["下", "downward"],
                 ]
