@@ -1,3 +1,5 @@
+const VERSION = "1.0-test";
+
 window.toolbox = {
     kind: "categoryToolbox",
     contents: [
