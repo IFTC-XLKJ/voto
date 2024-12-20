@@ -312,6 +312,22 @@ addEventListener('load', function () {
     block.code('undefined_block', function (block) {
         return ["UNDEFINED", Blockly.JavaScript.ORDER_ATOMIC];
     })
+    var NaNBlockJson = {
+        type: 'nan_block',
+        message0: 'NaN',
+        args0: [],
+        output: null,
+        tooltip: '返回NaN',
+    };
+    Blockly.Blocks['nan_block'] = {
+        init: function () {
+            this.jsonInit(NaNBlockJson);
+            this.svgGroup_.classList.add('OperatorsBlocks');
+        }
+    };
+    block.code('nan_block', function (block) {
+        return ["NAN", Blockly.JavaScript.ORDER_ATOMIC];
+    })
     var GetDataTypeJson = {
         type: 'data_get_type',
         message0: '获取 %1 的数据类型',
