@@ -77,6 +77,7 @@ addEventListener("load", () => {
             let code = e.data.code
             render(parentWindow.workdata.roleData, preRun)
             code = `let isEnd = false
+const NULL = null
 const parentWindow = parent || top;
 const actions = new Action();
 const events = new Events();
