@@ -383,6 +383,7 @@ addEventListener("load", () => {
     Csl.log("加载完成")
     Csl.log("欢迎使用 Voto编辑器")
     Csl.log("当前版本：" + VERSION)
+    Csl.log(`<a href="https://she-qu.pages.dev" target="_blank" style="color: #ccc;">前往社区</a>`, true)
     events.on("preview", e => {
         console.log("preview", e)
         if (e.type == "reply") {
