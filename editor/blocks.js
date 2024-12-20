@@ -199,7 +199,7 @@ addEventListener('load', function () {
     }, [null])
     block.code("controls_comment", function (block) {
         var text = block.getFieldValue('TEXT')
-        return `// ${text}\n`
+        return `// ${text.replaceAll("\n", "    ")}\n`
 
     })
     // Actions
