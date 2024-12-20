@@ -94,6 +94,10 @@ window.toolbox = {
                     kind: "block",
                     type: "math_simple_operator",
                 },
+                {
+                    kind: "block",
+                    type: "data_get_type"
+                }
             ]
         },
         {
