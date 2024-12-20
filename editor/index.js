@@ -394,6 +394,7 @@ addEventListener("load", () => {
             }
         }
     })
+    avaterImg.src = localStorage.getItem("头像")
 })
 
 addEventListener("load", () => {
