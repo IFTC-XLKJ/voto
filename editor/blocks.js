@@ -298,10 +298,10 @@ addEventListener('load', function () {
     })
     var UndefinedBlockJson = {
         type: 'undefined_block',
-        message0: '空值',
+        message0: '未定义',
         args0: [],
         output: null,
-        tooltip: '返回空值',
+        tooltip: '返回未定义',
     };
     Blockly.Blocks['undefined_block'] = {
         init: function () {
