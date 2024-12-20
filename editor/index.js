@@ -868,3 +868,22 @@ const beforeunloadHandler = (event) => {
     event.returnValue = true;
 };
 addEventListener("beforeunload", beforeunloadHandler);
+
+/**
+ * 设置元素的属性
+ * @param {HTMLElement} element 
+ * @param {String} name 
+ * @param {any} value 
+ */
+function 设置属性(element, name, value) {
+    element.setAttribute(name, value)
+}
+/**
+ * 获取元素的属性
+ * @param {HTMLElement} element 
+ * @param {String} name 
+ * @returns {any} 
+ */
+function 获取属性(element, name) {
+    return element.getAttribute(name)
+}
