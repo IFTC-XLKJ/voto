@@ -1,22 +1,23 @@
 class Action {
     #getPer(role) {
-        return role.style.left.slice(0, -1);
+        return Number(role.style.left.slice(0, -1));
     }
     constructor() {
         this.rolesId = workdata.roleData.map(role => role.id);
         this.roles = {};
         this.rolesId.forEach(id => {
-            this.roles[id] = document.getElementById(`ROLE_${id}`)
+            const preRun = document.querySelector("[data-type=\"run\"]")
+            this.roles[id] = preRun.querySelector(`#ROLE_${id}`)
         })
-        console.log(this)
+        console.log("Action角色", this)
     }
     move(role, direction, distance) {
-        const preRun = document.querySelector("[data-type=\"run\"]")
         if (role != "__background__") {
+            console.log(this.#getPer(this.roles[role]) + distance)
             if (direction == "forward") {
                 this.roles[role].style.left = `${this.#getPer(this.roles[role]) + distance}%`
             } else if (direction == "backward") {
-                this.roles[role].style.left = `${(this.roles[role].offsetLeft + distance) / (preRun.clientWidth / 640)}px`
+                this.roles[role].style.left = `${this.#getPer(this.roles[role]) - distance}%`
             } else if (direction == "upward") {
                 this.roles[role].style.top = `${(this.roles[role].offsetTop - distance) / (preRun.clientHeight / 360)}px`
             } else if (direction == "downward") {
