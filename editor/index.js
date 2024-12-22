@@ -574,6 +574,9 @@ addEventListener("load", () => {
                             try {
                                 setTimeout(async () => {
                                     workdata.workId = workId
+                                    const WORKDATA = workdata
+                                    WORKDATA.code = Blockly.JavaScript.workspaceToCode(workspace)
+                                    console.log(WORKDATA)
                                     const json = await Porject.setTableData({
                                         type: "UPDATE",
                                         filter: `ID='${localStorage.getItem("UID")}' AND WID='${workdata.workId}'`,
