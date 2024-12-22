@@ -98,7 +98,7 @@ addEventListener('load', function () {
             {
                 type: 'input_value',
                 name: 'IF0',
-                check: 'Boolean',
+                check: ['String', 'Number', 'Boolean'],
             },
         ],
         message1: '%1',
@@ -419,7 +419,7 @@ addEventListener('load', function () {
                 text: 'Hello',
             },
         ],
-        output: 'String',
+        output: "String",
         tooltip: '字符串',
     }
     block.add("text", function () {
