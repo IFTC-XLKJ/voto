@@ -399,7 +399,7 @@ addEventListener('load', function () {
                 ],
             },
         ],
-        output: 'Boolean',
+        output: ['Boolean', 'Number'],
         style: 'logic_blocks',
         tooltip: '布尔值',
     }
