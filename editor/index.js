@@ -574,8 +574,78 @@ addEventListener("load", () => {
                             try {
                                 setTimeout(async () => {
                                     workdata.workId = workId
-                                    const WORKDATA = workdata
-                                    WORKDATA.code = Blockly.JavaScript.workspaceToCode(workspace)
+                                    let WORKDATA = workdata
+                                    const code = Blockly.JavaScript.workspaceToCode(workspace)
+                                    WORKDATA.code = `let isEnd = false
+                                    const NULL = null
+                                    const UNDEFINED = void 0
+                                    const NAN = NaN
+                                    const parentWindow = parent || top;
+                                    const actions = new Action();
+                                    const events = new Events();
+                                    const looks = new Looks();
+                                    const controller = new AbortController();
+                                    const signal = controller.signal;
+                                    ${getFPSCode()}
+                                    function backgroundClick(event) {
+                                        if (event.target.className == "preview") {
+                                            const e = {
+                                                x: event.offsetX,
+                                                y: event.offsetY,
+                                            }
+                                            events.emit("on_role_-__background__-_click", e)
+                                        }
+                                    }
+                                    function backgroundDown(event) {
+                                        if (event.target.className == "preview") {
+                                            const e = {
+                                                x: event.offsetX,
+                                                y: event.offsetY,
+                                            }
+                                            events.emit("on_role_-__background__-_down", e)
+                                        }
+                                    }
+                                    function backgroundUp(event) {
+                                        if (event.target.className == "preview") {
+                                            const e = {
+                                                x: event.offsetX,
+                                                y: event.offsetY,
+                                            }
+                                            events.emit("on_role_-__background__-_up", e)
+                                        }
+                                    }
+                                    preRun.addEventListener("click", backgroundClick)
+                                    preRun.addEventListener("mousedown", backgroundDown)
+                                    preRun.addEventListener("touchstart", backgroundDown)
+                                    preRun.addEventListener("mouseup", backgroundUp)
+                                    preRun.addEventListener("touchend", backgroundUp)
+                                    console.time("run")
+                                    ${code}
+                                    console.timeLog("run")
+                                    addEventListener("message", e => {
+                                        if (e.data == "stop") {
+                                            preRun.removeEventListener("click", backgroundClick)
+                                            preRun.removeEventListener("mousedown", backgroundDown)
+                                            preRun.removeEventListener("touchstart", backgroundDown)
+                                            preRun.removeEventListener("mouseup", backgroundUp)
+                                            preRun.removeEventListener("touchend", backgroundUp)
+                                        }
+                                    })
+                                    function createTimeoutPromise(timeout) {
+                                        return new Promise((resovle, reject) => {
+                                            setTimeout(() => {
+                                                reject(new Error('Operation timed out'));
+                                            }, timeout);
+                                        });
+                                    }
+                                    parentWindow.document.getElementById("previewBtn").addEventListener("click", () => {
+                                        console.log("114514")
+                                        controller.abort();
+                                        events.emit("stop");
+                                        console.timeEnd("run")
+                                        isEnd = true
+                                    })
+                                    events.emit("when_start");`
                                     console.log(WORKDATA)
                                     const json = await Porject.setTableData({
                                         type: "UPDATE",
@@ -596,7 +666,7 @@ addEventListener("load", () => {
                             } catch (e) {
                                 newToast.error("作品保存失败", 2000)
                                 newToast.loadend(id)
-                                return;
+                                return false;
                             }
                         } else {
                             setTimeout(async () => {
@@ -887,4 +957,28 @@ function 设置属性(element, name, value) {
  */
 function 获取属性(element, name) {
     return element.getAttribute(name)
+}
+function getFPSCode() {
+    return `
+    var fpsCounter = {
+        startTime: 0,
+        frameCount: 0,
+        fps: 0,
+        update: function (timestamp) {
+            if (this.startTime === 0) {
+                this.startTime = timestamp;
+            } else {
+                var elapsedTime = timestamp - this.startTime;
+                if (elapsedTime >= 1000) {
+                    this.fps = this.frameCount;
+                    this.frameCount = 0;
+                    this.startTime = timestamp;
+                }
+            }
+            this.frameCount++;
+            requestAnimationFrame(this.update.bind(this));
+        }
+    };
+    requestAnimationFrame(fpsCounter.update.bind(fpsCounter));
+    `
 }
