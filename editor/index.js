@@ -629,11 +629,6 @@ addEventListener("load", () => {
                 }
                 clearInterval(SAVE)
             }
-            if (time > 1000) {
-                newToast.error("封面上传超时", 2000)
-                newToast.loadend(id)
-                clearInterval(SAVE)
-            }
             time++;
         })
     })
