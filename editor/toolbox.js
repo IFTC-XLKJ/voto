@@ -36,6 +36,10 @@ window.toolbox = {
                 },
                 {
                     kind: "block",
+                    type: "controls_get_fps",
+                },
+                {
+                    kind: "block",
                     type: "controls_output",
                 },
                 {
