@@ -86,6 +86,7 @@ const events = new Events();
 const looks = new Looks();
 const controller = new AbortController();
 const signal = controller.signal;
+${getFPSCode()}
 function backgroundClick(event) {
     if (event.target.className == "preview") {
         const e = {
@@ -271,4 +272,29 @@ async function captureScreen(w, h, x, y) {
     } catch (error) {
         return error
     }
+}
+
+function getFPSCode() {
+    return `
+    var fpsCounter = {
+        startTime: 0,
+        frameCount: 0,
+        fps: 0,
+        update: function (timestamp) {
+            if (this.startTime === 0) {
+                this.startTime = timestamp;
+            } else {
+                var elapsedTime = timestamp - this.startTime;
+                if (elapsedTime >= 1000) {
+                    this.fps = this.frameCount;
+                    this.frameCount = 0;
+                    this.startTime = timestamp;
+                }
+            }
+            this.frameCount++;
+            requestAnimationFrame(this.update.bind(this));
+        }
+    };
+    requestAnimationFrame(fpsCounter.update.bind(fpsCounter));
+    `
 }
