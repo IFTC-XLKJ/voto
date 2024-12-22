@@ -1,6 +1,7 @@
 const blockLoad = new Event('blockLoad', { isTrust: true })
 window.roles = []
 console.log(roles)
+
 /* 角色名 */ /* 角色ID */ /* 角色类型 */
 addEventListener('load', function () {
     const block = new Block()
@@ -63,6 +64,20 @@ addEventListener('load', function () {
         return code
     })
     // Controls
+    var GetFPSJson = {
+        type: 'controls_get_fps',
+        message0: '获取帧率',
+        output: 'Number',
+        tooltip: '获取当前帧率',
+    }
+    block.add("controls_get_fps", function () {
+        this.jsonInit(GetFPSJson);
+        this.svgGroup_.classList.add('ControlsBlocks');
+    }, {})
+    block.code("controls_get_fps", function (block) {
+        var code = `fpsCounter.fps`
+        return [code, Blockly.JavaScript.ORDER_NONE];
+    })
     var ControlsRepeatJson = {
         type: 'controls_repeat',
         message0: '%{BKY_CONTROLS_REPEAT_TITLE}',
@@ -849,3 +864,7 @@ addEventListener('load', function () {
     console.log("blockLoad")
     document.dispatchEvent(blockLoad)
 })
+
+function getFPS() {
+    return fpsCounter.fps;
+}
