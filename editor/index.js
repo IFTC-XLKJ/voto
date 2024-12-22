@@ -1,5 +1,6 @@
 const pathToMedia = "/blockly/package/media/";
 window.run = false
+window.Project
 const generatorWorkId = () => {
     return Math.random().toString(36).slice(2) + Math.random().toString(36).slice(2) + Math.random().toString(36).slice(2)
 }
@@ -121,7 +122,7 @@ addEventListener("load", () => {
         Csl.error("错误：" + msg + "在" + url + "的" + lineNo + "行" + columnNo + "列\n" + error)
     }
     vvzh = new pgdbs(dbs_a6b2a4d6c02022e831626d31ab805a468a151b90d5161660485a73cc6e1ea902)
-    const Porject = new pgdbs(dbs_8efbb73cc76b58f1e97c0faac2289f9b5cbcfc8eda08d3801958ddb27943f14e)
+    Project = new pgdbs(dbs_8efbb73cc76b58f1e97c0faac2289f9b5cbcfc8eda08d3801958ddb27943f14e)
     const runBtn = document.querySelector(".run")
     const stopBtn = document.querySelector(".stop")
     runBtn.style.display = "block"
@@ -177,7 +178,7 @@ addEventListener("load", () => {
                         const isTrust = await login();
                         if (isTrust) {
                             Csl.log("作品已加载中...")
-                            const json = await Porject.getTableData({
+                            const json = await Project.getTableData({
                                 limit: 1,
                                 page: 1,
                                 filter: `ID="${localStorage.getItem("UID")}" AND WID="${urlParams.workId}"`
@@ -398,7 +399,7 @@ addEventListener("load", () => {
 })
 
 addEventListener("load", () => {
-    const Porject = new pgdbs(dbs_8efbb73cc76b58f1e97c0faac2289f9b5cbcfc8eda08d3801958ddb27943f14e)
+    Project = new pgdbs(dbs_8efbb73cc76b58f1e97c0faac2289f9b5cbcfc8eda08d3801958ddb27943f14e)
     let isFile = false
     let isHelp = false
     file.addEventListener("click", () => {
@@ -458,7 +459,7 @@ addEventListener("load", () => {
             Csl.log("正在获取作品列表")
             if (localStorage.getItem("UID")) {
                 try {
-                    const json = await Porject.getTableData({
+                    const json = await Project.getTableData({
                         limit: 100,
                         page: projectPage,
                         filter: `ID='${localStorage.getItem("UID")}'`
@@ -563,7 +564,7 @@ addEventListener("load", () => {
                 console.log("上传完成", url)
                 try {
                     workdata.workId = workId
-                    const check = await Porject.getTableData({
+                    const check = await Project.getTableData({
                         limit: 1,
                         page: 1,
                         filter: `ID='${localStorage.getItem("UID")}' AND WID='${workdata.workId}'`
@@ -647,21 +648,26 @@ addEventListener("load", () => {
                                     })
                                     events.emit("when_start");`
                                     console.log(WORKDATA)
-                                    const json = await Porject.setTableData({
-                                        type: "UPDATE",
-                                        filter: `ID='${localStorage.getItem("UID")}' AND WID='${workdata.workId}'`,
-                                        fields: `name="${workdata.title}",cover="${url}",workdata='${JSON.stringify(workdata)}'`
-                                    })
-                                    console.log(workdata.workId)
-                                    console.log(json)
-                                    if (json.code == 200) {
-                                        newToast.success("作品保存成功", 2000)
-                                        newToast.loadend(id)
-                                    } else {
+                                    try {
+                                        const json = await Project.setTableData({
+                                            type: "UPDATE",
+                                            filter: `ID='${localStorage.getItem("UID")}' AND WID='${WORKDATA.workId}'`,
+                                            fields: `name="${WORKDATA.title}",cover="${url}",workdata='${JSON.stringify(WORKDATA)}'`
+                                        })
+                                        console.log(WORKDATA.workId)
+                                        console.log(json)
+                                        if (json.code == 200) {
+                                            newToast.success("作品保存成功", 2000)
+                                            newToast.loadend(id)
+                                        } else {
+                                            newToast.error("作品保存失败", 2000)
+                                            newToast.loadend(id)
+                                        }
+                                    } catch (e) {
                                         newToast.error("作品保存失败", 2000)
                                         newToast.loadend(id)
                                     }
-                                    return;
+                                    return false;
                                 }, 200)
                             } catch (e) {
                                 newToast.error("作品保存失败", 2000)
@@ -671,7 +677,7 @@ addEventListener("load", () => {
                         } else {
                             setTimeout(async () => {
                                 const WorkID = generatorWorkId().slice(2, -1)
-                                const json = await Porject.setTableData({
+                                const json = await Project.setTableData({
                                     type: "INSERT",
                                     filter: "ID,name,WID,cover,workdata",
                                     fields: `("${localStorage.getItem("UID")}","${workdata.title}","${WorkID}","${url}",'${JSON.stringify(workdata)}')`
