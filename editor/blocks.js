@@ -581,9 +581,7 @@ addEventListener('load', function () {
         }
     };
     block.code("variables_get", function (block) {
-        var code = Blockly.JavaScript.nameDB_.getName(
-            block.getFieldValue('var'), Blockly.Variables.CATEGORY_NAME);
-        console.log(code)
+        var code = Blockly.JavaScript.nameDB_.getName(block.getFieldValue('var'), Blockly.Variables.CATEGORY_NAME);
         return [code, Blockly.JavaScript.ORDER_ATOMIC];
     })
     var VariablesSetterJson = {
