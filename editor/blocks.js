@@ -619,8 +619,7 @@ addEventListener('load', function () {
     }, {})
     block.code("variables_setter", function (block, generator) {
         var operator = block.getFieldValue('type');
-        var varName = Blockly.JavaScript.nameDB_.getName(
-            block.getFieldValue('var'), Blockly.Variables.CATEGORY_NAME);
+        var varName = Blockly.JavaScript.nameDB_.getName(block.getFieldValue('var'), Blockly.Variables.CATEGORY_NAME);
         var num = generator.valueToCode(block, 'num', Blockly.JavaScript.ORDER_ADDITION) || '0';
         var code = `${varName} ${operator} ${num};\n`;
         return code;
