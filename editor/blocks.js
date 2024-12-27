@@ -567,7 +567,7 @@ addEventListener('load', function () {
             {
                 type: 'field_variable',
                 name: 'var',
-                variable: '%{BKY_VARIABLES_DEFAULT_NAME}',
+                variable: 'a',
             },
         ],
         output: null,
@@ -591,7 +591,7 @@ addEventListener('load', function () {
             {
                 type: 'field_variable',
                 name: 'var',
-                variable: '%{BKY_VARIABLES_DEFAULT_NAME}',
+                variable: 'a',
             },
             {
                 type: 'field_dropdown',
