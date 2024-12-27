@@ -631,7 +631,7 @@ addEventListener('load', function () {
             {
                 type: 'field_variable',
                 name: 'VAR',
-                variable: '%{BKY_VARIABLES_DEFAULT_NAME}',
+                variable: 'a',
             },
             {
                 type: 'input_value',
